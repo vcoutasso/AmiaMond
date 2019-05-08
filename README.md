@@ -1,2 +1,2 @@
-# AmiaMond
-Projeto da disciplina de Princípios de Programação 2
+# Amia: Mond
+Projeto da disciplina de Fundamentos de Programação 2
