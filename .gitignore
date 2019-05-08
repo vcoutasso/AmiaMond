@@ -33,3 +33,13 @@
 
 
 amia
+/packages/SFML/include/SFML
+/packages/SFML/lib
+/.vs/AmiaVS
+/Debug
+/packages/SFML
+/x64
+/AmiaVS.sln
+/AmiaVS.vcxproj
+/AmiaVS.vcxproj.filters
+/AmiaVS.vcxproj.user
