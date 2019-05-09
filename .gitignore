@@ -30,9 +30,9 @@
 *.exe
 *.out
 *.app
-
-
 amia
+
+# VS Project
 /packages/SFML/include/SFML
 /packages/SFML/lib
 /.vs/AmiaVS

@@ -29,7 +29,7 @@ $(PROJ_NAME): $(OBJ)
 	@ echo
 	@ echo -e '\033[1;37mFinished building binary:\033[0m $@'
 
-./obj/%.o: ./src/%.c ./src/%.h
+./obj/%.o: ./src/%.cpp ./src/%.hpp
 	@ echo -e '\033[1;37mBuilding target using G++ compiler:\033[0m $<'
 	$(CC) -o $@ $< $(CC_FLAGS)
 	@ echo
