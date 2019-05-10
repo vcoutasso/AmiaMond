@@ -11,7 +11,6 @@ class Option {
 	private:
 		bool hovering;
 
-
 	public:
 		Option(float px, float py, unsigned int s, string t, string pathToFont);
 		sf::Font font;
