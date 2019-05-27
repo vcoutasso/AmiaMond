@@ -8,12 +8,12 @@ Option::Option(float px, float py, unsigned int s, string t, string pathToFont) 
 
 	hovering = false;
 
-	text.setPosition(px, py);
 	text.setCharacterSize(s);
 	text.setString(t);
+	text.setPosition(px - text.getLocalBounds().width / 2, py);
 }
 
-// Seta o valor do atributo hovering. Não sei se vai ser realmente util em algum momento
+// Seta o valor do atributo hovering. 
 void Option::setHovering(bool b) {
 	hovering = b;
 }
@@ -24,7 +24,6 @@ bool Option::getHovering() {
 }
 
 // Verifica se as coordenadas x e y representam um ponto que está em cima de Text. A principio para ser usado com as coordenadas do mouse.
-// TODO: Implementação.
 bool Option::isHovering(int x, int y) {
 	sf::FloatRect  pos = text.getGlobalBounds();
 	if (pos.contains(x,y))
