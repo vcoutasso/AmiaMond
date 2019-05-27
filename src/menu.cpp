@@ -2,6 +2,7 @@
 
 using namespace std;
 
+// Inicializa a classe. O objeto Text contem as informações de posição do texto e a string da opção. 
 Option::Option(float px, float py, unsigned int s, string t, string pathToFont) {
 	setFont(pathToFont);
 
@@ -16,7 +17,9 @@ void Option::setHovering(bool b) {
 	hovering = b;
 }
 
-bool Option::isHovering() {
+bool Option::isHovering(int x, int y) {
+	
+
 	return hovering;
 }
 
