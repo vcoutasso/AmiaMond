@@ -17,12 +17,11 @@ class Option {
 		sf::Text text;
 
 		void setHovering(bool b);
+		bool getHovering();
 		bool isHovering(int x, int y);
 
 		void setFont(string pathToFile);
-
 };
-
 
 
 
