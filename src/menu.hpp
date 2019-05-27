@@ -17,7 +17,7 @@ class Option {
 		sf::Text text;
 
 		void setHovering(bool b);
-		bool isHovering();
+		bool isHovering(int x, int y);
 
 		void setFont(string pathToFile);
 
