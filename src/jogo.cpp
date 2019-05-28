@@ -16,8 +16,11 @@ void Jogo::mainMenu() {
 
 	Option jogar(width / 2,  height / 4, 40, "Jogar", "bin/Roboto-Bold.ttf");
 	Option sair(width / 2, 3 * height / 4, 40, "Sair", "bin/Roboto-Bold.ttf");
+	Option instrucoes(width / 2, 2 * height / 4, 40, "Instrucoes", "bin/Roboto-Bold.ttf"); //Adicionando as Instruções
 
 	Clock clock;
+
+	bool atualizaTela = true;
 
 	while(window.isOpen()) {
 		
@@ -34,6 +37,14 @@ void Jogo::mainMenu() {
 				case Event::MouseButtonPressed:
 					if (sair.getHovering())
 						window.close();
+					
+					if (instrucoes.getHovering()) {
+						Instructions i1 ;
+
+						i1.openInstructions(&window); //Entrando nas Instruções
+
+						instrucoes.setHovering(false);
+					}
 
 					break;
 
@@ -47,7 +58,10 @@ void Jogo::mainMenu() {
 						sair.setHovering(true);
 					else if (jogar.isHovering(event.mouseMove.x, event.mouseMove.y))
 						jogar.setHovering(true);
+					else if (instrucoes.isHovering(event.mouseMove.x, event.mouseMove.y)) 
+						instrucoes.setHovering(true);
 					else {
+						instrucoes.setHovering(false);
 						sair.setHovering(false);
 						jogar.setHovering(false);
 					}
@@ -60,7 +74,12 @@ void Jogo::mainMenu() {
 			
 			// Atualiza a tela apenas depois de processar os eventos e se tiver passado o tempo minimo necessario.
 			// Caso contrário, torna a processar os eventos.
-			if (clock.getElapsedTime().asSeconds() >= 1/60.f) {
+			if (clock.getElapsedTime().asSeconds() >= 1 / 60.f) {
+				atualizaTela = true;
+			}
+
+			if (atualizaTela) {
+				atualizaTela = false;
 
 				if (sair.getHovering()) 
 					sair.text.setFillColor(Color::Blue);
@@ -72,9 +91,15 @@ void Jogo::mainMenu() {
 					jogar.text.setFillColor(Color::Blue);
 				else
 					jogar.text.setFillColor(Color::Red);
+
+				if (instrucoes.getHovering())
+					instrucoes.text.setFillColor(Color::Blue);
+				else
+					instrucoes.text.setFillColor(Color::Red);
 				
 
 				window.clear(Color(123, 231, 111));
+				window.draw(instrucoes.text);
 				window.draw(sair.text);
 				window.draw(jogar.text);
 				window.display();
