@@ -32,6 +32,9 @@
 *.app
 amia
 
+# Vim
+session.vim
+
 # VS Project
 /packages/SFML/include/SFML
 /packages/SFML/lib
