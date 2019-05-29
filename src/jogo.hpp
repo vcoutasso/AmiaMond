@@ -10,6 +10,10 @@ class Jogo {
 		Jogo();
 
 		sf::RenderWindow window;
+
+		void openInstructions();
+
+		void openJogar();
 		
 		void mainMenu();
 
