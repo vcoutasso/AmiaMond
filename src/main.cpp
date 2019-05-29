@@ -1,4 +1,3 @@
-#include "jogo.hpp"
 #include "menu.hpp"
 
 #define WIDTH 1280
@@ -8,10 +7,14 @@ using namespace sf;
 
 int main(int argc, char** argv) {
 
+	sf::ContextSettings settings;
+	settings.antialiasingLevel = 8;
+
 	Jogo jogo;
 
 	// Habilitar anti aliasing se precisar
-	jogo.window.create(VideoMode(WIDTH, HEIGHT), "Amia: Mond");
+	jogo.window.create(VideoMode(WIDTH, HEIGHT), "Amia: Mond", sf::Style::Default, settings);
+
 	//jogo.window.setVerticalSyncEnabled(false);
 	jogo.mainMenu();
 

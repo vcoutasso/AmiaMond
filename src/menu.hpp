@@ -3,7 +3,14 @@
 
 #include <string>
 #include <iostream>
+
 #include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+
+#include "jogo.hpp"
+#include "nave.hpp"
+#include "obstaculos.hpp"
+//#include "corrida.hpp"
 
 using namespace std;
 

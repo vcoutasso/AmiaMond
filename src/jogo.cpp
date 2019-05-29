@@ -1,4 +1,3 @@
-#include "jogo.hpp"
 #include "menu.hpp"
 
 using namespace sf;
