@@ -100,8 +100,6 @@ void Jogo::openJogar()
 	Option tresJogadores(450 + 310, 8 * height / 15 + 30, 40, "3", "bin/Roboto-Bold.ttf");
 	Option quatroJogadores(450 + 620, 8 * height / 15 + 30, 40, "4", "bin/Roboto-Bold.ttf");
 
-	Option refazer(700, height - 65, 40, "Refazer", "bin/Roboto-Bold.ttf");
-
 	Option iniciar(1100, height - 65, 40, "Iniciar!", "bin/Roboto-Bold.ttf");
 
 	Clock clock;
@@ -125,12 +123,6 @@ void Jogo::openJogar()
 				else
 					exit.setHovering(false);
 
-				if (refazer.isHovering(event.mouseMove.x, event.mouseMove.y)) {
-					refazer.setHovering(true);
-				}
-				else
-					refazer.setHovering(false);
-
 				if (iniciar.isHovering(event.mouseMove.x, event.mouseMove.y)) {
 					iniciar.setHovering(true);
 				}
@@ -144,20 +136,20 @@ void Jogo::openJogar()
 				else
 					modoJogoCorrida.setHovering(false);
 
-				if (doisJogadores.isHovering(event.mouseMove.x, event.mouseMove.y) && !doisJogadores.getSelected() && !tresJogadores.getSelected() && !quatroJogadores.getSelected()) {
+				if (doisJogadores.isHovering(event.mouseMove.x, event.mouseMove.y)) {
 
 					doisJogadores.setHovering(true);
 				}
 				else
 					doisJogadores.setHovering(false);
 
-				if (tresJogadores.isHovering(event.mouseMove.x, event.mouseMove.y) && !doisJogadores.getSelected() && !tresJogadores.getSelected() && !quatroJogadores.getSelected()) {
+				if (tresJogadores.isHovering(event.mouseMove.x, event.mouseMove.y)) {
 					tresJogadores.setHovering(true);
 				}
 				else
 					tresJogadores.setHovering(false);
 
-				if (quatroJogadores.isHovering(event.mouseMove.x, event.mouseMove.y) && !doisJogadores.getSelected() && !tresJogadores.getSelected() && !quatroJogadores.getSelected()) {
+				if (quatroJogadores.isHovering(event.mouseMove.x, event.mouseMove.y)) {
 					quatroJogadores.setHovering(true);
 				}
 				else
@@ -169,27 +161,29 @@ void Jogo::openJogar()
 					return;
 				}
 
-				if (refazer.getHovering()) {
-					modoJogoCorrida.setSelected(false);
-					doisJogadores.setSelected(false);
-					tresJogadores.setSelected(false);
-					quatroJogadores.setSelected(false);
-				}
-
 				if (modoJogoCorrida.getHovering()) {
 					modoJogoCorrida.setSelected(true);
 				}
 
 				if (doisJogadores.getHovering()) {
 					doisJogadores.setSelected(true);
+					
+					tresJogadores.setSelected(false);
+					quatroJogadores.setSelected(false);
 				}
 
 				if (tresJogadores.getHovering()) {
 					tresJogadores.setSelected(true);
+
+					doisJogadores.setSelected(false);
+					quatroJogadores.setSelected(false);
 				}
 
 				if (quatroJogadores.getHovering()) {
 					quatroJogadores.setSelected(true);
+
+					doisJogadores.setSelected(false);
+					tresJogadores.setSelected(false);
 				}
 				break;
 
@@ -205,12 +199,6 @@ void Jogo::openJogar()
 			}
 			else
 				exit.text.setFillColor(sf::Color::Red);
-
-			if (refazer.getHovering()) {
-				refazer.text.setFillColor(sf::Color::Blue);
-			}
-			else
-				refazer.text.setFillColor(sf::Color::Red);
 
 			if (iniciar.getHovering()) {
 				iniciar.text.setFillColor(sf::Color::Blue);
@@ -270,7 +258,6 @@ void Jogo::openJogar()
 			window.draw(modoJogo.text);
 			window.draw(modoJogoCorrida.text);
 			window.draw(exit.text);
-			window.draw(refazer.text);
 			window.draw(iniciar.text);
 
 			window.draw(numJogadores.text);
