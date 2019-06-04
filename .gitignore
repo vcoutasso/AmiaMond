@@ -47,4 +47,6 @@ session.vim
 /AmiaVS.vcxproj.filters
 /AmiaVS.vcxproj.user
 /AmiaMondMond
+
 /.gitattributes
+compile_commands.json
