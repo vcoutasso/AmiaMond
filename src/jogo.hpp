@@ -15,6 +15,8 @@ class Jogo {
 		
 		void mainMenu();
 
+		void playCorrida(int nplayers);
+
 		~Jogo();
 
 };

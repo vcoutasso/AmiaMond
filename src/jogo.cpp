@@ -52,7 +52,7 @@ void Jogo::openInstructions()
 				break;
 			}
 
-			if (clock.getElapsedTime().asSeconds() >= 1 / 60.f) {
+			if (clock.getElapsedTime().asSeconds() >= 1 / FPS) {
 
 				if (exit.getHovering())
 					exit.text.setFillColor(sf::Color::Blue);
@@ -74,7 +74,6 @@ void Jogo::openInstructions()
 //Implemetando a Função Jogar contendo todas as opções de modo de jogo e quantidade de jogadores
 void Jogo::openJogar()
 {
-	int width = window.getSize().x;
 	int height = window.getSize().y;
 
 	Option modoJogo(0, 0, 40, "Modo de Jogo", "bin/Roboto-Bold.ttf");
@@ -184,6 +183,19 @@ void Jogo::openJogar()
 					doisJogadores.setSelected(false);
 					tresJogadores.setSelected(false);
 				}
+				if (iniciar.getHovering()) {
+					// So inicia o jogo se estiver com todas as opções pertinentes selecionadas
+					if ((doisJogadores.getSelected() || tresJogadores.getSelected() || quatroJogadores.getSelected()) && (modoJogoCorrida.getSelected())) {
+						int n = 2;
+
+						if (tresJogadores.getHovering())
+							n = 3;
+						else if (quatroJogadores.getHovering())
+							n = 4;
+
+						playCorrida(n);
+					}
+				}
 				break;
 
 			default:
@@ -191,7 +203,7 @@ void Jogo::openJogar()
 			}
 		}
 
-		if (clock.getElapsedTime().asSeconds() >= 1 / 60.f) {
+		if (clock.getElapsedTime().asSeconds() >= 1 / FPS) {
 
 			if (exit.getHovering()) {
 				exit.text.setFillColor(sf::Color::Blue);
@@ -341,7 +353,7 @@ void Jogo::mainMenu() {
 			
 			// Atualiza a tela apenas depois de processar os eventos e se tiver passado o tempo minimo necessario.
 			// Caso contrário, torna a processar os eventos.
-			if (clock.getElapsedTime().asSeconds() >= 1 / 60.f) {
+			if (clock.getElapsedTime().asSeconds() >= 1 / FPS) {
 				atualizaTela = true;
 			}
 
@@ -375,6 +387,38 @@ void Jogo::mainMenu() {
 			}
 		}
 
+
+	}
+}
+
+void Jogo::playCorrida(int nplayers) {
+	sf::Clock clock;
+
+	while (window.isOpen()) {
+
+		sf::Event event;
+
+		while (window.pollEvent(event)) {
+			switch(event.type) {
+				case Event::KeyReleased:
+					if (event.key.code == Keyboard::Escape)
+						window.close();
+					break;
+
+				case Event::Closed:
+					window.close();
+					break;
+
+				default:
+					break;
+
+			}	
+		}
+
+		if (clock.getElapsedTime().asSeconds() >= 1 / FPS) {
+			window.clear(Color::Black);
+			window.display();
+		}
 
 	}
 }

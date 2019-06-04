@@ -1,8 +1,11 @@
 #ifndef _MENU_HPP
 #define _MENU_HPP
 
+#define FPS 60.0
+
 #include <string>
 #include <iostream>
+#include <stack>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>

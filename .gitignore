@@ -50,3 +50,6 @@ session.vim
 
 /.gitattributes
 compile_commands.json
+.idea/
+CMakeLists.txt
+cmake-build-debug/

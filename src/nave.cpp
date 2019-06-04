@@ -20,6 +20,13 @@ Nave::Nave(float x, float y) {
 	shape.setPosition(pos.x, pos.y);
 }
 
+Nave::Nave() {
+	pos = sf::Vector2f(0, 0);
+
+	speed = 0;
+
+}
+
 float Nave::getSpeed() {
 	return speed;
 }

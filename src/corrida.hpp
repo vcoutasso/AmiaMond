@@ -6,8 +6,12 @@
 class Corrida {
 	private:
 		Nave *players;
-		//std::vector<Obstaculos> obstaculos;
+		std::stack<Obstaculos> obstaculos;
 	public:
+		Corrida(int n);
+		Corrida();
+
+		void Main();
 
 
 

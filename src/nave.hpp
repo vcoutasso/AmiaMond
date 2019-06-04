@@ -10,6 +10,7 @@ class Nave {
 	public:
 		Nave(sf::Vector2f p);
 		Nave(float x, float y);
+		Nave();
 	
 		sf::RectangleShape shape;
 
