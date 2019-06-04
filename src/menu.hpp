@@ -17,6 +17,7 @@ using namespace std;
 class Option {		//Funcionalidade dos Botões
 	private:
 		bool hovering;
+		bool selected;
 
 	public:
 		Option(float px, float py, unsigned int s, string t, string pathToFont);
@@ -26,16 +27,10 @@ class Option {		//Funcionalidade dos Botões
 		void setHovering(bool b);
 		bool getHovering();
 		bool isHovering(int x, int y);
+		void setSelected(bool b);
+		bool getSelected();
 
 		void setFont(string pathToFile);
 };
-
-class Instructions {		//Tela de Instruções
-
-	public:
-
-		void openInstructions(sf::RenderWindow *window);
-};
-
 
 #endif
