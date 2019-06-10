@@ -295,6 +295,16 @@ void Jogo::mainMenu() {
 
 	Clock clock;
 
+	if (!buffer.loadFromFile("bin/menu_theme.wav")) {
+			std::cout << "Error! Could not load menu_theme.wav!" << endl;
+			window.close();
+	}
+
+	sound.setBuffer(buffer);
+	sound.setVolume(50.f);
+	sound.play();
+	sound.setLoop(true);
+
 	bool atualizaTela = true;
 
 	while(window.isOpen()) {

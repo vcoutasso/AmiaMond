@@ -5,19 +5,21 @@
 
 class Jogo {
 	public:
-		Jogo();
+	Jogo();
 
-		sf::RenderWindow window;
+	sf::RenderWindow window;
+	sf::SoundBuffer buffer;
+	sf::Sound sound;
 
-		void openInstructions();
+	void openInstructions();
 
-		void openJogar();
-		
-		void mainMenu();
+	void openJogar();
+	
+	void mainMenu();
 
-		void playCorrida(int nplayers);
+	void playCorrida(int nplayers);
 
-		~Jogo();
+	~Jogo();
 
 };
 
