@@ -40,6 +40,8 @@ class Option {		//Funcionalidade dos Bot�es
 		bool getSelected();
 
 		void setFont(string pathToFile);
+
+		~Option();
 };
 
 #endif
