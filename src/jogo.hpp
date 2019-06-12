@@ -11,13 +11,14 @@ class Jogo {
 	sf::SoundBuffer buffer;
 	sf::Sound sound;
 
-	void openInstructions();
-
-	void openJogar();
 	
-	void mainMenu();
+	int mainMenu();
 
-	void playCorrida(int nplayers);
+	int openInstructions();
+
+	int openJogar();
+
+	int playCorrida(int nplayers);
 
 	~Jogo();
 

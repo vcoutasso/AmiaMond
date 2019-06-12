@@ -1,13 +1,15 @@
 #include "menu.hpp"
 
 Jogo::~Jogo() {
+	buffer.~SoundBuffer();
+	sound.~Sound();
 	window.~RenderWindow();
 }
 
 Jogo::Jogo() {
 }
 
-void Jogo::openInstructions()
+int Jogo::openInstructions()
 {
 	int width = window.getSize().x;
 	int height = window.getSize().y;
@@ -29,20 +31,23 @@ void Jogo::openInstructions()
 			switch (event.type)
 			{
 			case sf::Event::Closed:
-				window.close();
+				return -1;
 				break;
 
 			case sf::Event::MouseMoved:		//Caso aperte no Botão Sair
 				if (exit.isHovering(event.mouseMove.x, event.mouseMove.y)) {
 					exit.setHovering(true);
+					exit.text.setFillColor(sf::Color::Blue);
 				}
-				else
+				else {
 					exit.setHovering(false); //Para quando estiver fora voltar
+					exit.text.setFillColor(sf::Color::Red);
+				}
 				break;
 
 			case sf::Event::MouseButtonPressed:
 				if (exit.getHovering()) {
-					return;
+					return 1;
 				}
 				break;
 
@@ -51,11 +56,6 @@ void Jogo::openInstructions()
 			}
 
 			if (clock.getElapsedTime().asSeconds() >= 1 / FPS) {
-
-				if (exit.getHovering())
-					exit.text.setFillColor(sf::Color::Blue);
-				else
-					exit.text.setFillColor(sf::Color::Red);
 
 				window.clear(sf::Color(123, 231, 111));
 				window.draw(exit.text);
@@ -66,11 +66,13 @@ void Jogo::openInstructions()
 			}
 		}
 	}
+
+	return 1;
 }
 
 //TODO: Abrir funções a partir das opções do usuário
 //Implemetando a Função Jogar contendo todas as opções de modo de jogo e quantidade de jogadores
-void Jogo::openJogar()
+int Jogo::openJogar()
 {
 	int height = window.getSize().y;
 
@@ -109,7 +111,7 @@ void Jogo::openJogar()
 			switch (event.type)
 			{
 			case sf::Event::Closed:
-				window.close();
+				return -1;
 				break;
 
 			case sf::Event::MouseMoved:
@@ -158,7 +160,7 @@ void Jogo::openJogar()
 
 			case sf::Event::MouseButtonPressed:
 				if (exit.getHovering()) {
-					return;
+					return 1;
 				}
 
 
@@ -200,7 +202,8 @@ void Jogo::openJogar()
 						else if (quatroJogadores.getHovering())
 							n = 4;
 
-						playCorrida(n);
+						if (playCorrida(n) == -1)
+							return -1;
 					}
 				}
 				break;
@@ -232,9 +235,10 @@ void Jogo::openJogar()
 
 
 	}
+	return 1;
 }
 
-void Jogo::mainMenu() {
+int Jogo::mainMenu() {
 	int width = window.getSize().x;
 	int height = window.getSize().y;
 
@@ -246,7 +250,7 @@ void Jogo::mainMenu() {
 
 	if (!buffer.loadFromFile("bin/menu_theme.wav")) {
 			std::cout << "Error! Could not load menu_theme.wav!" << endl;
-			window.close();
+			return -1;
 	}
 
 	sound.setBuffer(buffer);
@@ -265,21 +269,23 @@ void Jogo::mainMenu() {
 
 			switch (event.type) {
 				case sf::Event::Closed:
-					window.close();
+					return -1;
 					break;
 
 				case sf::Event::MouseButtonPressed:
 					if (sair.getHovering())
-						window.close();
+						return 1;
 					
 					if (instrucoes.getHovering()) {
-						openInstructions(); //Entrando nas Instruções
+						if (openInstructions() == -1) //Entrando nas Instruções
+							return -1;
 
 						instrucoes.setHovering(false);
 					}
 
 					if (jogar.getHovering()) {
-						openJogar();
+						if (openJogar() == -1)
+							return -1;
 
 						jogar.setHovering(false);
 					}
@@ -288,7 +294,7 @@ void Jogo::mainMenu() {
 
 				case sf::Event::KeyReleased:
 					if (event.key.code == sf::Keyboard::Escape)
-						window.close();
+						return 1;
 					break;
 				
 				case sf::Event::MouseMoved:
@@ -348,16 +354,17 @@ void Jogo::mainMenu() {
 
 
 	}
+	return 1;
 }
 
-void Jogo::playCorrida(int nplayers) {
+int Jogo::playCorrida(int nplayers) {
 	sf::Clock clock;
 
 	sf::Texture texture;
 
 	if (!texture.loadFromFile("bin/surfnauta_cinza.png")) {
 		std::cout << "Error! Could not load textures!" << std::endl;
-		return;
+		return -1;
 	}
 
 	sf::Sprite boneco;
@@ -374,13 +381,13 @@ void Jogo::playCorrida(int nplayers) {
 				case sf::Event::MouseMoved:
 					boneco.setPosition(sf::Vector2f(event.mouseMove.x, event.mouseMove.y));
 					break;
-				case sf::Event::KeyReleased:
+				case sf::Event::KeyReleased: // Volta para o menu
 					if (event.key.code == sf::Keyboard::Escape)
-						window.close();
+						return 1;
 					break;
 
-				case sf::Event::Closed:
-					window.close();
+				case sf::Event::Closed: // Sai do jogo
+					return -1;
 					break;
 
 				default:
@@ -396,4 +403,5 @@ void Jogo::playCorrida(int nplayers) {
 		}
 
 	}
+	return 1;
 }
