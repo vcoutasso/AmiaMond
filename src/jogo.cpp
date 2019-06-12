@@ -242,11 +242,28 @@ int Jogo::mainMenu() {
 	int width = window.getSize().x;
 	int height = window.getSize().y;
 
-	Option jogar(width / 2,  height / 4, 40, "Novo Jogo", "bin/Roboto-Bold.ttf");
-	Option sair(width / 2, 3 * height / 4, 40, "Sair", "bin/Roboto-Bold.ttf");
-	Option instrucoes(width / 2, 2 * height / 4, 40, "Tutorial", "bin/Roboto-Bold.ttf"); //Adicionando as Instruções
+	sf::RectangleShape background(sf::Vector2f(1920.0f, 1080.0f));
+	//background.setPosition(sf::Vector2f(0, 0));
+	sf::Texture space;
+	
+	space.loadFromFile("bin/frames.png");
+
+	background.setTexture(&space);
+
+	Animation animation(&space, sf::Vector2u(1, 15), 0.3);
+
+	//sf::Vector2u textureSize = space.getSize();
+	//textureSize.y /= 15;
+
+	//background.setTextureRect(sf::IntRect(textureSize.x * 0, textureSize.y * 0, textureSize.x, textureSize.y));
+
+	Option jogar(190,  height / 4, 40, "NOVO JOGO", "bin/Pixelada.ttf");
+	Option sair(190, 3 * height / 4, 40, "SAIR", "bin/Pixelada.ttf");
+	Option instrucoes(190, 2 * height / 4, 40, "TUTORIAL", "bin/Pixelada.ttf"); //Adicionando as Instruções
 
 	sf::Clock clock;
+
+	float deltaTime = 0;
 
 	if (!buffer.loadFromFile("bin/menu_theme.wav")) {
 			std::cout << "Error! Could not load menu_theme.wav!" << endl;
@@ -254,7 +271,7 @@ int Jogo::mainMenu() {
 	}
 
 	sound.setBuffer(buffer);
-	sound.setVolume(50.f);
+	sound.setVolume(30.f);
 	sound.play();
 	sound.setLoop(true);
 
@@ -263,6 +280,8 @@ int Jogo::mainMenu() {
 	while(window.isOpen()) {
 		
 		sf::Event event;
+
+		//deltaTime = clock.restart().asSeconds(); \\ VAI BUGA TUDO
 		
 		/* Tratamento de eventos */ 
 		while (window.pollEvent(event)) {
@@ -341,8 +360,10 @@ int Jogo::mainMenu() {
 				else
 					instrucoes.text.setFillColor(sf::Color::Red);
 				
+				animation.update(0, deltaTime);
+				background.setTextureRect(animation.uvRect);
 
-				window.clear(sf::Color(123, 231, 111));
+				window.draw(background);
 				window.draw(instrucoes.text);
 				window.draw(sair.text);
 				window.draw(jogar.text);
@@ -404,4 +425,36 @@ int Jogo::playCorrida(int nplayers) {
 
 	}
 	return 1;
+}
+
+Animation::Animation(sf::Texture* texture, sf::Vector2u imageCount, float switchTime)
+{
+	this->imageCount = imageCount;
+	this->switchTime = switchTime;
+	totalTime = 0;
+	//currentImage.x = 0;
+	currentImage.y = 0;
+
+	uvRect.width = texture->getSize().x / float(imageCount.x);
+	uvRect.height = texture->getSize().y / float(imageCount.y);
+}
+
+//Atualizado o tempo, ajeitando a frame rate
+void Animation::update(int row, float deltaTime)
+{
+	//currentImage.y = row;
+	currentImage.x = row;
+	totalTime += deltaTime;
+
+	if (totalTime >= switchTime) {
+		totalTime -= switchTime;
+		currentImage.y++;
+
+		if (currentImage.y >= imageCount.y) {
+			currentImage.y = 0;
+		}
+	}
+
+	uvRect.left = currentImage.x * uvRect.width;
+	uvRect.top = currentImage.y * uvRect.height;
 }
