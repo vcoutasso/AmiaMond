@@ -37,11 +37,11 @@ int Jogo::openInstructions()
 			case sf::Event::MouseMoved:		//Caso aperte no Botão Sair
 				if (exit.isHovering(event.mouseMove.x, event.mouseMove.y)) {
 					exit.setHovering(true);
-					exit.text.setFillColor(sf::Color::Blue);
+					exit.text.setFillColor(HOVER_COLOR);
 				}
 				else {
 					exit.setHovering(false); //Para quando estiver fora voltar
-					exit.text.setFillColor(sf::Color::Red);
+					exit.text.setFillColor(BUTTON_COLOR);
 				}
 				break;
 
@@ -118,27 +118,27 @@ int Jogo::openJogar()
 
 				if (exit.isHovering(event.mouseMove.x, event.mouseMove.y)) {
 					exit.setHovering(true);
-					exit.text.setFillColor(sf::Color::Blue);
+					exit.text.setFillColor(HOVER_COLOR);
 				}
 				else if (iniciar.isHovering(event.mouseMove.x, event.mouseMove.y)) {
 					iniciar.setHovering(true);
-					iniciar.text.setFillColor(sf::Color::Blue);
+					iniciar.text.setFillColor(HOVER_COLOR);
 				}
 				else if (modoJogoCorrida.isHovering(event.mouseMove.x, event.mouseMove.y) && !modoJogoCorrida.getSelected()) {
 					modoJogoCorrida.setHovering(true);
-					if (!modoJogoCorrida.getSelected()) modoJogoCorrida.text.setFillColor(sf::Color::Blue);
+					if (!modoJogoCorrida.getSelected()) modoJogoCorrida.text.setFillColor(HOVER_COLOR);
 				}
 				else if (doisJogadores.isHovering(event.mouseMove.x, event.mouseMove.y)) {
 					doisJogadores.setHovering(true);
-					if (!doisJogadores.getSelected()) doisJogadores.text.setFillColor(sf::Color::Blue);
+					if (!doisJogadores.getSelected()) doisJogadores.text.setFillColor(HOVER_COLOR);
 				}
 				else if (tresJogadores.isHovering(event.mouseMove.x, event.mouseMove.y)) {
 					tresJogadores.setHovering(true);
-					if (!tresJogadores.getSelected()) tresJogadores.text.setFillColor(sf::Color::Blue);
+					if (!tresJogadores.getSelected()) tresJogadores.text.setFillColor(HOVER_COLOR);
 				}
 				else if (quatroJogadores.isHovering(event.mouseMove.x, event.mouseMove.y)) {
 					quatroJogadores.setHovering(true);
-					if (!quatroJogadores.getSelected()) quatroJogadores.text.setFillColor(sf::Color::Blue);
+					if (!quatroJogadores.getSelected()) quatroJogadores.text.setFillColor(HOVER_COLOR);
 				}
 				else { // Se o mouse não estiver sobre nenhuma opção, desmarca todas
 					exit.setHovering(false);
@@ -148,12 +148,13 @@ int Jogo::openJogar()
 					tresJogadores.setHovering(false);
 					quatroJogadores.setHovering(false);
 
-					exit.text.setFillColor(sf::Color::Red); 
-					iniciar.text.setFillColor(sf::Color::Red); 
-					if (!modoJogoCorrida.getSelected()) modoJogoCorrida.text.setFillColor(sf::Color::Red); 
-					if (!doisJogadores.getSelected()) doisJogadores.text.setFillColor(sf::Color::Red);
-					if (!tresJogadores.getSelected()) tresJogadores.text.setFillColor(sf::Color::Red);
-					if (!quatroJogadores.getSelected()) quatroJogadores.text.setFillColor(sf::Color::Red);
+					exit.text.setFillColor(BUTTON_COLOR); 
+					iniciar.text.setFillColor(BUTTON_COLOR); 
+
+					if (!modoJogoCorrida.getSelected()) modoJogoCorrida.text.setFillColor(BUTTON_COLOR); 
+					if (!doisJogadores.getSelected()) doisJogadores.text.setFillColor(BUTTON_COLOR);
+					if (!tresJogadores.getSelected()) tresJogadores.text.setFillColor(BUTTON_COLOR);
+					if (!quatroJogadores.getSelected()) quatroJogadores.text.setFillColor(BUTTON_COLOR);
 				}
 				
 				break;
@@ -165,9 +166,9 @@ int Jogo::openJogar()
 
 
 				if ((doisJogadores.getHovering() || tresJogadores.getHovering() || quatroJogadores.getHovering())) {
-					doisJogadores.text.setFillColor(sf::Color::Red);
-					tresJogadores.text.setFillColor(sf::Color::Red);
-					quatroJogadores.text.setFillColor(sf::Color::Red);
+					doisJogadores.text.setFillColor(BUTTON_COLOR);
+					tresJogadores.text.setFillColor(BUTTON_COLOR);
+					quatroJogadores.text.setFillColor(BUTTON_COLOR);
 
 					doisJogadores.setSelected(false);
 					tresJogadores.setSelected(false);
@@ -239,7 +240,7 @@ int Jogo::openJogar()
 }
 
 int Jogo::mainMenu() {
-	int width = window.getSize().x;
+	//int width = window.getSize().x;
 	int height = window.getSize().y;
 
 	sf::RectangleShape background(sf::Vector2f(1920.0f, 1080.0f));
@@ -250,19 +251,14 @@ int Jogo::mainMenu() {
 
 	background.setTexture(&space);
 
-	Animation animation(&space, sf::Vector2u(1, 15), 0.3);
+	Animation animation(&space, sf::Vector2u(1, 15), 0.3f);
 
-	//sf::Vector2u textureSize = space.getSize();
-	//textureSize.y /= 15;
-
-	//background.setTextureRect(sf::IntRect(textureSize.x * 0, textureSize.y * 0, textureSize.x, textureSize.y));
 
 	Option jogar(190,  height / 4, 40, "NOVO JOGO", "bin/Pixelada.ttf");
 	Option sair(190, 3 * height / 4, 40, "SAIR", "bin/Pixelada.ttf");
 	Option instrucoes(190, 2 * height / 4, 40, "TUTORIAL", "bin/Pixelada.ttf"); //Adicionando as Instruções
 
 	sf::Clock clock;
-
 	float deltaTime = 0;
 
 	if (!buffer.loadFromFile("bin/menu_theme.wav")) {
@@ -281,10 +277,9 @@ int Jogo::mainMenu() {
 		
 		sf::Event event;
 
-		//deltaTime = clock.restart().asSeconds(); \\ VAI BUGA TUDO
-		
 		/* Tratamento de eventos */ 
 		while (window.pollEvent(event)) {
+
 
 			switch (event.type) {
 				case sf::Event::Closed:
@@ -317,16 +312,26 @@ int Jogo::mainMenu() {
 					break;
 				
 				case sf::Event::MouseMoved:
-					if (sair.isHovering(event.mouseMove.x, event.mouseMove.y))
+					if (sair.isHovering(event.mouseMove.x, event.mouseMove.y)) {
 						sair.setHovering(true);
-					else if (jogar.isHovering(event.mouseMove.x, event.mouseMove.y))
+						sair.text.setFillColor(HOVER_COLOR);
+					}
+					else if (jogar.isHovering(event.mouseMove.x, event.mouseMove.y)) {
 						jogar.setHovering(true);
-					else if (instrucoes.isHovering(event.mouseMove.x, event.mouseMove.y)) 
+						jogar.text.setFillColor(HOVER_COLOR);
+					}
+					else if (instrucoes.isHovering(event.mouseMove.x, event.mouseMove.y)) {
 						instrucoes.setHovering(true);
+						instrucoes.text.setFillColor(HOVER_COLOR);
+					}
 					else {
 						instrucoes.setHovering(false);
 						sair.setHovering(false);
 						jogar.setHovering(false);
+
+						sair.text.setFillColor(BUTTON_COLOR);
+						jogar.text.setFillColor(BUTTON_COLOR);
+						instrucoes.text.setFillColor(BUTTON_COLOR);
 					}
 
 					break;
@@ -334,7 +339,9 @@ int Jogo::mainMenu() {
 				default:
 					break;
 			}
+		}
 			
+
 			// Atualiza a tela apenas depois de processar os eventos e se tiver passado o tempo minimo necessario.
 			// Caso contrário, torna a processar os eventos.
 			if (clock.getElapsedTime().asSeconds() >= 1 / FPS) {
@@ -344,39 +351,21 @@ int Jogo::mainMenu() {
 			if (atualizaTela) {
 				atualizaTela = false;
 
-				if (sair.getHovering()) 
-					sair.text.setFillColor(sf::Color::Blue);
-				else
-					sair.text.setFillColor(sf::Color::Red);
-				
-
-				if (jogar.getHovering())
-					jogar.text.setFillColor(sf::Color::Blue);
-				else
-					jogar.text.setFillColor(sf::Color::Red);
-
-				if (instrucoes.getHovering())
-					instrucoes.text.setFillColor(sf::Color::Blue);
-				else
-					instrucoes.text.setFillColor(sf::Color::Red);
-				
-				animation.update(0, deltaTime);
-				background.setTextureRect(animation.uvRect);
-
+			animation.updateY(0, deltaTime);
+			background.setTextureRect(animation.uvRect);
 				window.draw(background);
 				window.draw(instrucoes.text);
 				window.draw(sair.text);
 				window.draw(jogar.text);
 				window.display();
 
-				clock.restart();
+				deltaTime = clock.restart().asSeconds();
 			}
 		}
 
-
-	}
 	return 1;
 }
+
 
 int Jogo::playCorrida(int nplayers) {
 	sf::Clock clock;
@@ -427,34 +416,3 @@ int Jogo::playCorrida(int nplayers) {
 	return 1;
 }
 
-Animation::Animation(sf::Texture* texture, sf::Vector2u imageCount, float switchTime)
-{
-	this->imageCount = imageCount;
-	this->switchTime = switchTime;
-	totalTime = 0;
-	//currentImage.x = 0;
-	currentImage.y = 0;
-
-	uvRect.width = texture->getSize().x / float(imageCount.x);
-	uvRect.height = texture->getSize().y / float(imageCount.y);
-}
-
-//Atualizado o tempo, ajeitando a frame rate
-void Animation::update(int row, float deltaTime)
-{
-	//currentImage.y = row;
-	currentImage.x = row;
-	totalTime += deltaTime;
-
-	if (totalTime >= switchTime) {
-		totalTime -= switchTime;
-		currentImage.y++;
-
-		if (currentImage.y >= imageCount.y) {
-			currentImage.y = 0;
-		}
-	}
-
-	uvRect.left = currentImage.x * uvRect.width;
-	uvRect.top = currentImage.y * uvRect.height;
-}

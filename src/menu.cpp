@@ -46,7 +46,7 @@ void Option::setFont(string pathToFile) {
 		cout << "Error: Could not load font! Path to file: " << pathToFile << endl;
 	else {
 		text.setFont(font);
-		text.setFillColor(sf::Color::Red);
+		text.setFillColor(BUTTON_COLOR);
 		text.setStyle(sf::Text::Bold);
 	}
 }
