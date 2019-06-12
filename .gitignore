@@ -55,3 +55,9 @@ CMakeLists.txt
 cmake-build-debug/
 
 src/.vscode/
+/.vs
+/SFML-2.5.1
+/AmiaMond.sln
+/AmiaMond.vcxproj
+/AmiaMond.vcxproj.filters
+/AmiaMond.vcxproj.user
