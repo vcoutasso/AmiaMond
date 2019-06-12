@@ -1,9 +1,7 @@
 #include "menu.hpp"
 
-#define WIDTH 1280
-#define HEIGHT 720
-
-using namespace sf;
+#define WIDTH 1920
+#define HEIGHT 1080
 
 int main(int argc, char** argv) {
 
@@ -13,9 +11,9 @@ int main(int argc, char** argv) {
 	Jogo jogo;
 
 	// Cria a janela e logo em seguida centraliza.
-	jogo.window.create(VideoMode(WIDTH, HEIGHT), "Amia: Mond", sf::Style::Default, settings);
-	jogo.window.setPosition(Vector2i(VideoMode::getDesktopMode().width / 2 - jogo.window.getSize().x / 2,
-			VideoMode::getDesktopMode().height / 2 - jogo.window.getSize().y / 2));
+	jogo.window.create(sf::VideoMode(WIDTH, HEIGHT), "Amia: Mond", sf::Style::Fullscreen, settings);
+	jogo.window.setPosition(sf::Vector2i(sf::VideoMode::getDesktopMode().width / 2 - jogo.window.getSize().x / 2,
+			sf::VideoMode::getDesktopMode().height / 2 - jogo.window.getSize().y / 2));
 
 	//jogo.window.setVerticalSyncEnabled(false);
 	jogo.mainMenu();

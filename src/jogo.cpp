@@ -1,7 +1,5 @@
 #include "menu.hpp"
 
-using namespace sf;
-
 Jogo::~Jogo() {
 	window.~RenderWindow();
 }
@@ -100,11 +98,11 @@ void Jogo::openJogar()
 
 	Option iniciar(1100, height - 65, 40, "Iniciar!", "bin/Roboto-Bold.ttf");
 
-	Clock clock;
+	sf::Clock clock;
 
 	while (window.isOpen()) {
 
-		Event event;
+		sf::Event event;
 
 		while (window.pollEvent(event)) {
 
@@ -293,7 +291,7 @@ void Jogo::mainMenu() {
 	Option sair(width / 2, 3 * height / 4, 40, "Sair", "bin/Roboto-Bold.ttf");
 	Option instrucoes(width / 2, 2 * height / 4, 40, "Tutorial", "bin/Roboto-Bold.ttf"); //Adicionando as Instruções
 
-	Clock clock;
+	sf::Clock clock;
 
 	if (!buffer.loadFromFile("bin/menu_theme.wav")) {
 			std::cout << "Error! Could not load menu_theme.wav!" << endl;
@@ -309,17 +307,17 @@ void Jogo::mainMenu() {
 
 	while(window.isOpen()) {
 		
-		Event event;
+		sf::Event event;
 		
 		/* Tratamento de eventos */ 
 		while (window.pollEvent(event)) {
 
 			switch (event.type) {
-				case Event::Closed:
+				case sf::Event::Closed:
 					window.close();
 					break;
 
-				case Event::MouseButtonPressed:
+				case sf::Event::MouseButtonPressed:
 					if (sair.getHovering())
 						window.close();
 					
@@ -337,12 +335,12 @@ void Jogo::mainMenu() {
 
 					break;
 
-				case Event::KeyReleased:
-					if (event.key.code == Keyboard::Escape)
+				case sf::Event::KeyReleased:
+					if (event.key.code == sf::Keyboard::Escape)
 						window.close();
 					break;
 				
-				case Event::MouseMoved:
+				case sf::Event::MouseMoved:
 					if (sair.isHovering(event.mouseMove.x, event.mouseMove.y))
 						sair.setHovering(true);
 					else if (jogar.isHovering(event.mouseMove.x, event.mouseMove.y))
@@ -371,23 +369,23 @@ void Jogo::mainMenu() {
 				atualizaTela = false;
 
 				if (sair.getHovering()) 
-					sair.text.setFillColor(Color::Blue);
+					sair.text.setFillColor(sf::Color::Blue);
 				else
-					sair.text.setFillColor(Color::Red);
+					sair.text.setFillColor(sf::Color::Red);
 				
 
 				if (jogar.getHovering())
-					jogar.text.setFillColor(Color::Blue);
+					jogar.text.setFillColor(sf::Color::Blue);
 				else
-					jogar.text.setFillColor(Color::Red);
+					jogar.text.setFillColor(sf::Color::Red);
 
 				if (instrucoes.getHovering())
-					instrucoes.text.setFillColor(Color::Blue);
+					instrucoes.text.setFillColor(sf::Color::Blue);
 				else
-					instrucoes.text.setFillColor(Color::Red);
+					instrucoes.text.setFillColor(sf::Color::Red);
 				
 
-				window.clear(Color(123, 231, 111));
+				window.clear(sf::Color(123, 231, 111));
 				window.draw(instrucoes.text);
 				window.draw(sair.text);
 				window.draw(jogar.text);
@@ -404,18 +402,33 @@ void Jogo::mainMenu() {
 void Jogo::playCorrida(int nplayers) {
 	sf::Clock clock;
 
+	sf::Texture texture;
+
+	if (!texture.loadFromFile("bin/surfnauta_cinza.png")) {
+		std::cout << "Error! Could not load textures!" << std::endl;
+		return;
+	}
+
+	sf::Sprite boneco;
+
+	boneco.setTexture(texture);
+	boneco.setScale(sf::Vector2f(0.1, 0.1));
+
 	while (window.isOpen()) {
 
 		sf::Event event;
 
 		while (window.pollEvent(event)) {
 			switch(event.type) {
-				case Event::KeyReleased:
-					if (event.key.code == Keyboard::Escape)
+				case sf::Event::MouseMoved:
+					boneco.setPosition(sf::Vector2f(event.mouseMove.x, event.mouseMove.y));
+					break;
+				case sf::Event::KeyReleased:
+					if (event.key.code == sf::Keyboard::Escape)
 						window.close();
 					break;
 
-				case Event::Closed:
+				case sf::Event::Closed:
 					window.close();
 					break;
 
@@ -426,7 +439,8 @@ void Jogo::playCorrida(int nplayers) {
 		}
 
 		if (clock.getElapsedTime().asSeconds() >= 1 / FPS) {
-			window.clear(Color::Black);
+			window.clear(sf::Color::Black);
+			window.draw(boneco);
 			window.display();
 		}
 
