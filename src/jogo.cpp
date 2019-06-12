@@ -113,43 +113,47 @@ void Jogo::openJogar()
 				break;
 
 			case sf::Event::MouseMoved:
+
 				if (exit.isHovering(event.mouseMove.x, event.mouseMove.y)) {
 					exit.setHovering(true);
+					exit.text.setFillColor(sf::Color::Blue);
 				}
-				else
-					exit.setHovering(false);
-
-				if (iniciar.isHovering(event.mouseMove.x, event.mouseMove.y)) {
+				else if (iniciar.isHovering(event.mouseMove.x, event.mouseMove.y)) {
 					iniciar.setHovering(true);
+					iniciar.text.setFillColor(sf::Color::Blue);
 				}
-				else
-					iniciar.setHovering(false);
-
-				if (modoJogoCorrida.isHovering(event.mouseMove.x, event.mouseMove.y) && !modoJogoCorrida.getSelected()) {
-
+				else if (modoJogoCorrida.isHovering(event.mouseMove.x, event.mouseMove.y) && !modoJogoCorrida.getSelected()) {
 					modoJogoCorrida.setHovering(true);
+					if (!modoJogoCorrida.getSelected()) modoJogoCorrida.text.setFillColor(sf::Color::Blue);
 				}
-				else
-					modoJogoCorrida.setHovering(false);
-
-				if (doisJogadores.isHovering(event.mouseMove.x, event.mouseMove.y)) {
-
+				else if (doisJogadores.isHovering(event.mouseMove.x, event.mouseMove.y)) {
 					doisJogadores.setHovering(true);
+					if (!doisJogadores.getSelected()) doisJogadores.text.setFillColor(sf::Color::Blue);
 				}
-				else
-					doisJogadores.setHovering(false);
-
-				if (tresJogadores.isHovering(event.mouseMove.x, event.mouseMove.y)) {
+				else if (tresJogadores.isHovering(event.mouseMove.x, event.mouseMove.y)) {
 					tresJogadores.setHovering(true);
+					if (!tresJogadores.getSelected()) tresJogadores.text.setFillColor(sf::Color::Blue);
 				}
-				else
-					tresJogadores.setHovering(false);
-
-				if (quatroJogadores.isHovering(event.mouseMove.x, event.mouseMove.y)) {
+				else if (quatroJogadores.isHovering(event.mouseMove.x, event.mouseMove.y)) {
 					quatroJogadores.setHovering(true);
+					if (!quatroJogadores.getSelected()) quatroJogadores.text.setFillColor(sf::Color::Blue);
 				}
-				else
+				else { // Se o mouse não estiver sobre nenhuma opção, desmarca todas
+					exit.setHovering(false);
+					iniciar.setHovering(false);
+					modoJogoCorrida.setHovering(false);
+					doisJogadores.setHovering(false);
+					tresJogadores.setHovering(false);
 					quatroJogadores.setHovering(false);
+
+					exit.text.setFillColor(sf::Color::Red); 
+					iniciar.text.setFillColor(sf::Color::Red); 
+					if (!modoJogoCorrida.getSelected()) modoJogoCorrida.text.setFillColor(sf::Color::Red); 
+					if (!doisJogadores.getSelected()) doisJogadores.text.setFillColor(sf::Color::Red);
+					if (!tresJogadores.getSelected()) tresJogadores.text.setFillColor(sf::Color::Red);
+					if (!quatroJogadores.getSelected()) quatroJogadores.text.setFillColor(sf::Color::Red);
+				}
+				
 				break;
 
 			case sf::Event::MouseButtonPressed:
@@ -157,30 +161,35 @@ void Jogo::openJogar()
 					return;
 				}
 
+
+				if ((doisJogadores.getHovering() || tresJogadores.getHovering() || quatroJogadores.getHovering())) {
+					doisJogadores.text.setFillColor(sf::Color::Red);
+					tresJogadores.text.setFillColor(sf::Color::Red);
+					quatroJogadores.text.setFillColor(sf::Color::Red);
+
+					doisJogadores.setSelected(false);
+					tresJogadores.setSelected(false);
+					quatroJogadores.setSelected(false);
+				}
+
 				if (modoJogoCorrida.getHovering()) {
 					modoJogoCorrida.setSelected(true);
+					modoJogoCorrida.text.setFillColor(sf::Color::Black);
 				}
 
 				if (doisJogadores.getHovering()) {
 					doisJogadores.setSelected(true);
-					
-					tresJogadores.setSelected(false);
-					quatroJogadores.setSelected(false);
+					doisJogadores.text.setFillColor(sf::Color::Black);
 				}
-
-				if (tresJogadores.getHovering()) {
+				else if (tresJogadores.getHovering()) {
 					tresJogadores.setSelected(true);
-
-					doisJogadores.setSelected(false);
-					quatroJogadores.setSelected(false);
+					tresJogadores.text.setFillColor(sf::Color::Black);
 				}
-
-				if (quatroJogadores.getHovering()) {
+				else if (quatroJogadores.getHovering()) {
 					quatroJogadores.setSelected(true);
-
-					doisJogadores.setSelected(false);
-					tresJogadores.setSelected(false);
+					quatroJogadores.text.setFillColor(sf::Color::Black);
 				}
+
 				if (iniciar.getHovering()) {
 					// So inicia o jogo se estiver com todas as opções pertinentes selecionadas
 					if ((doisJogadores.getSelected() || tresJogadores.getSelected() || quatroJogadores.getSelected()) && (modoJogoCorrida.getSelected())) {
@@ -202,64 +211,6 @@ void Jogo::openJogar()
 		}
 
 		if (clock.getElapsedTime().asSeconds() >= 1 / FPS) {
-
-			if (exit.getHovering()) {
-				exit.text.setFillColor(sf::Color::Blue);
-			}
-			else
-				exit.text.setFillColor(sf::Color::Red);
-
-			if (iniciar.getHovering()) {
-				iniciar.text.setFillColor(sf::Color::Blue);
-			}
-			else
-				iniciar.text.setFillColor(sf::Color::Red);
-
-			if (exit.getHovering()) {
-				exit.text.setFillColor(sf::Color::Blue);
-			}
-			else
-				exit.text.setFillColor(sf::Color::Red);
-
-			if (modoJogoCorrida.getHovering()) {
-				modoJogoCorrida.text.setFillColor(sf::Color::Blue);
-			}
-			else
-				modoJogoCorrida.text.setFillColor(sf::Color::Red);
-
-			if (doisJogadores.getHovering()) {
-				doisJogadores.text.setFillColor(sf::Color::Blue);
-			}
-			else
-				doisJogadores.text.setFillColor(sf::Color::Red);
-
-			if (tresJogadores.getHovering()) {
-				tresJogadores.text.setFillColor(sf::Color::Blue);
-			}
-			else
-				tresJogadores.text.setFillColor(sf::Color::Red);
-
-			if (quatroJogadores.getHovering()) {
-				quatroJogadores.text.setFillColor(sf::Color::Blue);
-			}
-			else
-				quatroJogadores.text.setFillColor(sf::Color::Red);
-
-			if (modoJogoCorrida.getSelected()) {
-				modoJogoCorrida.text.setFillColor(sf::Color::Black);
-			}
-
-			if (doisJogadores.getSelected()) {
-				doisJogadores.text.setFillColor(sf::Color::Black);
-			}
-
-			if (tresJogadores.getSelected()) {
-				tresJogadores.text.setFillColor(sf::Color::Black);
-			}
-
-			if (quatroJogadores.getSelected()) {
-				quatroJogadores.text.setFillColor(sf::Color::Black);
-			}
 
 			window.clear(sf::Color(123, 231, 111));
 
