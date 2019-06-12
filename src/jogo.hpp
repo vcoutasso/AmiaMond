@@ -1,20 +1,26 @@
 #ifndef _JOGO_HPP
 #define _JOGO_HPP
 
-#include <SFML/Window.hpp>
 #include "menu.hpp"
-
 
 class Jogo {
 	public:
-		Jogo();
+	Jogo();
 
-		sf::RenderWindow window;
-		
-		void mainMenu();
+	sf::RenderWindow window;
+	sf::SoundBuffer buffer;
+	sf::Sound sound;
 
-		~Jogo();
+	
+	int mainMenu();
 
+	int openInstructions();
+
+	int openJogar();
+
+	int playCorrida(int nplayers);
+
+	~Jogo();
 
 };
 

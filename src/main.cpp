@@ -1,18 +1,20 @@
-#include "jogo.hpp"
 #include "menu.hpp"
 
-#define WIDTH 1280
-#define HEIGHT 720
-
-using namespace sf;
+#define WIDTH 1920
+#define HEIGHT 1080
 
 int main(int argc, char** argv) {
 
+	sf::ContextSettings settings;
+	settings.antialiasingLevel = 8;
+
 	Jogo jogo;
 
-	// Habilitar anti aliasing se precisar
-	jogo.window.create(VideoMode(WIDTH, HEIGHT), "Amia: Mond");
-	//jogo.window.setVerticalSyncEnabled(false);
+	// Cria a janela e logo em seguida centraliza.
+	jogo.window.create(sf::VideoMode(WIDTH, HEIGHT), "Amia: Mond", sf::Style::Fullscreen, settings);
+	jogo.window.setPosition(sf::Vector2i(sf::VideoMode::getDesktopMode().width / 2 - jogo.window.getSize().x / 2,
+			sf::VideoMode::getDesktopMode().height / 2 - jogo.window.getSize().y / 2));
+
 	jogo.mainMenu();
 
 	jogo.~Jogo();
