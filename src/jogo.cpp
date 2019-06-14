@@ -5,8 +5,8 @@ Jogo::~Jogo() {
 	buffer.~SoundBuffer();
 	sound.~Sound();
 
-	music.stop();
-	music.~Music();
+	//music.stop();
+	//music.~Music();
 
 	window.~RenderWindow();
 }
@@ -75,8 +75,8 @@ int Jogo::openInstructions()
 	}
 
 	// Libera recursos e retorna
-	exit.~Option();
-	title.~Option();
+	//exit.~Option();
+	//title.~Option();
 
 	return quit;
 }
@@ -251,7 +251,7 @@ int Jogo::openJogar()
 	}
 
 	// Libera recursos e retorna
-	novoJogo.~Option();
+	/*novoJogo.~Option();
 	modoJogo.~Option();
 	modoJogoCorrida.~Option();
 	exit.~Option();
@@ -259,7 +259,7 @@ int Jogo::openJogar()
 	numJogadores.~Option();
 	doisJogadores.~Option();
 	tresJogadores.~Option();
-	quatroJogadores.~Option();
+	quatroJogadores.~Option();*/
 
 	return quit;
 }
@@ -388,9 +388,9 @@ int Jogo::mainMenu() {
 
 
 	// Libera recursos e retorna
-	instrucoes.~Option();
-	sair.~Option();
-	jogar.~Option();
+	//instrucoes.~Option();
+	//sair.~Option();
+	//jogar.~Option();
 
 	space.~Texture();
 

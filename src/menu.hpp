@@ -23,7 +23,7 @@
 
 using namespace std;
 
-class Option {		//Funcionalidade dos Bot�es
+class Option {		//Funcionalidade dos Botões
 	private:
 		bool hovering;
 		bool selected;
@@ -41,7 +41,7 @@ class Option {		//Funcionalidade dos Bot�es
 
 		void setFont(string pathToFile);
 
-		~Option();
+		//~Option();
 };
 
 #endif
