@@ -14,8 +14,7 @@ Jogo::~Jogo() {
 Jogo::Jogo() {
 }
 
-int Jogo::openInstructions()
-{
+int Jogo::openInstructions() {
 	int width = window.getSize().x;
 	int height = window.getSize().y;
 
@@ -99,8 +98,7 @@ int Jogo::openInstructions()
 
 //TODO: Abrir funções a partir das opções do usuário
 //Implemetando a Função Jogar contendo todas as opções de modo de jogo e quantidade de jogadores
-int Jogo::openJogar()
-{
+int Jogo::openJogar() {
 	int height = window.getSize().y;
 
 	int quit = 0;
@@ -431,16 +429,24 @@ int Jogo::mainMenu() {
 int Jogo::playCorrida(int nplayers) {
 	sf::Clock clock;
 
+	sf::RectangleShape background(sf::Vector2f(1920, 1080));
+	sf::Texture space;
 	sf::Texture texture;
+	sf::Sprite boneco;
+
+	space.loadFromFile("bin/bg_game.png");
+	background.setTexture(&space);
+
+	Animation animation(&space, sf::Vector2u(3, 15), 0.05f);
 
 	int quit = 0;
+	float deltaTime = 0;
 
 	if (!texture.loadFromFile("bin/surfnauta_cinza.png")) {
 		std::cout << "Error! Could not load textures!" << std::endl;
 		quit = -1;
 	}
 
-	sf::Sprite boneco;
 
 	boneco.setTexture(texture);
 	boneco.setScale(sf::Vector2f(0.1, 0.1));
@@ -470,9 +476,14 @@ int Jogo::playCorrida(int nplayers) {
 		}
 
 		if (clock.getElapsedTime().asSeconds() >= 1 / FPS) {
-			window.clear(sf::Color::Black);
+			
+			animation.updateXY(deltaTime);
+			background.setTextureRect(animation.uvRect);
+			window.draw(background);
 			window.draw(boneco);
 			window.display();
+
+			deltaTime = clock.restart().asSeconds();
 		}
 
 	}
@@ -480,6 +491,7 @@ int Jogo::playCorrida(int nplayers) {
 	// Libera recursos e retorna
 	boneco.~Sprite();
 	texture.~Texture();
+	space.~Texture();
 
 
 	return quit;

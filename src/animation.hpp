@@ -12,6 +12,7 @@ public:
 
 	void updateX(int row, float deltaTime);
 	void updateY(int column, float deltaTime);
+	void updateXY(float deltaTime);
 
 private:
 	sf::Vector2u imageCount;
