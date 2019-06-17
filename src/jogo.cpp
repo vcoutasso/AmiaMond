@@ -429,6 +429,16 @@ int Jogo::mainMenu() {
 int Jogo::playCorrida(int nplayers) {
 	sf::Clock clock;
 
+	sf::Text fps;
+	sf::Font font;
+
+	fps.setString("60");
+	font.loadFromFile("bin/Pixelada.ttf");
+	fps.setFont(font);
+	fps.setFillColor(sf::Color::White);
+	fps.setCharacterSize(24);
+	fps.setPosition(window.getSize().x - fps.getLocalBounds().width, 0);
+
 	sf::RectangleShape background(sf::Vector2f(1920, 1080));
 	sf::Texture space;
 	sf::Texture texture;
@@ -443,6 +453,7 @@ int Jogo::playCorrida(int nplayers) {
 	float deltaTime = 0;
 
 	bool atualizaTela = true;
+	bool mostraFPS = false;
 
 	if (!texture.loadFromFile("bin/surfnauta_cinza.png")) {
 		std::cout << "Error! Could not load textures!" << std::endl;
@@ -467,6 +478,8 @@ int Jogo::playCorrida(int nplayers) {
 				case sf::Event::KeyReleased: // Volta para o menu
 					if (event.key.code == sf::Keyboard::Escape)
 						quit = 1;
+					if (event.key.code == sf::Keyboard::F1)
+						mostraFPS = !mostraFPS;
 					break;
 
 				case sf::Event::Closed: // Sai do jogo
@@ -485,6 +498,9 @@ int Jogo::playCorrida(int nplayers) {
 			window.draw(background);
 			window.draw(boneco);
 
+			if (mostraFPS)
+				window.draw(fps);
+
 			sf::sleep(sf::seconds((1 / FPS) - clock.getElapsedTime().asSeconds()));
 			atualizaTela = true;
 		}
@@ -494,7 +510,8 @@ int Jogo::playCorrida(int nplayers) {
 
 			deltaTime = clock.restart().asSeconds();
 
-			std::cout << "FPS: " << 1 / deltaTime << std::endl;
+			fps.setString(std::to_string((int)round(1 / deltaTime)));
+			fps.setPosition(window.getSize().x - fps.getLocalBounds().width, 0);
 
 			atualizaTela = false;
 		}
