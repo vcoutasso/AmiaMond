@@ -20,12 +20,22 @@ int Jogo::openInstructions()
 	int height = window.getSize().y;
 
 	int quit = 0;
+	float deltaTime = 0;
 
-	Option exit(0, 0, 40, "Voltar para o Menu", "bin/Roboto-Bold.ttf");
+	sf::RectangleShape background(sf::Vector2f(1920.0f, 1080.0f));
+	sf::Texture space;
+	
+	space.loadFromFile("bin/bg_inst.png");
+	background.setTexture(&space);
+
+	Animation animation(&space, sf::Vector2u(1, 15), 0.3f);
+
+
+	Option exit(0, 0, 40, "VOLTAR PARA O MENU", "bin/Pixelada.ttf");
 	exit.text.setPosition(width - (exit.text.getGlobalBounds().width) - 14, height - 65);
-	Option title(160, 30, 40, "Como jogar:", "bin/Roboto-Bold.ttf");
+	Option title(160, 30, 40, "COMO JOGAR:", "bin/Pixelada.ttf");
 
-	title.text.setStyle(sf::Text::Bold | sf::Text::Underlined | sf::Text::Italic);
+	title.text.setStyle(sf::Text::Bold | sf::Text::Italic);
 
 	sf::Clock clock;
 
@@ -61,25 +71,31 @@ int Jogo::openInstructions()
 			default:
 				break;
 			}
+		}
 
 			if (clock.getElapsedTime().asSeconds() >= 1 / FPS) {
 
-				window.clear(sf::Color(123, 231, 111));
+				animation.updateY(0, deltaTime);
+				background.setTextureRect(animation.uvRect);
+				window.draw(background);
 				window.draw(exit.text);
 				window.draw(title.text);
 				window.display();
 
-				clock.restart();
+				deltaTime = clock.restart().asSeconds();
 			}
 		}
-	}
 
 	// Libera recursos e retorna
 	//exit.~Option();
 	//title.~Option();
 
+	space.~Texture();
+
 	return quit;
 }
+
+
 
 //TODO: Abrir funções a partir das opções do usuário
 //Implemetando a Função Jogar contendo todas as opções de modo de jogo e quantidade de jogadores
@@ -89,29 +105,29 @@ int Jogo::openJogar()
 
 	int quit = 0;
 
-	Option modoJogo(0, 0, 40, "Modo de Jogo", "bin/Roboto-Bold.ttf");
+	Option modoJogo(0, 0, 40, "MODO DE JOGO", "bin/Pixelada.ttf");
 	modoJogo.text.setPosition(modoJogo.text.getGlobalBounds().width / 10 - 3, 4 * height / 15 + 30);
 	modoJogo.text.setFillColor(sf::Color::Yellow);
 
-	Option novoJogo(0, 0, 40, "* Selecione o Estilo de Jogo:", "bin/Roboto-Bold.ttf");
+	Option novoJogo(0, 0, 40, "* SELECIONE O ESTILO DE JOGO:", "bin/Pixelada.ttf");
 	novoJogo.text.setPosition(modoJogo.text.getGlobalBounds().width / 10 - 3, 10);
-	novoJogo.text.setStyle(sf::Text::Bold | sf::Text::Italic | sf::Text::Underlined);
+	novoJogo.text.setStyle(sf::Text::Bold | sf::Text::Italic); 
 
-	Option modoJogoCorrida(0, 0, 40, "Corrida", "bin/Roboto-Bold.ttf");
+	Option modoJogoCorrida(0, 0, 40, "CORRIDA", "bin/Pixelada.ttf");
 	modoJogoCorrida.text.setPosition(450, 4 * height / 15 + 30);
 
-	Option exit(0, 0, 40, "Voltar para o Menu", "bin/Roboto-Bold.ttf");
+	Option exit(0, 0, 40, "VOLTAR PARA O MENU", "bin/Pixelada.ttf");
 	exit.text.setPosition(modoJogo.text.getGlobalBounds().width / 10 - 3, height - 65);
 
-	Option numJogadores(0, 0, 40, "Nm. de Jogadores", "bin/Roboto-Bold.ttf");
+	Option numJogadores(0, 0, 40, "NM. DE JOGADORES", "bin/Pixelada.ttf");
 	numJogadores.text.setPosition(modoJogo.text.getGlobalBounds().width / 10 - 3, 8 * height / 15 + 30);
 	numJogadores.text.setFillColor(sf::Color::Yellow);
 
-	Option doisJogadores(460 , 8 * height / 15 + 30, 40, "2", "bin/Roboto-Bold.ttf");
-	Option tresJogadores(450 + 310, 8 * height / 15 + 30, 40, "3", "bin/Roboto-Bold.ttf");
-	Option quatroJogadores(450 + 620, 8 * height / 15 + 30, 40, "4", "bin/Roboto-Bold.ttf");
+	Option doisJogadores(460 , 8 * height / 15 + 30, 40, "2", "bin/Pixelada.ttf");
+	Option tresJogadores(450 + 310, 8 * height / 15 + 30, 40, "3", "bin/Pixelada.ttf");
+	Option quatroJogadores(450 + 620, 8 * height / 15 + 30, 40, "4", "bin/Pixelada.ttf");
 
-	Option iniciar(1100, height - 65, 40, "Iniciar!", "bin/Roboto-Bold.ttf");
+	Option iniciar(1100, height - 65, 40, "INICIAR!", "bin/Pixelada.ttf");
 
 	sf::Clock clock;
 
@@ -269,10 +285,16 @@ int Jogo::mainMenu() {
 
 	int quit = 0;
 
+	/* Flag pra identificar se o jogo está no menu por ter voltado de uma tela
+	 * Se for o caso, deltaTime receberá um valor muito grande e irá imprimir todos os frames "atrasados" em um curto espaço de tempo
+	 * Essa flag permite atribuir um valor baixo para deltaTime e impedir que isso aconteça.
+	 */
+	bool resetaDeltaTime = false;
+
 	sf::RectangleShape background(sf::Vector2f(1920.0f, 1080.0f));
 	sf::Texture space;
 	
-	space.loadFromFile("bin/frames.png");
+	space.loadFromFile("bin/bg_menu.png");
 
 	background.setTexture(&space);
 
@@ -316,6 +338,7 @@ int Jogo::mainMenu() {
 					if (instrucoes.getHovering()) {
 						if (openInstructions() == -1) //Entrando nas Instruções
 							quit = -1;
+						resetaDeltaTime = true;
 
 						instrucoes.setHovering(false);
 					}
@@ -323,6 +346,7 @@ int Jogo::mainMenu() {
 					if (jogar.getHovering()) {
 						if (openJogar() == -1)
 							quit = -1;
+						resetaDeltaTime = true;
 
 						jogar.setHovering(false);
 					}
@@ -383,7 +407,13 @@ int Jogo::mainMenu() {
 				window.display();
 
 				deltaTime = clock.restart().asSeconds();
+
+				if (resetaDeltaTime) {
+					deltaTime = 0;
+					resetaDeltaTime = false;
+				}
 			}
+
 		}
 
 
