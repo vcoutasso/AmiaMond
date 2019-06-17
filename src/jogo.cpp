@@ -437,10 +437,12 @@ int Jogo::playCorrida(int nplayers) {
 	space.loadFromFile("bin/bg_game.png");
 	background.setTexture(&space);
 
-	Animation animation(&space, sf::Vector2u(3, 15), 0.05f);
+	Animation animation(&space, sf::Vector2u(3, 15), 0.025f);
 
 	int quit = 0;
 	float deltaTime = 0;
+
+	bool atualizaTela = true;
 
 	if (!texture.loadFromFile("bin/surfnauta_cinza.png")) {
 		std::cout << "Error! Could not load textures!" << std::endl;
@@ -450,6 +452,8 @@ int Jogo::playCorrida(int nplayers) {
 
 	boneco.setTexture(texture);
 	boneco.setScale(sf::Vector2f(0.1, 0.1));
+
+	clock.restart();
 
 	while (!quit) {
 
@@ -475,15 +479,24 @@ int Jogo::playCorrida(int nplayers) {
 			}	
 		}
 
-		if (clock.getElapsedTime().asSeconds() >= 1 / FPS) {
-			
+		if (clock.getElapsedTime().asSeconds() <= 1 / FPS) {
 			animation.updateXY(deltaTime);
 			background.setTextureRect(animation.uvRect);
 			window.draw(background);
 			window.draw(boneco);
+
+			sf::sleep(sf::seconds((1 / FPS) - clock.getElapsedTime().asSeconds()));
+			atualizaTela = true;
+		}
+			
+		if (atualizaTela) {
 			window.display();
 
 			deltaTime = clock.restart().asSeconds();
+
+			std::cout << "FPS: " << 1 / deltaTime << std::endl;
+
+			atualizaTela = false;
 		}
 
 	}
@@ -496,4 +509,3 @@ int Jogo::playCorrida(int nplayers) {
 
 	return quit;
 }
-
