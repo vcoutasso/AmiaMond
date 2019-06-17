@@ -20,6 +20,7 @@ int Jogo::openInstructions() {
 
 	int quit = 0;
 	float deltaTime = 0;
+	bool atualizaTela = true;
 
 	sf::RectangleShape background(sf::Vector2f(1920.0f, 1080.0f));
 	sf::Texture space;
@@ -72,17 +73,24 @@ int Jogo::openInstructions() {
 			}
 		}
 
-			if (clock.getElapsedTime().asSeconds() >= 1 / FPS) {
-
+			if (clock.getElapsedTime().asSeconds() <= 1 / FPS) {
 				animation.updateY(0, deltaTime);
 				background.setTextureRect(animation.uvRect);
 				window.draw(background);
 				window.draw(exit.text);
 				window.draw(title.text);
+				sf::sleep(sf::seconds((1 / FPS) - clock.getElapsedTime().asSeconds()));
+
+				atualizaTela = true;
+			}
+			
+			if (atualizaTela) {
 				window.display();
 
 				deltaTime = clock.restart().asSeconds();
+				atualizaTela = false;
 			}
+			
 		}
 
 	// Libera recursos e retorna
@@ -102,6 +110,7 @@ int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 	int height = window.getSize().y;
 
 	int quit = 0;
+	bool atualizaTela = true;
 
 	Option modoJogo(0, 0, 40, "MODO DE JOGO", "bin/Pixelada.ttf");
 	modoJogo.text.setPosition(modoJogo.text.getGlobalBounds().width / 10 - 3, 4 * height / 15 + 30);
@@ -242,8 +251,7 @@ int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 			}
 		}
 
-		if (clock.getElapsedTime().asSeconds() >= 1 / FPS) {
-
+		if (clock.getElapsedTime().asSeconds() <= 1 / FPS) {
 			animation.updateY(0, deltaTime);
 			background.setTextureRect(animation.uvRect);
 
@@ -259,9 +267,16 @@ int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 			window.draw(tresJogadores.text);
 			window.draw(quatroJogadores.text);
 
+			sf::sleep(sf::seconds((1 / FPS) - clock.getElapsedTime().asSeconds()));
+			atualizaTela = true;
+		}
+
+		if (atualizaTela) {
+
 			window.display();
 
 			deltaTime = clock.restart().asSeconds();
+			atualizaTela = false;
 		}
 
 
