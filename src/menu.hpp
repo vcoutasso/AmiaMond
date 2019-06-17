@@ -16,8 +16,8 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Window.hpp>
 
-#include "jogo.hpp"
 #include "animation.hpp"
+#include "jogo.hpp"
 #include "nave.hpp"
 #include "obstaculos.hpp"
 #include "corrida.hpp"

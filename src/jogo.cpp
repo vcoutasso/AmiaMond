@@ -98,7 +98,7 @@ int Jogo::openInstructions() {
 
 //TODO: Abrir funções a partir das opções do usuário
 //Implemetando a Função Jogar contendo todas as opções de modo de jogo e quantidade de jogadores
-int Jogo::openJogar() {
+int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 	int height = window.getSize().y;
 
 	int quit = 0;
@@ -128,6 +128,7 @@ int Jogo::openJogar() {
 	Option iniciar(1100, height - 65, 40, "INICIAR!", "bin/Pixelada.ttf");
 
 	sf::Clock clock;
+	float deltaTime = 0;
 
 	while (!quit) {
 
@@ -243,8 +244,10 @@ int Jogo::openJogar() {
 
 		if (clock.getElapsedTime().asSeconds() >= 1 / FPS) {
 
-			window.clear(sf::Color(123, 231, 111));
+			animation.updateY(0, deltaTime);
+			background.setTextureRect(animation.uvRect);
 
+			window.draw(background);
 			window.draw(novoJogo.text);
 			window.draw(modoJogo.text);
 			window.draw(modoJogoCorrida.text);
@@ -258,7 +261,7 @@ int Jogo::openJogar() {
 
 			window.display();
 
-			clock.restart();
+			deltaTime = clock.restart().asSeconds();
 		}
 
 
@@ -342,7 +345,7 @@ int Jogo::mainMenu() {
 					}
 
 					if (jogar.getHovering()) {
-						if (openJogar() == -1)
+						if (openJogar(animation, background) == -1)
 							quit = -1;
 						resetaDeltaTime = true;
 
@@ -501,8 +504,9 @@ int Jogo::playCorrida(int nplayers) {
 			if (mostraFPS)
 				window.draw(fps);
 
-			sf::sleep(sf::seconds((1 / FPS) - clock.getElapsedTime().asSeconds()));
 			atualizaTela = true;
+
+			sf::sleep(sf::seconds((1 / FPS) - clock.getElapsedTime().asSeconds()));
 		}
 			
 		if (atualizaTela) {

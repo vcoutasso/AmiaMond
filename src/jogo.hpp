@@ -16,7 +16,7 @@ class Jogo {
 
 	int openInstructions();
 
-	int openJogar();
+	int openJogar(Animation& animation, sf::RectangleShape& background);
 
 	int playCorrida(int nplayers);
 
