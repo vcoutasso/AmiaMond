@@ -253,6 +253,8 @@ int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 
 						if (playCorrida(n) == -1)
 							quit = -1;
+
+						clock.restart();
 					}
 				}
 				break;
