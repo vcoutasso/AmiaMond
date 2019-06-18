@@ -104,11 +104,6 @@ int Jogo::openInstructions() {
 			
 		}
 
-	// Libera recursos e retorna
-	//exit.~Option();
-	//title.~Option();
-
-	space.~Texture();
 
 	return quit;
 }
@@ -304,16 +299,6 @@ int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 
 	}
 
-	// Libera recursos e retorna
-	/*novoJogo.~Option();
-	modoJogo.~Option();
-	modoJogoCorrida.~Option();
-	exit.~Option();
-	iniciar.~Option();
-	numJogadores.~Option();
-	doisJogadores.~Option();
-	tresJogadores.~Option();
-	quatroJogadores.~Option();*/
 
 	return quit;
 }
@@ -458,12 +443,6 @@ int Jogo::mainMenu() {
 		}
 
 
-	// Libera recursos e retorna
-	//instrucoes.~Option();
-	//sair.~Option();
-	//jogar.~Option();
-
-	space.~Texture();
 
 	return quit;
 }
@@ -549,11 +528,6 @@ int Jogo::playCorrida(int nplayers) {
 		}
 
 	}
-
-	// Libera recursos e retorna
-	boneco.~Sprite();
-	texture.~Texture();
-	space.~Texture();
 
 
 	return quit;
