@@ -132,7 +132,7 @@ int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 	novoJogo.text.setStyle(sf::Text::Bold | sf::Text::Italic); 
 
 	Option modoJogoCorrida(0, 0, 40, "CORRIDA", "bin/Pixelada.ttf");
-	modoJogoCorrida.text.setPosition(450, 4 * height / 15 + 30);
+	modoJogoCorrida.text.setPosition(650, 4 * height / 15 + 30);
 
 	Option exit(0, 0, 40, "VOLTAR PARA O MENU", "bin/Pixelada.ttf");
 	exit.text.setPosition(modoJogo.text.getGlobalBounds().width / 10 - 3, height - 65);
@@ -141,11 +141,11 @@ int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 	numJogadores.text.setPosition(modoJogo.text.getGlobalBounds().width / 10 - 3, 8 * height / 15 + 30);
 	numJogadores.text.setFillColor(sf::Color::Yellow);
 
-	Option doisJogadores(460 , 8 * height / 15 + 30, 40, "2", "bin/Pixelada.ttf");
-	Option tresJogadores(450 + 310, 8 * height / 15 + 30, 40, "3", "bin/Pixelada.ttf");
-	Option quatroJogadores(450 + 620, 8 * height / 15 + 30, 40, "4", "bin/Pixelada.ttf");
+	Option doisJogadores(650 , 8 * height / 15 + 30, 40, "2", "bin/Pixelada.ttf");
+	Option tresJogadores(650 + 310, 8 * height / 15 + 30, 40, "3", "bin/Pixelada.ttf");
+	Option quatroJogadores(650 + 620, 8 * height / 15 + 30, 40, "4", "bin/Pixelada.ttf");
 
-	Option iniciar(1100, height - 65, 40, "INICIAR!", "bin/Pixelada.ttf");
+	Option iniciar(1800, height - 65, 40, "INICIAR!", "bin/Pixelada.ttf");
 
 	sf::Clock clock;
 	float deltaTime = 0;
@@ -225,20 +225,20 @@ int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 
 				if (modoJogoCorrida.getHovering()) {
 					modoJogoCorrida.setSelected(true);
-					modoJogoCorrida.text.setFillColor(sf::Color::Black);
+					modoJogoCorrida.text.setFillColor(SELECTED_COLOR);
 				}
 
 				if (doisJogadores.getHovering()) {
 					doisJogadores.setSelected(true);
-					doisJogadores.text.setFillColor(sf::Color::Black);
+					doisJogadores.text.setFillColor(SELECTED_COLOR);
 				}
 				else if (tresJogadores.getHovering()) {
 					tresJogadores.setSelected(true);
-					tresJogadores.text.setFillColor(sf::Color::Black);
+					tresJogadores.text.setFillColor(SELECTED_COLOR);
 				}
 				else if (quatroJogadores.getHovering()) {
 					quatroJogadores.setSelected(true);
-					quatroJogadores.text.setFillColor(sf::Color::Black);
+					quatroJogadores.text.setFillColor(SELECTED_COLOR);
 				}
 
 				if (iniciar.getHovering()) {
@@ -254,6 +254,8 @@ int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 						if (playCorrida(n) == -1)
 							quit = -1;
 
+						iniciar.text.setFillColor(sf::Color::White);
+						window.draw(iniciar.text);
 						clock.restart();
 					}
 				}
@@ -269,6 +271,12 @@ int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 			background.setTextureRect(animation.uvRect);
 
 			window.draw(background);
+
+			window.draw(doisJogadores.printRect());
+			window.draw(tresJogadores.printRect());
+			window.draw(quatroJogadores.printRect());
+			window.draw(modoJogoCorrida.printRect());
+
 			window.draw(novoJogo.text);
 			window.draw(modoJogo.text);
 			window.draw(modoJogoCorrida.text);

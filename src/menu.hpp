@@ -5,7 +5,7 @@
 
 #define BUTTON_COLOR sf::Color::White
 #define HOVER_COLOR sf::Color(150, 150, 150)
-#define SELECTED_COLOR sf::Color(220, 220, 220)
+#define SELECTED_COLOR sf::Color::Yellow
 
 #include <SFML/Graphics.hpp>
 #include <string>
@@ -20,6 +20,7 @@ class Option {		//Funcionalidade dos Botões
 		sf::Font font;
 		sf::Text text;
 
+		sf::RectangleShape printRect();
 		void setHovering(bool b);
 		bool getHovering();
 		bool isHovering(int x, int y);
