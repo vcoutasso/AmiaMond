@@ -51,3 +51,27 @@ void Animation::updateY(int column, float deltaTime)
 	uvRect.left = currentImage.x * uvRect.width;
 	uvRect.top = currentImage.y * uvRect.height;
 }
+
+// Anima na vertical e na horizontal
+// Usado para arquivos muito grandes que nao cabem em imagens 1xn, como é o caso de bg_game.png
+void Animation::updateXY(float deltaTime)
+{
+	totalTime += deltaTime;
+
+	if (totalTime >= switchTime) {
+		totalTime -= switchTime;
+		currentImage.y++;
+
+		if (currentImage.y >= imageCount.y) {
+			currentImage.y = 0;
+			currentImage.x += 1;
+
+			if (currentImage.x >= imageCount.x) {
+				currentImage.x = 0;
+			}
+		}
+	}
+
+	uvRect.left = currentImage.x * uvRect.width;
+	uvRect.top = currentImage.y * uvRect.height;
+}

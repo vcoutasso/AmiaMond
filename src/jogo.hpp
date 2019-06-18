@@ -10,13 +10,13 @@ class Jogo {
 	sf::RenderWindow window;
 	sf::SoundBuffer buffer;
 	sf::Sound sound;
+	sf::Music music;
 
-	
 	int mainMenu();
 
 	int openInstructions();
 
-	int openJogar();
+	int openJogar(Animation& animation, sf::RectangleShape& background);
 
 	int playCorrida(int nplayers);
 

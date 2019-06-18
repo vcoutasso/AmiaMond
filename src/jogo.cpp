@@ -1,28 +1,45 @@
 #include "menu.hpp"
 
 Jogo::~Jogo() {
+	sound.stop();
 	buffer.~SoundBuffer();
 	sound.~Sound();
+
+	//music.stop();
+	//music.~Music();
+
 	window.~RenderWindow();
 }
 
 Jogo::Jogo() {
 }
 
-int Jogo::openInstructions()
-{
+int Jogo::openInstructions() {
 	int width = window.getSize().x;
 	int height = window.getSize().y;
 
-	Option exit(0, 0, 40, "Voltar para o Menu", "bin/Roboto-Bold.ttf");
-	exit.text.setPosition(width - (exit.text.getGlobalBounds().width) - 14, height - 65);
-	Option title(160, 30, 40, "Como jogar:", "bin/Roboto-Bold.ttf");
+	int quit = 0;
+	float deltaTime = 0;
+	bool atualizaTela = true;
 
-	title.text.setStyle(sf::Text::Bold | sf::Text::Underlined | sf::Text::Italic);
+	sf::RectangleShape background(sf::Vector2f(1920.0f, 1080.0f));
+	sf::Texture space;
+	
+	space.loadFromFile("bin/bg_inst.png");
+	background.setTexture(&space);
+
+	Animation animation(&space, sf::Vector2u(1, 15), 0.3f);
+
+
+	Option exit(0, 0, 40, "VOLTAR PARA O MENU", "bin/Pixelada.ttf");
+	exit.text.setPosition(width - (exit.text.getGlobalBounds().width) - 14, height - 65);
+	Option title(160, 30, 40, "COMO JOGAR:", "bin/Pixelada.ttf");
+
+	title.text.setStyle(sf::Text::Bold | sf::Text::Italic);
 
 	sf::Clock clock;
 
-	while (window.isOpen()) {
+	while (!quit) {
 
 		sf::Event event;
 
@@ -31,7 +48,7 @@ int Jogo::openInstructions()
 			switch (event.type)
 			{
 			case sf::Event::Closed:
-				return -1;
+				quit = -1;
 				break;
 
 			case sf::Event::MouseMoved:		//Caso aperte no Botão Sair
@@ -47,62 +64,82 @@ int Jogo::openInstructions()
 
 			case sf::Event::MouseButtonPressed:
 				if (exit.getHovering()) {
-					return 1;
+					quit = 1;
 				}
 				break;
 
 			default:
 				break;
 			}
+		}
 
-			if (clock.getElapsedTime().asSeconds() >= 1 / FPS) {
-
-				window.clear(sf::Color(123, 231, 111));
+			if (clock.getElapsedTime().asSeconds() <= 1 / FPS) {
+				animation.updateY(0, deltaTime);
+				background.setTextureRect(animation.uvRect);
+				window.draw(background);
 				window.draw(exit.text);
 				window.draw(title.text);
+				sf::sleep(sf::seconds((1 / FPS) - clock.getElapsedTime().asSeconds()));
+
+				atualizaTela = true;
+			}
+			
+			if (atualizaTela) {
 				window.display();
 
-				clock.restart();
+				deltaTime = clock.restart().asSeconds();
+				atualizaTela = false;
 			}
+			
 		}
-	}
 
-	return 1;
+	// Libera recursos e retorna
+	//exit.~Option();
+	//title.~Option();
+
+	space.~Texture();
+
+	return quit;
 }
+
+
 
 //TODO: Abrir funções a partir das opções do usuário
 //Implemetando a Função Jogar contendo todas as opções de modo de jogo e quantidade de jogadores
-int Jogo::openJogar()
-{
+int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 	int height = window.getSize().y;
 
-	Option modoJogo(0, 0, 40, "Modo de Jogo", "bin/Roboto-Bold.ttf");
+	int quit = 0;
+	bool atualizaTela = true;
+
+	Option modoJogo(0, 0, 40, "MODO DE JOGO", "bin/Pixelada.ttf");
 	modoJogo.text.setPosition(modoJogo.text.getGlobalBounds().width / 10 - 3, 4 * height / 15 + 30);
 	modoJogo.text.setFillColor(sf::Color::Yellow);
 
-	Option novoJogo(0, 0, 40, "* Selecione o Estilo de Jogo:", "bin/Roboto-Bold.ttf");
+	Option novoJogo(0, 0, 40, "* SELECIONE O ESTILO DE JOGO:", "bin/Pixelada.ttf");
 	novoJogo.text.setPosition(modoJogo.text.getGlobalBounds().width / 10 - 3, 10);
-	novoJogo.text.setStyle(sf::Text::Bold | sf::Text::Italic | sf::Text::Underlined);
+	novoJogo.text.setStyle(sf::Text::Bold | sf::Text::Italic); 
 
-	Option modoJogoCorrida(0, 0, 40, "Corrida", "bin/Roboto-Bold.ttf");
+	Option modoJogoCorrida(0, 0, 40, "CORRIDA", "bin/Pixelada.ttf");
 	modoJogoCorrida.text.setPosition(450, 4 * height / 15 + 30);
 
-	Option exit(0, 0, 40, "Voltar para o Menu", "bin/Roboto-Bold.ttf");
+	Option exit(0, 0, 40, "VOLTAR PARA O MENU", "bin/Pixelada.ttf");
 	exit.text.setPosition(modoJogo.text.getGlobalBounds().width / 10 - 3, height - 65);
 
-	Option numJogadores(0, 0, 40, "Nm. de Jogadores", "bin/Roboto-Bold.ttf");
+	Option numJogadores(0, 0, 40, "NM. DE JOGADORES", "bin/Pixelada.ttf");
 	numJogadores.text.setPosition(modoJogo.text.getGlobalBounds().width / 10 - 3, 8 * height / 15 + 30);
 	numJogadores.text.setFillColor(sf::Color::Yellow);
 
-	Option doisJogadores(460 , 8 * height / 15 + 30, 40, "2", "bin/Roboto-Bold.ttf");
-	Option tresJogadores(450 + 310, 8 * height / 15 + 30, 40, "3", "bin/Roboto-Bold.ttf");
-	Option quatroJogadores(450 + 620, 8 * height / 15 + 30, 40, "4", "bin/Roboto-Bold.ttf");
+	Option doisJogadores(460 , 8 * height / 15 + 30, 40, "2", "bin/Pixelada.ttf");
+	Option tresJogadores(450 + 310, 8 * height / 15 + 30, 40, "3", "bin/Pixelada.ttf");
+	Option quatroJogadores(450 + 620, 8 * height / 15 + 30, 40, "4", "bin/Pixelada.ttf");
 
-	Option iniciar(1100, height - 65, 40, "Iniciar!", "bin/Roboto-Bold.ttf");
+	Option iniciar(1100, height - 65, 40, "INICIAR!", "bin/Pixelada.ttf");
 
 	sf::Clock clock;
+	float deltaTime = 0;
 
-	while (window.isOpen()) {
+	while (!quit) {
 
 		sf::Event event;
 
@@ -111,7 +148,7 @@ int Jogo::openJogar()
 			switch (event.type)
 			{
 			case sf::Event::Closed:
-				return -1;
+				quit = -1;
 				break;
 
 			case sf::Event::MouseMoved:
@@ -161,7 +198,7 @@ int Jogo::openJogar()
 
 			case sf::Event::MouseButtonPressed:
 				if (exit.getHovering()) {
-					return 1;
+					quit = 1;
 				}
 
 
@@ -204,7 +241,7 @@ int Jogo::openJogar()
 							n = 4;
 
 						if (playCorrida(n) == -1)
-							return -1;
+							quit = -1;
 					}
 				}
 				break;
@@ -214,10 +251,11 @@ int Jogo::openJogar()
 			}
 		}
 
-		if (clock.getElapsedTime().asSeconds() >= 1 / FPS) {
+		if (clock.getElapsedTime().asSeconds() <= 1 / FPS) {
+			animation.updateY(0, deltaTime);
+			background.setTextureRect(animation.uvRect);
 
-			window.clear(sf::Color(123, 231, 111));
-
+			window.draw(background);
 			window.draw(novoJogo.text);
 			window.draw(modoJogo.text);
 			window.draw(modoJogoCorrida.text);
@@ -229,30 +267,54 @@ int Jogo::openJogar()
 			window.draw(tresJogadores.text);
 			window.draw(quatroJogadores.text);
 
+			sf::sleep(sf::seconds((1 / FPS) - clock.getElapsedTime().asSeconds()));
+			atualizaTela = true;
+		}
+
+		if (atualizaTela) {
+
 			window.display();
 
-			clock.restart();
+			deltaTime = clock.restart().asSeconds();
+			atualizaTela = false;
 		}
 
 
 	}
-	return 1;
+
+	// Libera recursos e retorna
+	/*novoJogo.~Option();
+	modoJogo.~Option();
+	modoJogoCorrida.~Option();
+	exit.~Option();
+	iniciar.~Option();
+	numJogadores.~Option();
+	doisJogadores.~Option();
+	tresJogadores.~Option();
+	quatroJogadores.~Option();*/
+
+	return quit;
 }
 
 int Jogo::mainMenu() {
-	//int width = window.getSize().x;
 	int height = window.getSize().y;
 
+	int quit = 0;
+
+	/* Flag pra identificar se o jogo está no menu por ter voltado de uma tela
+	 * Se for o caso, deltaTime receberá um valor muito grande e irá imprimir todos os frames "atrasados" em um curto espaço de tempo
+	 * Essa flag permite atribuir um valor baixo para deltaTime e impedir que isso aconteça.
+	 */
+	bool resetaDeltaTime = false;
+
 	sf::RectangleShape background(sf::Vector2f(1920.0f, 1080.0f));
-	//background.setPosition(sf::Vector2f(0, 0));
 	sf::Texture space;
 	
-	space.loadFromFile("bin/frames.png");
+	space.loadFromFile("bin/bg_menu.png");
 
 	background.setTexture(&space);
 
 	Animation animation(&space, sf::Vector2u(1, 15), 0.3f);
-
 
 	Option jogar(190,  height / 4, 40, "NOVO JOGO", "bin/Pixelada.ttf");
 	Option sair(190, 3 * height / 4, 40, "SAIR", "bin/Pixelada.ttf");
@@ -260,22 +322,19 @@ int Jogo::mainMenu() {
 
 	sf::Clock clock;
 	float deltaTime = 0;
-
-	if (!buffer.loadFromFile("bin/menu_theme.wav")) {
+ 
+	/* if (!music.openFromFile("bin/menu_theme.wav")) {
 			std::cout << "Error! Could not load menu_theme.wav!" << endl;
-			return -1;
+			quit = -1;
 	}
 
-	sound.setBuffer(buffer);
-	sound.setVolume(30.f);
-	sound.play();
-	sound.setLoop(true);
+	music.setVolume(30.f);
+	music.setLoop(true);
+	music.play();*/
 
 	bool atualizaTela = true;
 
-	while(window.isOpen()) {
-
-		deltaTime = 0;
+	while(!quit) {
 		
 		sf::Event event;
 
@@ -285,23 +344,25 @@ int Jogo::mainMenu() {
 
 			switch (event.type) {
 				case sf::Event::Closed:
-					return -1;
+					quit = -1;
 					break;
 
 				case sf::Event::MouseButtonPressed:
 					if (sair.getHovering())
-						return 1;
+						quit = 1;
 					
 					if (instrucoes.getHovering()) {
 						if (openInstructions() == -1) //Entrando nas Instruções
-							return -1;
+							quit = -1;
+						resetaDeltaTime = true;
 
 						instrucoes.setHovering(false);
 					}
 
 					if (jogar.getHovering()) {
-						if (openJogar() == -1)
-							return -1;
+						if (openJogar(animation, background) == -1)
+							quit = -1;
+						resetaDeltaTime = true;
 
 						jogar.setHovering(false);
 					}
@@ -310,7 +371,7 @@ int Jogo::mainMenu() {
 
 				case sf::Event::KeyReleased:
 					if (event.key.code == sf::Keyboard::Escape)
-						return 1;
+						quit = 1;
 					break;
 				
 				case sf::Event::MouseMoved:
@@ -353,8 +414,8 @@ int Jogo::mainMenu() {
 			if (atualizaTela) {
 				atualizaTela = false;
 
-			animation.updateY(0, deltaTime);
-			background.setTextureRect(animation.uvRect);
+				animation.updateY(0, deltaTime);
+				background.setTextureRect(animation.uvRect);
 				window.draw(background);
 				window.draw(instrucoes.text);
 				window.draw(sair.text);
@@ -362,29 +423,68 @@ int Jogo::mainMenu() {
 				window.display();
 
 				deltaTime = clock.restart().asSeconds();
+
+				if (resetaDeltaTime) {
+					deltaTime = 0;
+					resetaDeltaTime = false;
+				}
 			}
+
 		}
 
-	return 1;
+
+	// Libera recursos e retorna
+	//instrucoes.~Option();
+	//sair.~Option();
+	//jogar.~Option();
+
+	space.~Texture();
+
+	return quit;
 }
 
 
 int Jogo::playCorrida(int nplayers) {
 	sf::Clock clock;
 
+	sf::Text fps;
+	sf::Font font;
+
+	fps.setString("60");
+	font.loadFromFile("bin/Pixelada.ttf");
+	fps.setFont(font);
+	fps.setFillColor(sf::Color::White);
+	fps.setCharacterSize(24);
+	fps.setPosition(window.getSize().x - fps.getLocalBounds().width, 0);
+
+	sf::RectangleShape background(sf::Vector2f(1920, 1080));
+	sf::Texture space;
 	sf::Texture texture;
+	sf::Sprite boneco;
+
+	space.loadFromFile("bin/bg_game.png");
+	background.setTexture(&space);
+
+	Animation animation(&space, sf::Vector2u(3, 15), 0.025f);
+
+	int quit = 0;
+	float deltaTime = 0;
+
+	bool atualizaTela = true;
+	bool mostraFPS = false;
 
 	if (!texture.loadFromFile("bin/surfnauta_cinza.png")) {
 		std::cout << "Error! Could not load textures!" << std::endl;
-		return -1;
+		quit = -1;
 	}
 
-	sf::Sprite boneco;
 
 	boneco.setTexture(texture);
 	boneco.setScale(sf::Vector2f(0.1, 0.1));
 
-	while (window.isOpen()) {
+	clock.restart();
+
+	while (!quit) {
 
 		sf::Event event;
 
@@ -395,11 +495,13 @@ int Jogo::playCorrida(int nplayers) {
 					break;
 				case sf::Event::KeyReleased: // Volta para o menu
 					if (event.key.code == sf::Keyboard::Escape)
-						return 1;
+						quit = 1;
+					if (event.key.code == sf::Keyboard::F1)
+						mostraFPS = !mostraFPS;
 					break;
 
 				case sf::Event::Closed: // Sai do jogo
-					return -1;
+					quit = -1;
 					break;
 
 				default:
@@ -408,13 +510,38 @@ int Jogo::playCorrida(int nplayers) {
 			}	
 		}
 
-		if (clock.getElapsedTime().asSeconds() >= 1 / FPS) {
-			window.clear(sf::Color::Black);
+		if (clock.getElapsedTime().asSeconds() <= 1 / FPS) {
+			animation.updateXY(deltaTime);
+			background.setTextureRect(animation.uvRect);
+			window.draw(background);
 			window.draw(boneco);
+
+			if (mostraFPS)
+				window.draw(fps);
+
+			atualizaTela = true;
+
+			sf::sleep(sf::seconds((1 / FPS) - clock.getElapsedTime().asSeconds()));
+		}
+			
+		if (atualizaTela) {
 			window.display();
+
+			deltaTime = clock.restart().asSeconds();
+
+			fps.setString(std::to_string((int)round(1 / deltaTime)));
+			fps.setPosition(window.getSize().x - fps.getLocalBounds().width, 0);
+
+			atualizaTela = false;
 		}
 
 	}
-	return 1;
-}
 
+	// Libera recursos e retorna
+	boneco.~Sprite();
+	texture.~Texture();
+	space.~Texture();
+
+
+	return quit;
+}

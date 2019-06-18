@@ -1,5 +1,11 @@
 #include "menu.hpp"
 
+/*Option::~Option() {
+	text.~Text();
+	font.~Font();
+	std::cout << "Destruindo objeto" << std::endl;
+}*/
+
 // Inicializa a classe. O objeto Text contem as informações de posição do texto e a string da opção. 
 Option::Option(float px, float py, unsigned int s, string t, string pathToFont) {
 	setFont(pathToFont);

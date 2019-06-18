@@ -10,20 +10,21 @@
 #include <string>
 #include <iostream>
 #include <stack>
+#include <cmath>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/Window.hpp>
 
-#include "jogo.hpp"
 #include "animation.hpp"
+#include "jogo.hpp"
 #include "nave.hpp"
 #include "obstaculos.hpp"
 #include "corrida.hpp"
 
 using namespace std;
 
-class Option {		//Funcionalidade dos Bot�es
+class Option {		//Funcionalidade dos Botões
 	private:
 		bool hovering;
 		bool selected;
@@ -40,6 +41,8 @@ class Option {		//Funcionalidade dos Bot�es
 		bool getSelected();
 
 		void setFont(string pathToFile);
+
+		//~Option();
 };
 
 #endif
