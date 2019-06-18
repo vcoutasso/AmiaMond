@@ -1,4 +1,11 @@
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+
+#include <iostream>
+#include <cmath>
+
 #include "menu.hpp"
+#include "jogo.hpp"
 
 Jogo::~Jogo() {
 	sound.stop();
@@ -12,6 +19,9 @@ Jogo::~Jogo() {
 }
 
 Jogo::Jogo() {
+	font.loadFromFile("bin/Pixelada.ttf");
+	fps.setFont(font);
+	fps.setCharacterSize(24);
 }
 
 int Jogo::openInstructions() {
@@ -81,8 +91,9 @@ int Jogo::openInstructions() {
 				window.draw(title.text);
 				sf::sleep(sf::seconds((1 / FPS) - clock.getElapsedTime().asSeconds()));
 
-				atualizaTela = true;
 			}
+			
+			atualizaTela = true;
 			
 			if (atualizaTela) {
 				window.display();
@@ -242,6 +253,8 @@ int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 
 						if (playCorrida(n) == -1)
 							quit = -1;
+
+						clock.restart();
 					}
 				}
 				break;
@@ -268,8 +281,9 @@ int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 			window.draw(quatroJogadores.text);
 
 			sf::sleep(sf::seconds((1 / FPS) - clock.getElapsedTime().asSeconds()));
-			atualizaTela = true;
 		}
+		
+		atualizaTela = true;
 
 		if (atualizaTela) {
 
@@ -407,19 +421,22 @@ int Jogo::mainMenu() {
 
 			// Atualiza a tela apenas depois de processar os eventos e se tiver passado o tempo minimo necessario.
 			// Caso contrário, torna a processar os eventos.
-			if (clock.getElapsedTime().asSeconds() >= 1 / FPS) {
-				atualizaTela = true;
-			}
-
-			if (atualizaTela) {
-				atualizaTela = false;
-
+			if (clock.getElapsedTime().asSeconds() <= 1 / FPS) {
 				animation.updateY(0, deltaTime);
 				background.setTextureRect(animation.uvRect);
 				window.draw(background);
 				window.draw(instrucoes.text);
 				window.draw(sair.text);
 				window.draw(jogar.text);
+				
+				sf::sleep(sf::seconds((1 / FPS) - clock.getElapsedTime().asSeconds()));
+			}
+
+			atualizaTela = true;
+
+			if (atualizaTela) {
+				atualizaTela = false;
+
 				window.display();
 
 				deltaTime = clock.restart().asSeconds();
@@ -446,16 +463,6 @@ int Jogo::mainMenu() {
 
 int Jogo::playCorrida(int nplayers) {
 	sf::Clock clock;
-
-	sf::Text fps;
-	sf::Font font;
-
-	fps.setString("60");
-	font.loadFromFile("bin/Pixelada.ttf");
-	fps.setFont(font);
-	fps.setFillColor(sf::Color::White);
-	fps.setCharacterSize(24);
-	fps.setPosition(window.getSize().x - fps.getLocalBounds().width, 0);
 
 	sf::RectangleShape background(sf::Vector2f(1920, 1080));
 	sf::Texture space;
@@ -516,21 +523,19 @@ int Jogo::playCorrida(int nplayers) {
 			window.draw(background);
 			window.draw(boneco);
 
-			if (mostraFPS)
-				window.draw(fps);
-
-			atualizaTela = true;
-
 			sf::sleep(sf::seconds((1 / FPS) - clock.getElapsedTime().asSeconds()));
 		}
+
+		atualizaTela = true;
 			
 		if (atualizaTela) {
-			window.display();
 
 			deltaTime = clock.restart().asSeconds();
 
-			fps.setString(std::to_string((int)round(1 / deltaTime)));
-			fps.setPosition(window.getSize().x - fps.getLocalBounds().width, 0);
+			if (mostraFPS)
+				showFPS(deltaTime);
+
+			window.display();
 
 			atualizaTela = false;
 		}
@@ -544,4 +549,12 @@ int Jogo::playCorrida(int nplayers) {
 
 
 	return quit;
+}
+
+void Jogo::showFPS(float deltaTime) {
+	fps.setString(std::to_string((int)round(1 / deltaTime)));
+	fps.setFillColor(sf::Color::White);
+	fps.setPosition(window.getSize().x - fps.getLocalBounds().width, 0);
+
+	window.draw(fps);
 }

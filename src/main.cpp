@@ -1,4 +1,6 @@
-#include "menu.hpp"
+#include <SFML/Graphics.hpp>
+
+#include "jogo.hpp"
 
 #define WIDTH 1920
 #define HEIGHT 1080

@@ -1,3 +1,6 @@
+#include <string>
+#include <iostream>
+
 #include "menu.hpp"
 
 /*Option::~Option() {
@@ -7,7 +10,7 @@
 }*/
 
 // Inicializa a classe. O objeto Text contem as informações de posição do texto e a string da opção. 
-Option::Option(float px, float py, unsigned int s, string t, string pathToFont) {
+Option::Option(float px, float py, unsigned int s, std::string t, std::string pathToFont) {
 	setFont(pathToFont);
 
 	selected = false;
@@ -47,9 +50,9 @@ bool Option::getSelected() {
 }
 
 // Configura text
-void Option::setFont(string pathToFile) {
+void Option::setFont(std::string pathToFile) {
 	if (!font.loadFromFile(pathToFile))
-		cout << "Error: Could not load font! Path to file: " << pathToFile << endl;
+		std::cout << "Error: Could not load font! Path to file: " << pathToFile << std::endl;
 	else {
 		text.setFont(font);
 		text.setFillColor(BUTTON_COLOR);

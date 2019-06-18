@@ -7,22 +7,8 @@
 #define HOVER_COLOR sf::Color(150, 150, 150)
 #define SELECTED_COLOR sf::Color(220, 220, 220)
 
-#include <string>
-#include <iostream>
-#include <stack>
-#include <cmath>
-
 #include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/Window.hpp>
-
-#include "animation.hpp"
-#include "jogo.hpp"
-#include "nave.hpp"
-#include "obstaculos.hpp"
-#include "corrida.hpp"
-
-using namespace std;
+#include <string>
 
 class Option {		//Funcionalidade dos Botões
 	private:
@@ -30,7 +16,7 @@ class Option {		//Funcionalidade dos Botões
 		bool selected;
 
 	public:
-		Option(float px, float py, unsigned int s, string t, string pathToFont);
+		Option(float px, float py, unsigned int s, std::string t, std::string pathToFont);
 		sf::Font font;
 		sf::Text text;
 
@@ -40,7 +26,7 @@ class Option {		//Funcionalidade dos Botões
 		void setSelected(bool b);
 		bool getSelected();
 
-		void setFont(string pathToFile);
+		void setFont(std::string pathToFile);
 
 		//~Option();
 };

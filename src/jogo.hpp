@@ -1,7 +1,9 @@
 #ifndef _JOGO_HPP
 #define _JOGO_HPP
 
-#include "menu.hpp"
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+#include "animation.hpp"
 
 class Jogo {
 	public:
@@ -11,6 +13,8 @@ class Jogo {
 	sf::SoundBuffer buffer;
 	sf::Sound sound;
 	sf::Music music;
+	sf::Font font;
+	sf::Text fps;
 
 	int mainMenu();
 
@@ -19,6 +23,8 @@ class Jogo {
 	int openJogar(Animation& animation, sf::RectangleShape& background);
 
 	int playCorrida(int nplayers);
+
+	void showFPS(float deltaTime);
 
 	~Jogo();
 
