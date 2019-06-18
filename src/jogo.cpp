@@ -519,12 +519,12 @@ int Jogo::playCorrida(int nplayers) {
 		}
 			
 		if (atualizaTela) {
+			if (mostraFPS)
+				showFPS(deltaTime);
+
 			window.display();
 
 			deltaTime = clock.restart().asSeconds();
-
-			if (mostraFPS)
-				showFPS(deltaTime);
 
 			atualizaTela = false;
 		}
