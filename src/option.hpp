@@ -1,5 +1,5 @@
-#ifndef _MENU_HPP
-#define _MENU_HPP
+#ifndef _OPTION_HPP
+#define _OPTION_HPP
 
 #define FPS 60.0
 

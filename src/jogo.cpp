@@ -4,7 +4,7 @@
 #include <iostream>
 #include <cmath>
 
-#include "menu.hpp"
+#include "option.hpp"
 #include "jogo.hpp"
 
 Jogo::~Jogo() {

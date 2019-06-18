@@ -1,7 +1,7 @@
 #include <string>
 #include <iostream>
 
-#include "menu.hpp"
+#include "option.hpp"
 
 /*Option::~Option() {
 	text.~Text();
