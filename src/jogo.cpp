@@ -7,17 +7,6 @@
 #include "option.hpp"
 #include "jogo.hpp"
 
-Jogo::~Jogo() {
-	sound.stop();
-	buffer.~SoundBuffer();
-	sound.~Sound();
-
-	//music.stop();
-	//music.~Music();
-
-	window.~RenderWindow();
-}
-
 Jogo::Jogo() {
 	font.loadFromFile("bin/Pixelada.ttf");
 	fps.setFont(font);

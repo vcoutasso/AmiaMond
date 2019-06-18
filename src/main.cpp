@@ -19,7 +19,6 @@ int main(int argc, char** argv) {
 
 	jogo.mainMenu();
 
-	jogo.~Jogo();
 	
 	return 0;
 }

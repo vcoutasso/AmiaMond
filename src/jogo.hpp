@@ -26,8 +26,6 @@ class Jogo {
 
 	void showFPS(float deltaTime);
 
-	~Jogo();
-
 };
 
 
