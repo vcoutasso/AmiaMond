@@ -274,6 +274,8 @@ int Jogo::mainMenu() {
 	bool atualizaTela = true;
 
 	while(window.isOpen()) {
+
+		deltaTime = 0;
 		
 		sf::Event event;
 
