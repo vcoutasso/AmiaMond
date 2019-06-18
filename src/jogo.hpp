@@ -13,6 +13,8 @@ class Jogo {
 	sf::SoundBuffer buffer;
 	sf::Sound sound;
 	sf::Music music;
+	sf::Font font;
+	sf::Text fps;
 
 	int mainMenu();
 

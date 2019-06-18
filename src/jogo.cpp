@@ -19,6 +19,9 @@ Jogo::~Jogo() {
 }
 
 Jogo::Jogo() {
+	font.loadFromFile("bin/Pixelada.ttf");
+	fps.setFont(font);
+	fps.setCharacterSize(24);
 }
 
 int Jogo::openInstructions() {
@@ -88,8 +91,9 @@ int Jogo::openInstructions() {
 				window.draw(title.text);
 				sf::sleep(sf::seconds((1 / FPS) - clock.getElapsedTime().asSeconds()));
 
-				atualizaTela = true;
 			}
+			
+			atualizaTela = true;
 			
 			if (atualizaTela) {
 				window.display();
@@ -275,8 +279,9 @@ int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 			window.draw(quatroJogadores.text);
 
 			sf::sleep(sf::seconds((1 / FPS) - clock.getElapsedTime().asSeconds()));
-			atualizaTela = true;
 		}
+		
+		atualizaTela = true;
 
 		if (atualizaTela) {
 
@@ -414,19 +419,22 @@ int Jogo::mainMenu() {
 
 			// Atualiza a tela apenas depois de processar os eventos e se tiver passado o tempo minimo necessario.
 			// Caso contrário, torna a processar os eventos.
-			if (clock.getElapsedTime().asSeconds() >= 1 / FPS) {
-				atualizaTela = true;
-			}
-
-			if (atualizaTela) {
-				atualizaTela = false;
-
+			if (clock.getElapsedTime().asSeconds() <= 1 / FPS) {
 				animation.updateY(0, deltaTime);
 				background.setTextureRect(animation.uvRect);
 				window.draw(background);
 				window.draw(instrucoes.text);
 				window.draw(sair.text);
 				window.draw(jogar.text);
+				
+				sf::sleep(sf::seconds((1 / FPS) - clock.getElapsedTime().asSeconds()));
+			}
+
+			atualizaTela = true;
+
+			if (atualizaTela) {
+				atualizaTela = false;
+
 				window.display();
 
 				deltaTime = clock.restart().asSeconds();
@@ -513,18 +521,19 @@ int Jogo::playCorrida(int nplayers) {
 			window.draw(background);
 			window.draw(boneco);
 
-			atualizaTela = true;
-
 			sf::sleep(sf::seconds((1 / FPS) - clock.getElapsedTime().asSeconds()));
 		}
+
+		atualizaTela = true;
 			
 		if (atualizaTela) {
+
+			deltaTime = clock.restart().asSeconds();
+
 			if (mostraFPS)
 				showFPS(deltaTime);
 
 			window.display();
-
-			deltaTime = clock.restart().asSeconds();
 
 			atualizaTela = false;
 		}
@@ -541,16 +550,9 @@ int Jogo::playCorrida(int nplayers) {
 }
 
 void Jogo::showFPS(float deltaTime) {
-	sf::Text fps;
-	sf::Font font;
-
-	font.loadFromFile("bin/Pixelada.ttf");
-	fps.setFont(font);
-	fps.setCharacterSize(24);
 	fps.setString(std::to_string((int)round(1 / deltaTime)));
 	fps.setFillColor(sf::Color::White);
 	fps.setPosition(window.getSize().x - fps.getLocalBounds().width, 0);
 
 	window.draw(fps);
-
 }
