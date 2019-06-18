@@ -1,7 +1,7 @@
 #ifndef _OBSTACULOS_HPP
 #define _OBSTACULOS_HPP
 
-#include "menu.hpp"
+#include <SFML/Graphics.hpp>
 
 class Obstaculos {
 	private:

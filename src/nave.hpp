@@ -1,7 +1,7 @@
 #ifndef _NAVE_HPP
 #define _NAVE_HPP
 
-#include "menu.hpp"
+#include <SFML/Graphics.hpp>
 
 class Nave {
 	private:

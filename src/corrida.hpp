@@ -1,7 +1,8 @@
 #ifndef _CORRIDA_HPP
 #define _CORRIDA_HPP
 
-#include "menu.hpp"
+#include <stack>
+#include "nave.hpp"
 
 class Corrida {
 	private:

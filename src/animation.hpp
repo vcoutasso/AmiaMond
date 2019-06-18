@@ -1,7 +1,7 @@
 #ifndef _ANIMATION_HPP
 #define _ANIMATION_HPP
 
-#include "menu.hpp"
+#include <SFML/Graphics.hpp>
 
 //Colocando classe Animation, que vai fazer toda a animação do menu
 class Animation {

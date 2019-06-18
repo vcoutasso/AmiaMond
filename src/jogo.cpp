@@ -1,4 +1,11 @@
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+
+#include <iostream>
+#include <cmath>
+
 #include "menu.hpp"
+#include "jogo.hpp"
 
 Jogo::~Jogo() {
 	sound.stop();
@@ -447,16 +454,6 @@ int Jogo::mainMenu() {
 int Jogo::playCorrida(int nplayers) {
 	sf::Clock clock;
 
-	sf::Text fps;
-	sf::Font font;
-
-	fps.setString("60");
-	font.loadFromFile("bin/Pixelada.ttf");
-	fps.setFont(font);
-	fps.setFillColor(sf::Color::White);
-	fps.setCharacterSize(24);
-	fps.setPosition(window.getSize().x - fps.getLocalBounds().width, 0);
-
 	sf::RectangleShape background(sf::Vector2f(1920, 1080));
 	sf::Texture space;
 	sf::Texture texture;
@@ -516,9 +513,6 @@ int Jogo::playCorrida(int nplayers) {
 			window.draw(background);
 			window.draw(boneco);
 
-			if (mostraFPS)
-				window.draw(fps);
-
 			atualizaTela = true;
 
 			sf::sleep(sf::seconds((1 / FPS) - clock.getElapsedTime().asSeconds()));
@@ -529,8 +523,8 @@ int Jogo::playCorrida(int nplayers) {
 
 			deltaTime = clock.restart().asSeconds();
 
-			fps.setString(std::to_string((int)round(1 / deltaTime)));
-			fps.setPosition(window.getSize().x - fps.getLocalBounds().width, 0);
+			if (mostraFPS)
+				showFPS(deltaTime);
 
 			atualizaTela = false;
 		}
@@ -544,4 +538,19 @@ int Jogo::playCorrida(int nplayers) {
 
 
 	return quit;
+}
+
+void Jogo::showFPS(float deltaTime) {
+	sf::Text fps;
+	sf::Font font;
+
+	font.loadFromFile("bin/Pixelada.ttf");
+	fps.setFont(font);
+	fps.setCharacterSize(24);
+	fps.setString(std::to_string((int)round(1 / deltaTime)));
+	fps.setFillColor(sf::Color::White);
+	fps.setPosition(window.getSize().x - fps.getLocalBounds().width, 0);
+
+	window.draw(fps);
+
 }
