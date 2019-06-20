@@ -319,14 +319,14 @@ int Jogo::mainMenu() {
 	sf::Clock clock;
 	float deltaTime = 0;
  
-	/* if (!music.openFromFile("bin/menu_theme.wav")) {
-			std::cout << "Error! Could not load menu_theme.wav!" << endl;
+	 if (!music.openFromFile("bin/menu_theme.wav")) {
+			std::cout << "Error! Could not load menu_theme.wav!" << std::endl;
 			quit = -1;
 	}
 
 	music.setVolume(30.f);
 	music.setLoop(true);
-	music.play();*/
+	music.play();
 
 	bool atualizaTela = true;
 
