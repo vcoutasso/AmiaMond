@@ -231,9 +231,9 @@ int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 					if ((doisJogadores.getSelected() || tresJogadores.getSelected() || quatroJogadores.getSelected()) && (modoJogoCorrida.getSelected())) {
 						int n = 2;
 
-						if (tresJogadores.getHovering())
+						if (tresJogadores.getSelected())
 							n = 3;
-						else if (quatroJogadores.getHovering())
+						else if (quatroJogadores.getSelected())
 							n = 4;
 
 						if (playCorrida(n) == -1)
@@ -436,17 +436,25 @@ int Jogo::mainMenu() {
 int Jogo::playCorrida(int nplayers) {
 	sf::Clock clock;
 
+	std::cout << "n:" << nplayers << std::endl;
+
 	sf::RectangleShape background(sf::Vector2f(1920, 1080));
 	sf::Texture space;
 
 	Corrida corrida (nplayers);
 
-	corrida.player[0].createPlayer(sf::Vector2f(860, 270), sf::Vector2f(0.1, 0.1), "bin/surfnauta_cinza.png", 9);
+	corrida.player[0].createPlayer(sf::Vector2f(860, 171), sf::Vector2f(0.1, 0.1), "bin/surfnauta_cinza.png", 9);
+	corrida.player[1].createPlayer(sf::Vector2f(860, 342), sf::Vector2f(0.1, 0.1), "bin/surfnauta_cinza.png", 9);
+	if (nplayers >= 3)
+		corrida.player[2].createPlayer(sf::Vector2f(860, 513), sf::Vector2f(0.1, 0.1), "bin/surfnauta_cinza.png", 9);
+	if (nplayers == 4)
+		corrida.player[3].createPlayer(sf::Vector2f(860, 684), sf::Vector2f(0.1, 0.1), "bin/surfnauta_cinza.png", 9);
 
 	space.loadFromFile("bin/bg_game.png");
 	background.setTexture(&space);
 
 	Animation animation(&space, sf::Vector2u(3, 15), 0.025f);
+
 
 	int quit = 0;
 	float deltaTime = 0;
@@ -471,6 +479,12 @@ int Jogo::playCorrida(int nplayers) {
 				case sf::Event::KeyPressed:
 					if (event.key.code == sf::Keyboard::A) //Player 1
 						corrida.player[0].rise = true;
+					if (event.key.code == sf::Keyboard::F) //Player 2
+						corrida.player[1].rise = true;
+					if (event.key.code == sf::Keyboard::J && nplayers >= 3) //Player 3
+						corrida.player[2].rise = true;
+					if (event.key.code == sf::Keyboard::L && nplayers == 4) //Player 4
+						corrida.player[3].rise = true;
 
 					break;
 
@@ -482,6 +496,12 @@ int Jogo::playCorrida(int nplayers) {
 
 					if (event.key.code == sf::Keyboard::A)
 						corrida.player[0].rise = false;
+					if (event.key.code == sf::Keyboard::F)
+						corrida.player[1].rise = false;
+					if (event.key.code == sf::Keyboard::J && nplayers >= 3)
+						corrida.player[2].rise = false;
+					if (event.key.code == sf::Keyboard::L && nplayers == 4)
+						corrida.player[3].rise = false;
 
 					break;
 
@@ -501,10 +521,19 @@ int Jogo::playCorrida(int nplayers) {
 			animation.updateXY(deltaTime);
 			background.setTextureRect(animation.uvRect);
 
-			corrida.player[0].boolPosition();
-
 			window.draw(background);
 			window.draw(corrida.player[0].player);
+			corrida.player[0].boolPosition();
+			window.draw(corrida.player[1].player);
+			corrida.player[1].boolPosition();
+			if (nplayers >= 3)
+				window.draw(corrida.player[2].player); {
+				corrida.player[2].boolPosition();
+			}
+			if (nplayers == 4) {
+				window.draw(corrida.player[3].player);
+				corrida.player[3].boolPosition();
+			}
 
 
 
