@@ -3,31 +3,42 @@
 
 #include <SFML/Graphics.hpp>
 
-class Obstaculos {
+class ObstaculoEstatico {
 	private:
 		sf::Vector2f pos;
-		sf::RectangleShape shape;
 		sf::Texture texture;
 
 		float speed;
 
+		std::string *textureFiles;
+
 	public:
-		Obstaculos(sf::Vector2f pos, std::string pathToFile);
-		Obstaculos(float x, float y);
+		ObstaculoEstatico();
+		sf::Sprite sprite;
 
 		sf::Vector2f getPosition();
 		void setPosition(float x, float y);
 		void setPosition(sf::Vector2f pos);
-		void draw();
 
 };
 
-class ObstaculoEstatico : public Obstaculos {
+class ObstaculoGiratorio : public ObstaculoEstatico {
+	private:
+		bool giratorio;
+		float angularSpeed;
 
+	public:
+		ObstaculoGiratorio();
 
 };
 
-class ObstaculoGiratorio : public Obstaculos {
+class ObstaculoVazado : public ObstaculoEstatico {
+	private:
+		sf::RectangleShape vazado1;
+		sf::RectangleShape vazado2;
+
+	public:
+		ObstaculoVazado();
 
 };
 

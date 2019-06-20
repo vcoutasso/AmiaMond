@@ -6,6 +6,7 @@
 
 #include "option.hpp"
 #include "jogo.hpp"
+#include "corrida.hpp"
 
 Jogo::Jogo() {
 	font.loadFromFile("bin/Pixelada.ttf");
@@ -245,6 +246,27 @@ int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 				}
 				break;
 
+			case sf::Event::KeyReleased:
+				if (event.key.code == sf::Keyboard::Enter) {
+					// So inicia o jogo se estiver com todas as opções pertinentes selecionadas
+					if ((doisJogadores.getSelected() || tresJogadores.getSelected() || quatroJogadores.getSelected()) && (modoJogoCorrida.getSelected())) {
+						int n = 2;
+
+						if (tresJogadores.getHovering())
+							n = 3;
+						else if (quatroJogadores.getHovering())
+							n = 4;
+
+						if (playCorrida(n) == -1)
+							quit = -1;
+
+						iniciar.text.setFillColor(sf::Color::White);
+						window.draw(iniciar.text);
+						clock.restart();
+					}
+				}
+				break;
+
 			default:
 				break;
 			}
@@ -445,10 +467,8 @@ int Jogo::playCorrida(int nplayers) {
 	sf::Texture texture;
 	sf::Sprite boneco;
 
-	space.loadFromFile("bin/bg_game.png");
-	background.setTexture(&space);
-
-	Animation animation(&space, sf::Vector2u(3, 15), 0.025f);
+	Corrida corrida;
+	corrida.criaObstaculo();
 
 	int quit = 0;
 	float deltaTime = 0;
@@ -456,11 +476,14 @@ int Jogo::playCorrida(int nplayers) {
 	bool atualizaTela = true;
 	bool mostraFPS = false;
 
-	if (!texture.loadFromFile("bin/surfnauta_cinza.png")) {
+	if (!(texture.loadFromFile("bin/surfnauta_cinza.png")) || !space.loadFromFile("bin/bg_game.png")) {
 		std::cout << "Error! Could not load textures!" << std::endl;
 		quit = -1;
 	}
 
+	background.setTexture(&space);
+
+	Animation animation(&space, sf::Vector2u(3, 15), 0.025f);
 
 	boneco.setTexture(texture);
 	boneco.setScale(sf::Vector2f(0.1, 0.1));
@@ -498,6 +521,7 @@ int Jogo::playCorrida(int nplayers) {
 			background.setTextureRect(animation.uvRect);
 			window.draw(background);
 			window.draw(boneco);
+			window.draw(corrida.obstaculosEstaticos[0].sprite);
 
 			sf::sleep(sf::seconds((1 / FPS) - clock.getElapsedTime().asSeconds()));
 		}

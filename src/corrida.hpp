@@ -8,16 +8,15 @@
 class Corrida {
 	private:
 		//Nave *players;
-		std::vector<Obstaculos> obstaculos;
 
 	public:
+		std::vector<ObstaculoEstatico> obstaculosEstaticos;
+		std::vector<ObstaculoGiratorio> obstaculosGiratorios;
+		std::vector<ObstaculoVazado> obstaculosVazados;
+
 		Corrida(int n);
 		Corrida();
-
-		template <typename T>
-		T criaObstaculo();
-
-
+		void criaObstaculo();
 
 		void Main();
 

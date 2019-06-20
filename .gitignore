@@ -55,6 +55,7 @@ CMakeLists.txt
 cmake-build-debug/
 
 src/.vscode/
+.vscode/
 /.vs
 /SFML-2.5.1
 /AmiaMond.sln
