@@ -3,19 +3,18 @@
 
 #include <vector>
 #include "obstaculos.hpp"
-#include "nave.hpp"
+#include "player.hpp"
+
 
 class Corrida {
 	private:
-		//Nave *players;
 		std::vector<Obstaculos> obstaculos;
 
 	public:
+		Player *player;
+
 		Corrida(int n);
 		Corrida();
-
-		template <typename T>
-		T criaObstaculo();
 
 
 

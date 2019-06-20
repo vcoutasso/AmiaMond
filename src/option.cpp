@@ -15,17 +15,6 @@ Option::Option(float px, float py, unsigned int s, std::string t, std::string pa
 	text.setPosition(px - text.getLocalBounds().width / 2, py);
 }
 
-//Printar para mudar o fundo nas opções para não confundir na imagem
-sf::RectangleShape Option::printRect()
-{
-	sf::RectangleShape rect(sf::Vector2f(text.getGlobalBounds().width + 15, text.getGlobalBounds().height + 15));
-
-	rect.setFillColor(sf::Color::Black);
-	rect.setPosition(sf::Vector2f(text.getPosition().x - 7, text.getPosition().y + 6 - 7));
-
-	return rect;
-}
-
 // Seta o valor do atributo hovering. 
 void Option::setHovering(bool b) {
 	hovering = b;
