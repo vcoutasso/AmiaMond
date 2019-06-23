@@ -33,7 +33,7 @@ int Jogo::openInstructions() {
 
 
 	Option exit(0, 0, 40, "VOLTAR PARA O MENU", "bin/Pixelada.ttf");
-	exit.text.setPosition(width - (exit.text.getGlobalBounds().width) - 14, height - 65);
+	exit.text.setPosition(static_cast<float>(width) - (exit.text.getGlobalBounds().width) - 14, static_cast<float>(height) - 65);
 	Option title(160, 30, 40, "COMO JOGAR:", "bin/Pixelada.ttf");
 
 	title.text.setStyle(sf::Text::Bold | sf::Text::Italic);
@@ -42,7 +42,7 @@ int Jogo::openInstructions() {
 
 	while (!quit) {
 
-		sf::Event event;
+		sf::Event event{};
 
 		while (window.pollEvent(event)) {
 
@@ -80,7 +80,7 @@ int Jogo::openInstructions() {
 				window.draw(background);
 				window.draw(exit.text);
 				window.draw(title.text);
-				sf::sleep(sf::seconds((1 / FPS) - clock.getElapsedTime().asSeconds()));
+				sf::sleep(sf::seconds(static_cast<float>(1.f / FPS - clock.getElapsedTime().asSeconds())));
 
 			}
 			
@@ -100,17 +100,15 @@ int Jogo::openInstructions() {
 }
 
 
-
-//TODO: Abrir funções a partir das opções do usuário
-//Implemetando a Função Jogar contendo todas as opções de modo de jogo e quantidade de jogadores
+// Implemetando a Função Jogar contendo todas as opções de modo de jogo e quantidade de jogadores
 int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
-	int height = window.getSize().y;
+	float height = window.getSize().y;
 
 	int quit = 0;
 	bool atualizaTela = true;
 
 	Option modoJogo(0, 0, 40, "MODO DE JOGO:", "bin/Pixelada.ttf");
-	modoJogo.text.setPosition(modoJogo.text.getGlobalBounds().width / 10 - 3, 4 * height / 15 + 30);
+	modoJogo.text.setPosition(modoJogo.text.getGlobalBounds().width / 10 - 3, 4 * height / 15.f + 30);
 	modoJogo.text.setFillColor(sf::Color::Yellow);
 
 	Option novoJogo(0, 0, 40, "* SELECIONE O ESTILO DE JOGO:", "bin/Pixelada.ttf");
@@ -124,7 +122,7 @@ int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 	exit.text.setPosition(modoJogo.text.getGlobalBounds().width / 10 - 3, height - 65);
 
 	Option numJogadores(0, 0, 40, "NM. DE JOGADORES:", "bin/Pixelada.ttf");
-	numJogadores.text.setPosition(modoJogo.text.getGlobalBounds().width / 10 - 3, 8 * height / 15 + 30);
+	numJogadores.text.setPosition(modoJogo.text.getGlobalBounds().width / 10 - 3, 8 *height / 15 + 30);
 	numJogadores.text.setFillColor(sf::Color::Yellow);
 
 	Option doisJogadores(100 , 8 * height / 15 + 150, 40, "2", "bin/Pixelada.ttf");
@@ -138,7 +136,7 @@ int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 
 	while (!quit) {
 
-		sf::Event event;
+		sf::Event event{};
 
 		while (window.pollEvent(event)) {
 
@@ -290,7 +288,7 @@ int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 			window.draw(tresJogadores.text);
 			window.draw(quatroJogadores.text);
 
-			sf::sleep(sf::seconds((1 / FPS) - clock.getElapsedTime().asSeconds()));
+			sf::sleep(sf::seconds(1 / FPS - clock.getElapsedTime().asSeconds())); 
 		}
 		
 		atualizaTela = true;
@@ -311,7 +309,7 @@ int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 }
 
 int Jogo::mainMenu() {
-	int height = window.getSize().y;
+	float height = window.getSize().y;
 
 	int quit = 0;
 
@@ -350,7 +348,7 @@ int Jogo::mainMenu() {
 
 	while(!quit) {
 		
-		sf::Event event;
+		sf::Event event{};
 
 		/* Tratamento de eventos */ 
 		while (window.pollEvent(event)) {
@@ -500,7 +498,7 @@ int Jogo::playCorrida(int nplayers) {
 
 	while (!quit) {
 
-		sf::Event event;
+		sf::Event event{};
 
 		while (window.pollEvent(event)) {
 			switch(event.type) {
@@ -603,7 +601,7 @@ int Jogo::playCorrida(int nplayers) {
 					break;
 			}
 
-			sf::sleep(sf::seconds((1 / FPS) - clock.getElapsedTime().asSeconds()));
+			sf::sleep(sf::seconds(1 / FPS - clock.getElapsedTime().asSeconds()));
 		}
 
 		atualizaTela = true;

@@ -10,6 +10,7 @@ class ObstaculoEstatico {
 		float speed;
 
 	public:
+		virtual ~ObstaculoEstatico() = default;
 		ObstaculoEstatico();
 		sf::Texture texture;
 		sf::Sprite sprite;
@@ -32,7 +33,7 @@ class ObstaculoGiratorio : public ObstaculoEstatico {
 	public:
 		ObstaculoGiratorio();
 
-		void updatePosition();
+		void updatePosition() override;
 
 		void setTexture() override;
 

@@ -6,8 +6,8 @@
 
 #include "animation.hpp"
 
-#define WIDTH 1920
-#define HEIGHT 1080
+constexpr int WIDTH = 1920;
+constexpr int HEIGHT = 1080;
 
 class Jogo {
 	public:

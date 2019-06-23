@@ -20,9 +20,6 @@ class Player {		//Inserindo todos os dados do player generalizado
 		void setPlayerTexture(std::string pathToTexture);
 		void createPlayer(sf::Vector2f pos, sf::Vector2f scale, std::string pathToTexture, float speed);
 
-		void boolPosition(); //Função para verificar se está subindo ou descendo
-		int checkPosition();
-
 		void updatePosition();
 		void setPosition(sf::Vector2f pos);
 		sf::Vector2f getPosition();
