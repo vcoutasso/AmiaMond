@@ -15,9 +15,12 @@ CC=g++
 # Compiler flags
 CC_FLAGS = -c		\
 	   -Wall	\
-	   -pedantic	\
+	   -Wextra	\
 	   -Werror	\
+	   -pedantic	\
+	   -ansi	\
 	   -std=c++11
+	   #-Weffc++	
 
 # Linker flags
 L_FLAGS= `pkg-config --cflags --libs sfml-all`		

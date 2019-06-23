@@ -27,6 +27,10 @@ int main(int argc, char** argv) {
 	// Para voltar para a tela anterior, basta retornar 1.
 	jogo.mainMenu();
 
+
+	// Apenas para remover o warning de nao estar usando argc e argv
+	(void)argv;
+	(void)argc;
 	
 	return 0;
 }
