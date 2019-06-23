@@ -7,6 +7,7 @@
 #include "option.hpp"
 #include "jogo.hpp"
 #include "corrida.hpp"
+#include "player.hpp"
 
 Jogo::Jogo() {
 	font.loadFromFile("bin/Pixelada.ttf");
@@ -478,24 +479,13 @@ int Jogo::playCorrida(int nplayers) {
 
 	Animation animation(&space, sf::Vector2u(3, 15), 0.025f);
 
-
 	int quit = 0;
 	float deltaTime = 0;
 
 	bool atualizaTela = true;
 	bool mostraFPS = false;
 
-	if (!(texture.loadFromFile("bin/surfnauta_cinza.png")) || !space.loadFromFile("bin/bg_game.png")) {
-		std::cout << "Error! Could not load textures!" << std::endl;
-		quit = -1;
-	}
-
 	background.setTexture(&space);
-
-	Animation animation(&space, sf::Vector2u(3, 15), 0.025f);
-
-	boneco.setTexture(texture);
-	boneco.setScale(sf::Vector2f(0.1, 0.1));
 
 	clock.restart();
 
@@ -511,8 +501,6 @@ int Jogo::playCorrida(int nplayers) {
 			switch(event.type) {
 				case sf::Event::MouseMoved:
 					//corrida.player[0].player.setPosition(sf::Vector2f(event.mouseMove.x, event.mouseMove.y));
-					
-
 					break;
 
 				case sf::Event::KeyPressed:
@@ -566,19 +554,11 @@ int Jogo::playCorrida(int nplayers) {
 			background.setTextureRect(animation.uvRect);
 
 			window.draw(background);
-			window.draw(corrida.player[0].player);
-			corrida.player[0].boolPosition();
-			window.draw(corrida.player[1].player);
-			corrida.player[1].boolPosition();
-			if (nplayers >= 3)
-				window.draw(corrida.player[2].player); {
-				corrida.player[2].boolPosition();
-			}
-			if (nplayers == 4) {
-				window.draw(corrida.player[3].player);
-				corrida.player[3].boolPosition();
-			}
 
+			for (int i = 0; i < nplayers; ++i) {
+				corrida.player[i].updatePosition();
+				window.draw(corrida.player[i].sprite);
+			}
 
 
 			// Itera pelos vetores contendo os obstaculos e imprime os sprites na tela. 
@@ -586,7 +566,6 @@ int Jogo::playCorrida(int nplayers) {
 			for (auto it = corrida.obstaculosEstaticos.begin(); it != corrida.obstaculosEstaticos.end(); ++it) {
 				window.draw((*it)->sprite);
 				(*it)->updatePosition();
-
 			}
 
 			for (auto it = corrida.obstaculosGiratorios.begin(); it != corrida.obstaculosGiratorios.end(); ++it) {

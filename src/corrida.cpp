@@ -5,10 +5,6 @@ Corrida::Corrida(int n) {
 	player = new Player[n]; 
 }
 
-Corrida::Corrida() {
-
-}
-
 // Decide aleatoriamente o tipo do proximo obstaculo a ser gerado
 void Corrida::criaObstaculo() {
 	const auto num = rand() % 3;

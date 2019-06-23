@@ -28,6 +28,8 @@ class Option {		//Funcionalidade dos Botões
 
 		void setFont(std::string pathToFile);
 
+		sf::RectangleShape printRect();
+
 };
 
 #endif

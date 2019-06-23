@@ -1,21 +1,21 @@
 #ifndef _CORRIDA_HPP
 #define _CORRIDA_HPP
 
-#include <list>
 #include <vector>
+
 #include "obstaculos.hpp"
+#include "player.hpp"
 
 class Corrida {
-	private:
-		//Nave *players;
-
 	public:
 		std::vector<ObstaculoEstatico*> obstaculosEstaticos;
 		std::vector<ObstaculoGiratorio*> obstaculosGiratorios;
 		std::vector<ObstaculoVazado*> obstaculosVazados;
 
+		Player *player;
+
 		Corrida(int n);
-		Corrida();
+
 		void criaObstaculo();
 
 		void Main();

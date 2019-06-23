@@ -5,28 +5,32 @@
 #include <string>
 
 class Player {		//Inserindo todos os dados do player generalizado
-private:
-	sf::Vector2f pos;
-	sf::Vector2f scale;
-	float speed;
-	sf::Texture playerTexture;
+	private:
+		sf::Vector2f pos;
+		sf::Vector2f scale;
+		float speed;
+		sf::Texture playerTexture;
 
-public:
-	Player();
+	public:
+		Player();
 
-	bool rise = false;
-	sf::RectangleShape player;
-	
-	void setPlayerTexture(std::string pathToTexture);
-	void createPlayer(sf::Vector2f pos,sf::Vector2f scale, std::string pathToTexture, float speed);
+		bool rise = false;
+		sf::Sprite sprite;
+		
+		void setPlayerTexture(std::string pathToTexture);
+		void createPlayer(sf::Vector2f pos, sf::Vector2f scale, std::string pathToTexture, float speed);
 
-	void boolPosition(); //Função para verificar se está subindo ou descendo
-	int checkPosition();
+		void boolPosition(); //Função para verificar se está subindo ou descendo
+		int checkPosition();
 
-	float getSpeed();
-	void setSpeed(float speed);
-	void resetSpeed();
-	float changeSpeed(float extraSpeed);
+		void updatePosition();
+		void setPosition(sf::Vector2f pos);
+		sf::Vector2f getPosition();
+
+		float getSpeed();
+		void setSpeed(float speed);
+		void resetSpeed();
+		float changeSpeed(float extraSpeed);
 };
 
 
