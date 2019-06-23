@@ -108,7 +108,7 @@ int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 	int quit = 0;
 	bool atualizaTela = true;
 
-	Option modoJogo(0, 0, 40, "MODO DE JOGO", "bin/Pixelada.ttf");
+	Option modoJogo(0, 0, 40, "MODO DE JOGO:", "bin/Pixelada.ttf");
 	modoJogo.text.setPosition(modoJogo.text.getGlobalBounds().width / 10 - 3, 4 * height / 15 + 30);
 	modoJogo.text.setFillColor(sf::Color::Yellow);
 
@@ -117,18 +117,18 @@ int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 	novoJogo.text.setStyle(sf::Text::Bold | sf::Text::Italic); 
 
 	Option modoJogoCorrida(0, 0, 40, "CORRIDA", "bin/Pixelada.ttf");
-	modoJogoCorrida.text.setPosition(650, 4 * height / 15 + 30);
+	modoJogoCorrida.text.setPosition(100, 400);
 
 	Option exit(0, 0, 40, "VOLTAR PARA O MENU", "bin/Pixelada.ttf");
 	exit.text.setPosition(modoJogo.text.getGlobalBounds().width / 10 - 3, height - 65);
 
-	Option numJogadores(0, 0, 40, "NM. DE JOGADORES", "bin/Pixelada.ttf");
+	Option numJogadores(0, 0, 40, "NM. DE JOGADORES:", "bin/Pixelada.ttf");
 	numJogadores.text.setPosition(modoJogo.text.getGlobalBounds().width / 10 - 3, 8 * height / 15 + 30);
 	numJogadores.text.setFillColor(sf::Color::Yellow);
 
-	Option doisJogadores(650 , 8 * height / 15 + 30, 40, "2", "bin/Pixelada.ttf");
-	Option tresJogadores(650 + 310, 8 * height / 15 + 30, 40, "3", "bin/Pixelada.ttf");
-	Option quatroJogadores(650 + 620, 8 * height / 15 + 30, 40, "4", "bin/Pixelada.ttf");
+	Option doisJogadores(100 , 8 * height / 15 + 150, 40, "2", "bin/Pixelada.ttf");
+	Option tresJogadores(100 + 100, 8 * height / 15 + 150, 40, "3", "bin/Pixelada.ttf");
+	Option quatroJogadores(100 + 200, 8 * height / 15 + 150, 40, "4", "bin/Pixelada.ttf");
 
 	Option iniciar(1800, height - 65, 40, "INICIAR!", "bin/Pixelada.ttf");
 
@@ -231,9 +231,9 @@ int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 					if ((doisJogadores.getSelected() || tresJogadores.getSelected() || quatroJogadores.getSelected()) && (modoJogoCorrida.getSelected())) {
 						int n = 2;
 
-						if (tresJogadores.getHovering())
+						if (tresJogadores.getSelected())
 							n = 3;
-						else if (quatroJogadores.getHovering())
+						else if (quatroJogadores.getSelected())
 							n = 4;
 
 						if (playCorrida(n) == -1)
@@ -277,11 +277,6 @@ int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 			background.setTextureRect(animation.uvRect);
 
 			window.draw(background);
-
-			window.draw(doisJogadores.printRect());
-			window.draw(tresJogadores.printRect());
-			window.draw(quatroJogadores.printRect());
-			window.draw(modoJogoCorrida.printRect());
 
 			window.draw(novoJogo.text);
 			window.draw(modoJogo.text);
@@ -468,10 +463,21 @@ int Jogo::playCorrida(int nplayers) {
 
 	sf::RectangleShape background(sf::Vector2f(1920, 1080));
 	sf::Texture space;
-	sf::Texture texture;
-	sf::Sprite boneco;
 
-	Corrida corrida;
+	Corrida corrida (nplayers);
+
+	corrida.player[0].createPlayer(sf::Vector2f(860, 171), sf::Vector2f(0.1, 0.1), "bin/surfnauta_cinza.png", 9);
+	corrida.player[1].createPlayer(sf::Vector2f(860, 342), sf::Vector2f(0.1, 0.1), "bin/surfnauta_cinza.png", 9);
+	if (nplayers >= 3)
+		corrida.player[2].createPlayer(sf::Vector2f(860, 513), sf::Vector2f(0.1, 0.1), "bin/surfnauta_cinza.png", 9);
+	if (nplayers == 4)
+		corrida.player[3].createPlayer(sf::Vector2f(860, 684), sf::Vector2f(0.1, 0.1), "bin/surfnauta_cinza.png", 9);
+
+	space.loadFromFile("bin/bg_game.png");
+	background.setTexture(&space);
+
+	Animation animation(&space, sf::Vector2u(3, 15), 0.025f);
+
 
 	int quit = 0;
 	float deltaTime = 0;
@@ -504,13 +510,38 @@ int Jogo::playCorrida(int nplayers) {
 		while (window.pollEvent(event)) {
 			switch(event.type) {
 				case sf::Event::MouseMoved:
-					boneco.setPosition(sf::Vector2f(event.mouseMove.x, event.mouseMove.y));
+					//corrida.player[0].player.setPosition(sf::Vector2f(event.mouseMove.x, event.mouseMove.y));
+					
+
 					break;
+
+				case sf::Event::KeyPressed:
+					if (event.key.code == sf::Keyboard::A) //Player 1
+						corrida.player[0].rise = true;
+					if (event.key.code == sf::Keyboard::F) //Player 2
+						corrida.player[1].rise = true;
+					if (event.key.code == sf::Keyboard::J && nplayers >= 3) //Player 3
+						corrida.player[2].rise = true;
+					if (event.key.code == sf::Keyboard::L && nplayers == 4) //Player 4
+						corrida.player[3].rise = true;
+
+					break;
+
 				case sf::Event::KeyReleased: // Volta para o menu
 					if (event.key.code == sf::Keyboard::Escape)
 						quit = 1;
 					if (event.key.code == sf::Keyboard::F1)
 						mostraFPS = !mostraFPS;
+
+					if (event.key.code == sf::Keyboard::A)
+						corrida.player[0].rise = false;
+					if (event.key.code == sf::Keyboard::F)
+						corrida.player[1].rise = false;
+					if (event.key.code == sf::Keyboard::J && nplayers >= 3)
+						corrida.player[2].rise = false;
+					if (event.key.code == sf::Keyboard::L && nplayers == 4)
+						corrida.player[3].rise = false;
+
 					break;
 
 				case sf::Event::Closed: // Sai do jogo
@@ -528,11 +559,27 @@ int Jogo::playCorrida(int nplayers) {
 			clockObstaculos.restart();
 		}
 
+
+
 		if (clock.getElapsedTime().asSeconds() <= 1 / FPS) {
 			animation.updateXY(deltaTime);
 			background.setTextureRect(animation.uvRect);
+
 			window.draw(background);
-			window.draw(boneco);
+			window.draw(corrida.player[0].player);
+			corrida.player[0].boolPosition();
+			window.draw(corrida.player[1].player);
+			corrida.player[1].boolPosition();
+			if (nplayers >= 3)
+				window.draw(corrida.player[2].player); {
+				corrida.player[2].boolPosition();
+			}
+			if (nplayers == 4) {
+				window.draw(corrida.player[3].player);
+				corrida.player[3].boolPosition();
+			}
+
+
 
 			// Itera pelos vetores contendo os obstaculos e imprime os sprites na tela. 
 			// TODO: Se não tiverem mais na tela, destruir os mesmos.

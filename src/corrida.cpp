@@ -2,7 +2,7 @@
 #include <cstdlib> 
 
 Corrida::Corrida(int n) {
-	//players = new Nave[n]; 
+	player = new Player[n]; 
 }
 
 Corrida::Corrida() {
