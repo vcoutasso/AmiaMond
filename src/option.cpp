@@ -16,8 +16,7 @@ Option::Option(float px, float py, unsigned int s, std::string t, std::string pa
 }
 
 //Printar para mudar o fundo nas opções para não confundir na imagem
-sf::RectangleShape Option::printRect()
-{
+sf::RectangleShape Option::printRect() {
 	sf::RectangleShape rect(sf::Vector2f(text.getGlobalBounds().width + 15, text.getGlobalBounds().height + 15));
 
 	rect.setFillColor(sf::Color::Black);
@@ -45,8 +44,7 @@ bool Option::isHovering(int x, int y) {
 		return false;
 }
 
-void Option::setSelected(bool b)
-{
+void Option::setSelected(bool b) {
 	selected = b;
 }
 

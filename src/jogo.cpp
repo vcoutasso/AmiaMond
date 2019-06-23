@@ -460,7 +460,11 @@ int Jogo::mainMenu() {
 
 
 int Jogo::playCorrida(int nplayers) {
+
 	sf::Clock clock;
+	sf::Clock clockObstaculos;
+
+	sf::Time intervaloObstaculos = sf::seconds(1.5);
 
 	sf::RectangleShape background(sf::Vector2f(1920, 1080));
 	sf::Texture space;
@@ -468,7 +472,6 @@ int Jogo::playCorrida(int nplayers) {
 	sf::Sprite boneco;
 
 	Corrida corrida;
-	corrida.criaObstaculo();
 
 	int quit = 0;
 	float deltaTime = 0;
@@ -489,6 +492,10 @@ int Jogo::playCorrida(int nplayers) {
 	boneco.setScale(sf::Vector2f(0.1, 0.1));
 
 	clock.restart();
+
+	// Clock que nunca é resetado para saber quanto tempo passou desde o inicio do jogo
+	// Usado para aumentar a dificuldade do jogo com o tempo
+	sf::Clock gameTimer;
 
 	while (!quit) {
 
@@ -516,12 +523,34 @@ int Jogo::playCorrida(int nplayers) {
 			}	
 		}
 
+		if (clockObstaculos.getElapsedTime().asSeconds() >= intervaloObstaculos.asSeconds()) {
+			corrida.criaObstaculo();
+			clockObstaculos.restart();
+		}
+
 		if (clock.getElapsedTime().asSeconds() <= 1 / FPS) {
 			animation.updateXY(deltaTime);
 			background.setTextureRect(animation.uvRect);
 			window.draw(background);
 			window.draw(boneco);
-			window.draw(corrida.obstaculosEstaticos[0].sprite);
+
+			// Itera pelos vetores contendo os obstaculos e imprime os sprites na tela. 
+			// TODO: Se não tiverem mais na tela, destruir os mesmos.
+			for (auto it = corrida.obstaculosEstaticos.begin(); it != corrida.obstaculosEstaticos.end(); ++it) {
+				window.draw((*it)->sprite);
+				(*it)->updatePosition();
+
+			}
+
+			for (auto it = corrida.obstaculosGiratorios.begin(); it != corrida.obstaculosGiratorios.end(); ++it) {
+				window.draw((*it)->sprite);
+				(*it)->updatePosition();
+			}
+
+			for (auto it = corrida.obstaculosVazados.begin(); it != corrida.obstaculosVazados.end(); ++it) {
+				window.draw((*it)->sprite);
+				(*it)->updatePosition();
+			}
 
 			sf::sleep(sf::seconds((1 / FPS) - clock.getElapsedTime().asSeconds()));
 		}
