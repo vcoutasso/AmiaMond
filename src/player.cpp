@@ -5,12 +5,14 @@
 #define WIDTH 1920
 #define HEIGHT 1080
 
+// Construtor padrão
 Player::Player() {
 	pos = sf::Vector2f(0, 0);
 
 	speed = 9;
 }
 
+// Carrega a textura
 void Player::setPlayerTexture(std::string pathToTexture) {
 	if (!playerTexture.loadFromFile(pathToTexture))
 		std::cout << "Error: Could not load texture! Path to file: " << pathToTexture << std::endl;
@@ -19,12 +21,10 @@ void Player::setPlayerTexture(std::string pathToTexture) {
 
 }
 
+// Seta todos os atributos necessarios do objeto
 void Player::createPlayer(sf::Vector2f pos, sf::Vector2f scale, std::string pathToTexture, float speed) {
 
-
-	//setPlayerTexture(pathToTexture);
-	playerTexture.loadFromFile(pathToTexture);
-	sprite.setTexture(playerTexture);
+	setPlayerTexture(pathToTexture);
 	sprite.setScale(scale);
 	sprite.setOrigin(sf::Vector2f(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2));
 	sprite.setPosition(pos);
@@ -32,26 +32,7 @@ void Player::createPlayer(sf::Vector2f pos, sf::Vector2f scale, std::string path
 
 }
 
-void Player::boolPosition() {
-
-	if (rise == true && checkPosition() == 1 && sprite.getPosition().y >= speed)
-		sprite.setPosition(sprite.getPosition().x, sprite.getPosition().y - speed);
-
-	if (rise == false && checkPosition() == 1 && (sprite.getPosition().y + sprite.getLocalBounds().height) <= (HEIGHT - speed))
-		sprite.setPosition(sprite.getPosition().x, sprite.getPosition().y + speed);
-}
-
-
-int Player::checkPosition() {
-	int aux = 1;
-
-	if (sprite.getPosition().y < 0 || (sprite.getPosition().y + sprite.getLocalBounds().height ) > HEIGHT){
-		aux = -1;
-	}
-
-	return aux;
-}
-
+// Atualiza a posição do objeto com base na velocidade. Só altera a posição se estiver dentro dos limites da janela.
 void Player::updatePosition() {
 	if (rise) {
 		if (sprite.getPosition().y >= 0 + (sprite.getTexture()->getSize().y * sprite.getScale().y) / 2)
@@ -63,28 +44,33 @@ void Player::updatePosition() {
 	}
 }
 
+// Seta a posição do jogador e do sprite.
 void Player::setPosition(sf::Vector2f pos) {
 	this->pos = pos;
 	sprite.setPosition(pos);
 }
 
+// Retoran a posição do jogador e do sprite. Poderia ser utilizado sprite.getPosition(). Ambos tem o mesmo valor.
 sf::Vector2f Player::getPosition() {
 	return pos;
 }
  
-
+// Retorna speed
 float Player::getSpeed() {
 	return speed;
 }
 
+// Seta speed
 void Player::setSpeed(float speed) {
 	this->speed = speed;
 }
 
+// Reseta speed para o valor inicial
 void Player::resetSpeed() {
-	speed = 5;
+	speed = 9;
 }
 
+// Incrementa, ou decrementa, a velocidade do jogador
 float Player::changeSpeed(float extraSpeed) {
 	speed += extraSpeed;
 	return speed;

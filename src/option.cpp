@@ -44,10 +44,12 @@ bool Option::isHovering(int x, int y) {
 		return false;
 }
 
+// Seta a opção selcted do objeto. Essa opção representa se a opção foi marcad aou não
 void Option::setSelected(bool b) {
 	selected = b;
 }
 
+// Retorna true se a opção estiver marcada, e false caso contrário.
 bool Option::getSelected() {
 	return selected;
 }

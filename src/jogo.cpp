@@ -387,7 +387,8 @@ int Jogo::mainMenu() {
 					if (event.key.code == sf::Keyboard::Escape)
 						quit = 1;
 					break;
-				
+
+				// Monitora os movimentos do mouse para verificar se está sobre alguma opção
 				case sf::Event::MouseMoved:
 					if (sair.isHovering(event.mouseMove.x, event.mouseMove.y)) {
 						sair.setHovering(true);
@@ -454,12 +455,13 @@ int Jogo::mainMenu() {
 	return quit;
 }
 
-
+// Método principal do jogo no modo Corrida
 int Jogo::playCorrida(int nplayers) {
 
 	sf::Clock clock;
 	sf::Clock clockObstaculos;
 
+	// Define o intervalo entre a criação de diferentes obstaculos
 	sf::Time intervaloObstaculos = sf::seconds(1.5);
 
 	sf::RectangleShape background(sf::Vector2f(1920, 1080));
@@ -467,6 +469,7 @@ int Jogo::playCorrida(int nplayers) {
 
 	Corrida corrida (nplayers);
 
+	// Inicializa os bonecos
 	corrida.player[0].createPlayer(sf::Vector2f(860, 171), sf::Vector2f(0.1, 0.1), "bin/surfnauta_cinza.png", 9);
 	corrida.player[1].createPlayer(sf::Vector2f(860, 342), sf::Vector2f(0.1, 0.1), "bin/surfnauta_cinza.png", 9);
 	if (nplayers >= 3)
@@ -489,6 +492,8 @@ int Jogo::playCorrida(int nplayers) {
 
 	clock.restart();
 
+	window.setMouseCursorVisible(false);
+
 	// Clock que nunca é resetado para saber quanto tempo passou desde o inicio do jogo
 	// Usado para aumentar a dificuldade do jogo com o tempo
 	sf::Clock gameTimer;
@@ -499,10 +504,8 @@ int Jogo::playCorrida(int nplayers) {
 
 		while (window.pollEvent(event)) {
 			switch(event.type) {
-				case sf::Event::MouseMoved:
-					//corrida.player[0].player.setPosition(sf::Vector2f(event.mouseMove.x, event.mouseMove.y));
-					break;
 
+				// Ao pressionar a tecla, o respectivo jogador começará a subir
 				case sf::Event::KeyPressed:
 					if (event.key.code == sf::Keyboard::A) //Player 1
 						corrida.player[0].rise = true;
@@ -515,10 +518,11 @@ int Jogo::playCorrida(int nplayers) {
 
 					break;
 
-				case sf::Event::KeyReleased: // Volta para o menu
-					if (event.key.code == sf::Keyboard::Escape)
+				// Ao soltar, volta a cair
+				case sf::Event::KeyReleased: 
+					if (event.key.code == sf::Keyboard::Escape) // Volta para o menu
 						quit = 1;
-					if (event.key.code == sf::Keyboard::F1)
+					if (event.key.code == sf::Keyboard::F1) // Botão de toggle para o contador de FPS
 						mostraFPS = !mostraFPS;
 
 					if (event.key.code == sf::Keyboard::A)
@@ -542,13 +546,13 @@ int Jogo::playCorrida(int nplayers) {
 			}	
 		}
 
+		// Se passou o tempo definido em intervaloObstaculos, cria um novo obstaculo e reseta o clock.
 		if (clockObstaculos.getElapsedTime().asSeconds() >= intervaloObstaculos.asSeconds()) {
 			corrida.criaObstaculo();
 			clockObstaculos.restart();
 		}
 
-
-
+		// Desenha elementos na tela
 		if (clock.getElapsedTime().asSeconds() <= 1 / FPS) {
 			animation.updateXY(deltaTime);
 			background.setTextureRect(animation.uvRect);
@@ -562,27 +566,49 @@ int Jogo::playCorrida(int nplayers) {
 
 
 			// Itera pelos vetores contendo os obstaculos e imprime os sprites na tela. 
-			// TODO: Se não tiverem mais na tela, destruir os mesmos.
-			for (auto it = corrida.obstaculosEstaticos.begin(); it != corrida.obstaculosEstaticos.end(); ++it) {
+			for(auto it = corrida.obstaculosEstaticos.begin(); it != corrida.obstaculosEstaticos.end(); ++it) {
 				window.draw((*it)->sprite);
 				(*it)->updatePosition();
 			}
 
-			for (auto it = corrida.obstaculosGiratorios.begin(); it != corrida.obstaculosGiratorios.end(); ++it) {
+			// Itera pelo vector até que remova todos os obstaculos que não estao mais visiveis na tela
+			while (!corrida.obstaculosEstaticos.empty()) {
+				if (corrida.obstaculosEstaticos.front()->getPosition().x < -corrida.obstaculosEstaticos.front()->sprite.getGlobalBounds().width / 2)
+					corrida.obstaculosEstaticos.erase(corrida.obstaculosEstaticos.begin());
+				else
+					break;
+			}
+
+			for(auto it = corrida.obstaculosGiratorios.begin(); it != corrida.obstaculosGiratorios.end(); ++it) {
 				window.draw((*it)->sprite);
 				(*it)->updatePosition();
 			}
 
-			for (auto it = corrida.obstaculosVazados.begin(); it != corrida.obstaculosVazados.end(); ++it) {
+			while (!corrida.obstaculosGiratorios.empty()) {
+				if (corrida.obstaculosGiratorios.front()->getPosition().x < -corrida.obstaculosGiratorios.front()->sprite.getGlobalBounds().width / 2)
+					corrida.obstaculosGiratorios.erase(corrida.obstaculosGiratorios.begin());
+				else
+					break;
+			}
+
+			for(auto it = corrida.obstaculosVazados.begin(); it != corrida.obstaculosVazados.end(); ++it) {
 				window.draw((*it)->sprite);
 				(*it)->updatePosition();
+			}
+
+			while (!corrida.obstaculosVazados.empty()) {
+				if (corrida.obstaculosVazados.front()->getPosition().x < -corrida.obstaculosVazados.front()->sprite.getGlobalBounds().width / 2)
+					corrida.obstaculosVazados.erase(corrida.obstaculosVazados.begin());
+				else
+					break;
 			}
 
 			sf::sleep(sf::seconds((1 / FPS) - clock.getElapsedTime().asSeconds()));
 		}
 
 		atualizaTela = true;
-			
+
+
 		if (atualizaTela) {
 
 			deltaTime = clock.restart().asSeconds();
@@ -597,10 +623,12 @@ int Jogo::playCorrida(int nplayers) {
 
 	}
 
+	window.setMouseCursorVisible(true);
 
 	return quit;
 }
 
+// Mostra a quantidade de frames por segundo no canto superior direito da tela.
 void Jogo::showFPS(float deltaTime) {
 	fps.setString(std::to_string((int)round(1 / deltaTime)));
 	fps.setFillColor(sf::Color::White);

@@ -18,9 +18,6 @@ class Corrida {
 
 		void criaObstaculo();
 
-		void Main();
-
-
 
 };
 

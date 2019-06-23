@@ -4,12 +4,10 @@
 #include <SFML/Graphics.hpp>
 
 class ObstaculoEstatico {
-	private:
-		sf::Vector2f pos;
-		float speed;
-
 	protected:
+		sf::Vector2f pos;
 		void setInitialPosition();
+		float speed;
 
 	public:
 		ObstaculoEstatico();
@@ -17,8 +15,9 @@ class ObstaculoEstatico {
 		sf::Sprite sprite;
 
 		virtual void setTexture();
+	
+		virtual void updatePosition();
 
-		void updatePosition();
 		sf::Vector2f getPosition();
 
 		void setPosition(float x, float y);
@@ -32,6 +31,8 @@ class ObstaculoGiratorio : public ObstaculoEstatico {
 
 	public:
 		ObstaculoGiratorio();
+
+		void updatePosition();
 
 		void setTexture() override;
 

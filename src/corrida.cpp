@@ -1,6 +1,7 @@
 #include "corrida.hpp"
 #include <cstdlib> 
 
+// Inicializa com a quantiade adequada de jogadores.
 Corrida::Corrida(int n) {
 	player = new Player[n]; 
 }
@@ -22,3 +23,5 @@ void Corrida::criaObstaculo() {
 		obstaculosVazados.back()->setTexture();
 	}
 }
+
+
