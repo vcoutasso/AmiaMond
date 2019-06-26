@@ -9,6 +9,8 @@
 #include "corrida.hpp"
 #include "player.hpp"
 
+#include "collision.h"
+
 Jogo::Jogo() {
 	font.loadFromFile("bin/Pixelada.ttf");
 	fps.setFont(font);
@@ -564,26 +566,63 @@ int Jogo::playCorrida(int nplayers) {
 
 
 			// Itera pelos vetores contendo os obstaculos e imprime os sprites na tela. 
-			for(auto it = corrida.obstaculosEstaticos.begin(); it != corrida.obstaculosEstaticos.end(); ++it) {
+			for (auto it = corrida.obstaculosEstaticos.begin(); it != corrida.obstaculosEstaticos.end(); ++it) {
 				window.draw((*it)->sprite);
 				(*it)->updatePosition();
 			}
 
 			// Itera pelo vector até que remova todos os obstaculos que não estao mais visiveis na tela
 			while (!corrida.obstaculosEstaticos.empty()) {
-				if (corrida.obstaculosEstaticos.front()->getPosition().x < -corrida.obstaculosEstaticos.front()->sprite.getGlobalBounds().width / 2)
+				if (corrida.obstaculosEstaticos.front()->getPosition().x < - corrida.obstaculosEstaticos.front()->sprite.getGlobalBounds().width / 2)
 					corrida.obstaculosEstaticos.erase(corrida.obstaculosEstaticos.begin());
 				else
 					break;
 			}
 
-			for(auto it = corrida.obstaculosGiratorios.begin(); it != corrida.obstaculosGiratorios.end(); ++it) {
+			for (auto it = corrida.obstaculosEstaticos.begin(); it != corrida.obstaculosEstaticos.end(); ++it) {
+				if (Collision::BoundingBoxTest(corrida.player[0].sprite, (*it)->sprite)) {
+
+					// TODO: ARRUMAR ISSO !!
+					//corrida.player[0].ajustaPosicao((*it)->sprite, (*it).isVertical());
+
+					sf::Vector2f prancha(corrida.player[0].sprite.getPosition().x, corrida.player->sprite.getGlobalBounds().top + corrida.player->sprite.getGlobalBounds().height);
+					sf::Vector2f cabeca(corrida.player[0].sprite.getPosition().x, corrida.player->sprite.getGlobalBounds().top);
+
+
+					sf::Vector2f topLeft((*it)->sprite.getGlobalBounds().left, (*it)->sprite.getGlobalBounds().top);
+					sf::Vector2f topRight((*it)->sprite.getGlobalBounds().left + (*it)->sprite.getGlobalBounds().width, (*it)->sprite.getGlobalBounds().top);
+
+					sf::Vector2f bottomLeft((*it)->sprite.getGlobalBounds().left, (*it)->sprite.getGlobalBounds().top + (*it)->sprite.getGlobalBounds().height);
+					sf::Vector2f bottomRight((*it)->sprite.getGlobalBounds().left + (*it)->sprite.getGlobalBounds().width, (*it)->sprite.getGlobalBounds().top + (*it)->sprite.getGlobalBounds().height);
+
+					if ((*it)->isVertical()) {
+						if (abs(prancha.y - topLeft.y) < 5)
+							corrida.player[0].setPosition(sf::Vector2f(corrida.player[0].getPosition().x, corrida.player[0].getPosition().y - corrida.player[0].getSpeed()));
+						else if (abs(cabeca.y - bottomLeft.y) < 5)
+							corrida.player[0].setPosition(sf::Vector2f(corrida.player[0].getPosition().x, corrida.player[0].getPosition().y + corrida.player[0].getSpeed()));
+						else
+							corrida.player[0].setPosition(sf::Vector2f(corrida.player[0].getPosition().x + (*it)->getSpeed(), corrida.player[0].getPosition().y));
+					}
+					else {
+						if (abs(prancha.y - topLeft.y) < 8)
+							corrida.player[0].setPosition(sf::Vector2f(corrida.player[0].getPosition().x, corrida.player[0].getPosition().y - corrida.player[0].getSpeed()));
+						else if (abs(cabeca.y - bottomLeft.y) < 8)
+							corrida.player[0].setPosition(sf::Vector2f(corrida.player[0].getPosition().x, corrida.player[0].getPosition().y + corrida.player[0].getSpeed()));
+						else
+							corrida.player[0].setPosition(sf::Vector2f(corrida.player[0].getPosition().x + (*it)->getSpeed(), corrida.player[0].getPosition().y));
+					}
+				}
+			}
+
+
+
+			for (auto it = corrida.obstaculosGiratorios.begin(); it != corrida.obstaculosGiratorios.end(); ++it) {
 				window.draw((*it)->sprite);
 				(*it)->updatePosition();
 			}
 
 			while (!corrida.obstaculosGiratorios.empty()) {
-				if (corrida.obstaculosGiratorios.front()->getPosition().x < -corrida.obstaculosGiratorios.front()->sprite.getGlobalBounds().width / 2)
+				if (corrida.obstaculosGiratorios.front()->getPosition().x < - corrida.obstaculosGiratorios.front()->sprite.getGlobalBounds().width / 2)
 					corrida.obstaculosGiratorios.erase(corrida.obstaculosGiratorios.begin());
 				else
 					break;
@@ -595,7 +634,7 @@ int Jogo::playCorrida(int nplayers) {
 			}
 
 			while (!corrida.obstaculosVazados.empty()) {
-				if (corrida.obstaculosVazados.front()->getPosition().x < -corrida.obstaculosVazados.front()->sprite.getGlobalBounds().width / 2)
+				if (corrida.obstaculosVazados.front()->getPosition().x < - corrida.obstaculosVazados.front()->sprite.getGlobalBounds().width / 2)
 					corrida.obstaculosVazados.erase(corrida.obstaculosVazados.begin());
 				else
 					break;

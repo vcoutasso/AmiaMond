@@ -60,8 +60,15 @@ void ObstaculoEstatico::setTexture() {
 	textureFiles[0] = "bin/obstaculo_1.png";
 	textureFiles[1] = "bin/obstaculo_2.png";
 
-	texture.loadFromFile(textureFiles[rand() % 2]);
+	int n = rand() % 2;
+
+	texture.loadFromFile(textureFiles[n]);
 	sprite.setTexture(texture);
+
+	if (n == 0)
+		this->vertical = true;
+	else
+		this->vertical = false;
 
 	sprite.setOrigin(sf::Vector2f(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2));
 	setInitialPosition();
@@ -69,6 +76,17 @@ void ObstaculoEstatico::setTexture() {
 	delete[] textureFiles;
 }
 
+void ObstaculoEstatico::setSpeed(float speed) {
+	this->speed = speed;
+}
+
+float ObstaculoEstatico::getSpeed() {
+	return this->speed;
+}
+
+bool ObstaculoEstatico::isVertical() {
+	return vertical;
+}
 
 
 /* Métodos de ObstaculoGiratorio */

@@ -6,8 +6,10 @@
 class ObstaculoEstatico {
 	protected:
 		sf::Vector2f pos;
-		void setInitialPosition();
 		float speed;
+		void setInitialPosition();
+		bool vertical;
+		
 
 	public:
 		virtual ~ObstaculoEstatico() = default;
@@ -21,9 +23,13 @@ class ObstaculoEstatico {
 
 		sf::Vector2f getPosition();
 
+		float getSpeed();
+		void setSpeed(float speed);
+
 		void setPosition(float x, float y);
 		void setPosition(sf::Vector2f pos);
 
+		bool isVertical();
 };
 
 class ObstaculoGiratorio : public ObstaculoEstatico {

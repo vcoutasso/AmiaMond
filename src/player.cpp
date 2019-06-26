@@ -1,6 +1,9 @@
-#include "player.hpp"
 #include <string>
 #include <iostream>
+
+#include "player.hpp"
+
+
 
 #define WIDTH 1920
 #define HEIGHT 1080
@@ -75,3 +78,33 @@ float Player::changeSpeed(float extraSpeed) {
 	speed += extraSpeed;
 	return speed;
 }
+
+// Ajusta a posição do boneco de acordo com a colisão (por exemplo se colidiu de cima pra baixo ou de frente)
+void Player::ajustaPosicao(sf::Sprite obstaculo, bool vertical) {
+	const sf::Vector2f prancha(obstaculo.getPosition().x, obstaculo.getGlobalBounds().top + obstaculo.getGlobalBounds().height);
+	const sf::Vector2f cabeca(obstaculo.getPosition().x, obstaculo.getGlobalBounds().top);
+
+	const sf::Vector2f topLeft(obstaculo.getGlobalBounds().left, obstaculo.getGlobalBounds().top);
+	//sf::Vector2f topRight(obstaculo.getGlobalBounds().left + obstaculo.getGlobalBounds().width, obstaculo.getGlobalBounds().top);
+
+	const sf::Vector2f bottomLeft(obstaculo.getGlobalBounds().left, obstaculo.getGlobalBounds().top + obstaculo.getGlobalBounds().height);
+	//sf::Vector2f bottomRight(obstaculo.getGlobalBounds().left + obstaculo.getGlobalBounds().width, obstaculo.getGlobalBounds().top + obstaculo.getGlobalBounds().height);
+
+	if (vertical) {
+		if (abs(prancha.y - topLeft.y) < 5)
+			this->setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y - this->getSpeed()));
+		else if (abs(cabeca.y - bottomLeft.y) < 5)
+			this->setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y + this->getSpeed()));
+		else
+			this->setPosition(sf::Vector2f(this->getPosition().x + this->getSpeed(), this->getPosition().y));
+	}
+	else {
+		if (abs(prancha.y - topLeft.y) < 8)
+			this->setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y - this->getSpeed()));
+		else if (abs(cabeca.y - bottomLeft.y) < 8)
+			this->setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y + this->getSpeed()));
+		else
+			this->setPosition(sf::Vector2f(this->getPosition().x + this->getSpeed(), this->getPosition().y));
+	}
+}
+

@@ -28,6 +28,8 @@ class Player {		//Inserindo todos os dados do player generalizado
 		void setSpeed(float speed);
 		void resetSpeed();
 		float changeSpeed(float extraSpeed);
+
+		void ajustaPosicao(sf::Sprite obstaculo, bool vertical);
 };
 
 
