@@ -10,8 +10,10 @@ class Player {		//Inserindo todos os dados do player generalizado
 		sf::Vector2f scale;
 		float speed;
 		sf::Texture playerTexture;
+		sf::Clock temporizador; // Conta o tempo que o jogador ficou sem colisoes. Caso se mantenha um tempo minimo sem colidir, ganha velocidade para retornar à posição inicial.
 
 	public:
+
 		Player();
 
 		bool rise = false;
@@ -29,7 +31,10 @@ class Player {		//Inserindo todos os dados do player generalizado
 		void resetSpeed();
 		float changeSpeed(float extraSpeed);
 
-		void ajustaPosicao(sf::Sprite obstaculo, bool vertical);
+		void ajustaPosicao(const sf::Sprite& obstaculo, bool vertical, float speedObstaculo);
+
+		void restartTemporizador();
+		sf::Time elapsedTime();
 };
 
 

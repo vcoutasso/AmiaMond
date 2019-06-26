@@ -582,35 +582,7 @@ int Jogo::playCorrida(int nplayers) {
 			for (auto it = corrida.obstaculosEstaticos.begin(); it != corrida.obstaculosEstaticos.end(); ++it) {
 				if (Collision::BoundingBoxTest(corrida.player[0].sprite, (*it)->sprite)) {
 
-					// TODO: ARRUMAR ISSO !!
-					//corrida.player[0].ajustaPosicao((*it)->sprite, (*it).isVertical());
-
-					sf::Vector2f prancha(corrida.player[0].sprite.getPosition().x, corrida.player->sprite.getGlobalBounds().top + corrida.player->sprite.getGlobalBounds().height);
-					sf::Vector2f cabeca(corrida.player[0].sprite.getPosition().x, corrida.player->sprite.getGlobalBounds().top);
-
-
-					sf::Vector2f topLeft((*it)->sprite.getGlobalBounds().left, (*it)->sprite.getGlobalBounds().top);
-					sf::Vector2f topRight((*it)->sprite.getGlobalBounds().left + (*it)->sprite.getGlobalBounds().width, (*it)->sprite.getGlobalBounds().top);
-
-					sf::Vector2f bottomLeft((*it)->sprite.getGlobalBounds().left, (*it)->sprite.getGlobalBounds().top + (*it)->sprite.getGlobalBounds().height);
-					sf::Vector2f bottomRight((*it)->sprite.getGlobalBounds().left + (*it)->sprite.getGlobalBounds().width, (*it)->sprite.getGlobalBounds().top + (*it)->sprite.getGlobalBounds().height);
-
-					if ((*it)->isVertical()) {
-						if (abs(prancha.y - topLeft.y) < 5)
-							corrida.player[0].setPosition(sf::Vector2f(corrida.player[0].getPosition().x, corrida.player[0].getPosition().y - corrida.player[0].getSpeed()));
-						else if (abs(cabeca.y - bottomLeft.y) < 5)
-							corrida.player[0].setPosition(sf::Vector2f(corrida.player[0].getPosition().x, corrida.player[0].getPosition().y + corrida.player[0].getSpeed()));
-						else
-							corrida.player[0].setPosition(sf::Vector2f(corrida.player[0].getPosition().x + (*it)->getSpeed(), corrida.player[0].getPosition().y));
-					}
-					else {
-						if (abs(prancha.y - topLeft.y) < 8)
-							corrida.player[0].setPosition(sf::Vector2f(corrida.player[0].getPosition().x, corrida.player[0].getPosition().y - corrida.player[0].getSpeed()));
-						else if (abs(cabeca.y - bottomLeft.y) < 8)
-							corrida.player[0].setPosition(sf::Vector2f(corrida.player[0].getPosition().x, corrida.player[0].getPosition().y + corrida.player[0].getSpeed()));
-						else
-							corrida.player[0].setPosition(sf::Vector2f(corrida.player[0].getPosition().x + (*it)->getSpeed(), corrida.player[0].getPosition().y));
-					}
+					corrida.player[0].ajustaPosicao((*it)->sprite, (*it)->isVertical(), (*it)->getSpeed());
 				}
 			}
 
