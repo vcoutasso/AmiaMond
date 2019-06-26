@@ -20,7 +20,7 @@ class Corrida {
 		Corrida(int n);
 
 		void criaObstaculo();
-		void initPlayer(int n, sf::Vector2f pos, sf::Vector2f scale, std::string pathToTexture, float speed);
+		void initPlayer(sf::Vector2f pos, sf::Vector2f scale, std::string pathToTexture, float speed);
 
 		int getNumPlayers();
 		void setNumPlayers(int n);

@@ -8,7 +8,7 @@ Corrida::Corrida(int n) {
 		//player.push_back(new Player);
 }
 
-void Corrida::initPlayer(int n, sf::Vector2f pos, sf::Vector2f scale, std::string pathToTexture, float speed) {
+void Corrida::initPlayer(sf::Vector2f pos, sf::Vector2f scale, std::string pathToTexture, float speed) {
 	player.push_back(new Player);
 	player.back()->createPlayer(pos, scale, pathToTexture, speed);
 }

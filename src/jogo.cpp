@@ -9,7 +9,7 @@
 #include "corrida.hpp"
 #include "player.hpp"
 
-#include "collision.h"
+#include "collision.hpp"
 
 Jogo::Jogo() {
 	font.loadFromFile("bin/Pixelada.ttf");
@@ -475,8 +475,8 @@ int Jogo::playCorrida(int nplayers) {
 
 
 	// Inicializa os bonecos
-	for (int n = 0; n < nplayers; ++n) {
-		corrida.initPlayer(n, sf::Vector2f(xInicial, yInicial), sf::Vector2f(0.1, 0.1), "bin/surfnauta_cinza.png", velInicial);
+	for (int n = 0; n < corrida.getNumPlayers(); ++n) {
+		corrida.initPlayer(sf::Vector2f(xInicial, yInicial), sf::Vector2f(0.1, 0.1), "bin/surfnauta_cinza.png", velInicial);
 		yInicial += yInicial;
 	}
 
