@@ -469,13 +469,16 @@ int Jogo::playCorrida(int nplayers) {
 
 	Corrida corrida (nplayers);
 
+	const int xInicial = 860;
+	int yInicial = 170;
+	const int velInicial = 9;
+
+
 	// Inicializa os bonecos
-	corrida.player[0].createPlayer(sf::Vector2f(860, 171), sf::Vector2f(0.1, 0.1), "bin/surfnauta_cinza.png", 9);
-	corrida.player[1].createPlayer(sf::Vector2f(860, 342), sf::Vector2f(0.1, 0.1), "bin/surfnauta_cinza.png", 9);
-	if (nplayers >= 3)
-		corrida.player[2].createPlayer(sf::Vector2f(860, 513), sf::Vector2f(0.1, 0.1), "bin/surfnauta_cinza.png", 9);
-	if (nplayers == 4)
-		corrida.player[3].createPlayer(sf::Vector2f(860, 684), sf::Vector2f(0.1, 0.1), "bin/surfnauta_cinza.png", 9);
+	for (int n = 0; n < nplayers; ++n) {
+		corrida.initPlayer(n, sf::Vector2f(xInicial, yInicial), sf::Vector2f(0.1, 0.1), "bin/surfnauta_cinza.png", velInicial);
+		yInicial += yInicial;
+	}
 
 	space.loadFromFile("bin/bg_game.png");
 	background.setTexture(&space);
@@ -508,13 +511,13 @@ int Jogo::playCorrida(int nplayers) {
 				// Ao pressionar a tecla, o respectivo jogador começará a subir
 				case sf::Event::KeyPressed:
 					if (event.key.code == sf::Keyboard::A) //Player 1
-						corrida.player[0].rise = true;
+						corrida.player[0]->rise = true;
 					if (event.key.code == sf::Keyboard::F) //Player 2
-						corrida.player[1].rise = true;
+						corrida.player[1]->rise = true;
 					if (event.key.code == sf::Keyboard::J && nplayers >= 3) //Player 3
-						corrida.player[2].rise = true;
+						corrida.player[2]->rise = true;
 					if (event.key.code == sf::Keyboard::L && nplayers == 4) //Player 4
-						corrida.player[3].rise = true;
+						corrida.player[3]->rise = true;
 
 					break;
 
@@ -526,13 +529,13 @@ int Jogo::playCorrida(int nplayers) {
 						mostraFPS = !mostraFPS;
 
 					if (event.key.code == sf::Keyboard::A)
-						corrida.player[0].rise = false;
+						corrida.player[0]->rise = false;
 					if (event.key.code == sf::Keyboard::F)
-						corrida.player[1].rise = false;
+						corrida.player[1]->rise = false;
 					if (event.key.code == sf::Keyboard::J && nplayers >= 3)
-						corrida.player[2].rise = false;
+						corrida.player[2]->rise = false;
 					if (event.key.code == sf::Keyboard::L && nplayers == 4)
-						corrida.player[3].rise = false;
+						corrida.player[3]->rise = false;
 
 					break;
 
@@ -560,8 +563,8 @@ int Jogo::playCorrida(int nplayers) {
 			window.draw(background);
 
 			for (int i = 0; i < nplayers; ++i) {
-				corrida.player[i].updatePosition();
-				window.draw(corrida.player[i].sprite);
+				corrida.player[i]->updatePosition();
+				window.draw(corrida.player[i]->sprite);
 			}
 
 
@@ -579,11 +582,13 @@ int Jogo::playCorrida(int nplayers) {
 					break;
 			}
 
+			// Checa colisões com obstaculos do tipo estatico.
 			for (auto it = corrida.obstaculosEstaticos.begin(); it != corrida.obstaculosEstaticos.end(); ++it) {
-				if (Collision::BoundingBoxTest(corrida.player[0].sprite, (*it)->sprite)) {
-
-					corrida.player[0].ajustaPosicao((*it)->sprite, (*it)->isVertical(), (*it)->getSpeed());
-				}
+				// Faz todas as checagens para cada player
+				for (auto it_player = corrida.player.begin(); it_player != corrida.player.end(); ++it_player)
+					// Se colidiu, ajusta a posição do boneco
+					if (Collision::BoundingBoxTest((*it_player)->sprite, (*it)->sprite))
+						(*it_player)->ajustaPosicao((*it)->sprite, (*it)->isVertical(), (*it)->getSpeed());
 			}
 
 

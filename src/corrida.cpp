@@ -3,7 +3,14 @@
 
 // Inicializa com a quantiade adequada de jogadores.
 Corrida::Corrida(int n) {
-	player = new Player[n]; 
+	setNumPlayers(n);
+	//for (int i = 0; i < n; ++i)
+		//player.push_back(new Player);
+}
+
+void Corrida::initPlayer(int n, sf::Vector2f pos, sf::Vector2f scale, std::string pathToTexture, float speed) {
+	player.push_back(new Player);
+	player.back()->createPlayer(pos, scale, pathToTexture, speed);
 }
 
 // Decide aleatoriamente o tipo do proximo obstaculo a ser gerado
@@ -23,5 +30,14 @@ void Corrida::criaObstaculo() {
 		obstaculosVazados.back()->setTexture();
 	}
 }
+
+void Corrida::setNumPlayers(int n) {
+	numPlayers = n;
+}
+
+int Corrida::getNumPlayers() {
+	return numPlayers;
+}
+
 
 
