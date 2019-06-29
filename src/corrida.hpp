@@ -35,6 +35,14 @@ class Corrida {
 		void desenhaPlayers(sf::RenderWindow& window); // Desenha os bonecos na tela
 
 		void mataMatado(); // Remove do vetor player os jogadores que já morreram
+
+		// Verifica se os jogadores colidiram com algum obstaculo
+		void colisaoEstatico();
+		void colisaoGiratorio();
+		void colisaoVazado();
+
+	
+		void handleEvents(sf::Event& event, int& quit, bool& mostraFPS); // Método para tratar os eventos 
 };
 
 

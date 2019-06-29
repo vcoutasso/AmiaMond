@@ -505,49 +505,9 @@ int Jogo::playCorrida(int nplayers) {
 
 		sf::Event event{};
 
-		while (window.pollEvent(event)) {
-			switch(event.type) {
-
-				// Ao pressionar a tecla, o respectivo jogador começará a subir
-				case sf::Event::KeyPressed:
-					if (event.key.code == sf::Keyboard::A) //Player 1
-						corrida.player[0]->rise = true;
-					if (event.key.code == sf::Keyboard::F) //Player 2
-						corrida.player[1]->rise = true;
-					if (event.key.code == sf::Keyboard::J && nplayers >= 3) //Player 3
-						corrida.player[2]->rise = true;
-					if (event.key.code == sf::Keyboard::L && nplayers == 4) //Player 4
-						corrida.player[3]->rise = true;
-
-					break;
-
-				// Ao soltar, volta a cair
-				case sf::Event::KeyReleased:
-					if (event.key.code == sf::Keyboard::Escape) // Volta para o menu
-						quit = 1;
-					if (event.key.code == sf::Keyboard::F1) // Botão de toggle para o contador de FPS
-						mostraFPS = !mostraFPS;
-
-					if (event.key.code == sf::Keyboard::A)
-						corrida.player[0]->rise = false;
-					if (event.key.code == sf::Keyboard::F)
-						corrida.player[1]->rise = false;
-					if (event.key.code == sf::Keyboard::J && nplayers >= 3)
-						corrida.player[2]->rise = false;
-					if (event.key.code == sf::Keyboard::L && nplayers == 4)
-						corrida.player[3]->rise = false;
-
-					break;
-
-				case sf::Event::Closed: // Sai do jogo
-					quit = -1;
-					break;
-
-				default:
-					break;
-
-			}
-		}
+		// Permanece no loop até tratar todos os eventos. Tratamento é feito através de um switch case no método handleEvents()
+		while (window.pollEvent(event))
+			corrida.handleEvents(event, quit, mostraFPS);
 			
 		// Muda o background para fazer a animação e desenha na tela.
 		animation.updateXY(deltaTime);			
@@ -568,36 +528,12 @@ int Jogo::playCorrida(int nplayers) {
 			corrida.removeObstaculos(); // Remove todos os obstaculos que não estão mais visiveis na tela
 			corrida.desenhaObstaculos(window); // Desenha obstaculos restantes na tela
 
-			// Checa colisões com obstaculos do tipo estatico.
-			for (auto it = corrida.obstaculosEstaticos.begin(); it != corrida.obstaculosEstaticos.end(); ++it) {
-				// Faz todas as checagens para cada player
-				for (auto it_player = corrida.player.begin(); it_player != corrida.player.end(); ++it_player) {
-					// Se colidiu, ajusta a posição do boneco
-					if (Collision::BoundingBoxTest((*it_player)->sprite, (*it)->sprite)) {
-						(*it_player)->resetSpeed();
-						(*it_player)->ajustaPosicao((*it)->sprite, (*it)->isVertical(), (*it)->getSpeed());
-						(*it_player)->restartTemporizador();
-					}
-				}
-			}
+			// Checa colisão com todos os tipos de obstáculos
+			corrida.colisaoEstatico();
+			corrida.colisaoGiratorio();
+			corrida.colisaoVazado();
 
-			// Checa colisões com obstaculos do tipo vazado.
-			for (auto it = corrida.obstaculosVazados.begin(); it != corrida.obstaculosVazados.end(); ++it) {
-				// Faz todas as checagens para cada player
-				for (auto it_player = corrida.player.begin(); it_player != corrida.player.end(); ++it_player)
-					// Se colidiu, verifica se não está passando entre o(s) buraco(s)
-					if (Collision::BoundingBoxTest((*it_player)->sprite, (*it)->sprite)) {
-						if ((*it)->loadedFile == "obstaculo_3.png") { // Se for o obstaculo com apenas um buraco
-							if ((*it_player)->getPosition().y > (*it)->sprite.getGlobalBounds().top + 1/3 * (*it)->sprite.getGlobalBounds().height &&
-							(*it_player)->getPosition().y < (*it)->sprite.getGlobalBounds().top + 2/3 * (*it)->sprite.getGlobalBounds().height)
-								continue; // Nao faz nada, passou no buraco
-							else
-								(*it_player)->ajustaPosicao((*it)->sprite, (*it)->isVertical(), (*it)->getSpeed());
-						}
-					}
-			}
-
-			// Remove os jogadores que morreram
+			// Remove os jogadores que morreram.
 			//corrida.mataMatado();
 
 			// Faz os joagdores se deslocarem para a posição inicial em x (860) se for necessário.

@@ -1,4 +1,6 @@
 #include "corrida.hpp"
+#include "collision.hpp"
+
 #include <cstdlib> 
 
 // Inicializa com a quantiade adequada de jogadores.
@@ -125,3 +127,104 @@ void Corrida::mataMatado() {
 }
 
 
+// Checa colisões com obstaculos do tipo estatico.
+void Corrida::colisaoEstatico() {
+
+	for (auto it = obstaculosEstaticos.begin(); it != obstaculosEstaticos.end(); ++it) {
+		// Faz todas as checagens para cada player
+		for (auto it_player = player.begin(); it_player != player.end(); ++it_player) {
+			// Se colidiu, ajusta a posição do boneco
+			if (Collision::BoundingBoxTest((*it_player)->sprite, (*it)->sprite)) {
+				(*it_player)->resetSpeed();
+				(*it_player)->ajustaPosicao((*it)->sprite, (*it)->isVertical(), (*it)->getSpeed());
+				(*it_player)->restartTemporizador();
+			}
+		}
+	}
+}
+
+
+// Checa colisões com obstaculos do tipo giratorio.
+void Corrida::colisaoGiratorio() {
+
+	for (auto it = obstaculosGiratorios.begin(); it != obstaculosGiratorios.end(); ++it) {
+		// Faz todas as checagens para cada player
+		for (auto it_player = player.begin(); it_player != player.end(); ++it_player) {
+			// Se colidiu, ajusta a posição do boneco
+			if (Collision::BoundingBoxTest((*it_player)->sprite, (*it)->sprite)) {
+				(*it_player)->resetSpeed();
+				(*it_player)->ajustaPosicao((*it)->sprite, (*it)->isVertical(), (*it)->getSpeed());
+				(*it_player)->restartTemporizador();
+			}
+		}
+	}
+}
+
+
+// Checa colisões com obstaculos do tipo vazado.
+void Corrida::colisaoVazado() {			
+
+	for (auto it = obstaculosVazados.begin(); it != obstaculosVazados.end(); ++it) {
+		// Faz todas as checagens para cada player
+		for (auto it_player = player.begin(); it_player != player.end(); ++it_player)
+			// Se colidiu, verifica se não está passando entre o(s) buraco(s)
+			if (Collision::BoundingBoxTest((*it_player)->sprite, (*it)->sprite)) {
+				if ((*it)->loadedFile == "bin/obstaculo_3.png") { // Se for o obstaculo com apenas um buraco
+					if ((*it_player)->getPosition().y > (*it)->sprite.getGlobalBounds().top + 1 / 3 * (*it)->sprite.getGlobalBounds().height &&
+						(*it_player)->getPosition().y < (*it)->sprite.getGlobalBounds().top + 2 / 3 * (*it)->sprite.getGlobalBounds().height)
+						continue; // Nao faz nada, passou no buraco
+					
+					(*it_player)->ajustaPosicao((*it)->sprite, (*it)->isVertical(), (*it)->getSpeed());
+				}
+				else if ((*it)->loadedFile == "bin/obstaculo_4.png") {
+					
+				}
+			}
+	}
+}
+
+// Método responsável por tratar os eventos de event
+void Corrida::handleEvents(sf::Event& event, int& quit, bool& mostraFPS) {
+
+	switch (event.type) {
+
+		// Ao pressionar a tecla, o respectivo jogador começará a subir
+	case sf::Event::KeyPressed:
+		if (event.key.code == sf::Keyboard::A) //Player 1
+			player[0]->rise = true;
+		if (event.key.code == sf::Keyboard::F) //Player 2
+			player[1]->rise = true;
+		if (event.key.code == sf::Keyboard::J && getNumPlayers() >= 3) //Player 3
+			player[2]->rise = true;
+		if (event.key.code == sf::Keyboard::L && getNumPlayers() == 4) //Player 4
+			player[3]->rise = true;
+
+		break;
+
+		// Ao soltar, volta a cair
+	case sf::Event::KeyReleased:
+		if (event.key.code == sf::Keyboard::Escape) // Volta para o menu
+			quit = 1;
+		if (event.key.code == sf::Keyboard::F1) // Botão de toggle para o contador de FPS
+			mostraFPS = !mostraFPS;
+
+		if (event.key.code == sf::Keyboard::A)
+			player[0]->rise = false;
+		if (event.key.code == sf::Keyboard::F)
+			player[1]->rise = false;
+		if (event.key.code == sf::Keyboard::J && getNumPlayers() >= 3)
+			player[2]->rise = false;
+		if (event.key.code == sf::Keyboard::L && getNumPlayers() == 4)
+			player[3]->rise = false;
+
+		break;
+
+	case sf::Event::Closed: // Sai do jogo
+		quit = -1;
+		break;
+
+	default:
+		break;
+
+	}
+}
