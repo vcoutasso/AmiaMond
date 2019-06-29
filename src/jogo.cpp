@@ -472,6 +472,7 @@ int Jogo::playCorrida(int nplayers) {
 
 	// Define o intervalo entre a criação de diferentes obstaculos
 	sf::Time intervaloObstaculos = sf::seconds(1.5);
+	float dificuldade = 1;
 
 	sf::RectangleShape background(sf::Vector2f(1920, 1080));
 	sf::Texture space;
@@ -481,6 +482,8 @@ int Jogo::playCorrida(int nplayers) {
 	const int xInicial = 860;
 	int yInicial = 170;
 	const int velInicial = 9;
+
+	int velObstaculo = -12;
 
 
 	// Inicializa os bonecos
@@ -512,6 +515,12 @@ int Jogo::playCorrida(int nplayers) {
 
 	while (!quit) {
 
+		// Diminui o intervalo entre o aparecimento de obsatculos
+		if (intervaloObstaculos.asSeconds() >= 1 && gameTimer.getElapsedTime().asSeconds() >= dificuldade * 30) {
+			intervaloObstaculos -= sf::seconds(0.1);
+			velObstaculo -= 1.2;
+		}
+
 		sf::Event event{};
 
 		// Permanece no loop até tratar todos os eventos. Tratamento é feito através de um switch case no método handleEvents()
@@ -526,7 +535,7 @@ int Jogo::playCorrida(int nplayers) {
 
 		// Se passou o tempo definido em intervaloObstaculos, cria um novo obstaculo e reseta o clock.
 		if (clockObstaculos.getElapsedTime().asSeconds() >= intervaloObstaculos.asSeconds()) {
-			corrida.criaObstaculo();
+			corrida.criaObstaculo(velObstaculo);
 			clockObstaculos.restart();
 		}
 

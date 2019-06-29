@@ -21,7 +21,7 @@ class Corrida {
 
 		std::vector<Player*> player; // Vetor contendo todos os jogadores
 
-		void criaObstaculo(); // Cria obstaculo aleatoriamente. É chamado em um intervalo de tempo fixo.
+		void criaObstaculo(int velObstaculo); // Cria obstaculo aleatoriamente. É chamado em um intervalo de tempo fixo.
 		void initPlayer(sf::Vector2f pos, sf::Vector2f scale, std::string pathToTexture, float speed); // Inicializa o vetor player de acordo com numPlayers
 
 		void removeObstaculos(); // Remove obstaculos que estão fora da tela

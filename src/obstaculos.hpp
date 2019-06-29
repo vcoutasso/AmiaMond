@@ -13,7 +13,7 @@ class ObstaculoEstatico {
 
 	public:
 		virtual ~ObstaculoEstatico() = default;
-		ObstaculoEstatico();
+		ObstaculoEstatico(int velObstaculo);
 		sf::Texture texture;
 		sf::Sprite sprite;
 
@@ -39,7 +39,7 @@ class ObstaculoGiratorio : public ObstaculoEstatico {
 		float angularSpeed;
 
 	public:
-		ObstaculoGiratorio();
+		ObstaculoGiratorio(int velObstaculo);
 
 		void updatePosition() override;
 
@@ -48,12 +48,9 @@ class ObstaculoGiratorio : public ObstaculoEstatico {
 };
 
 class ObstaculoVazado : public ObstaculoEstatico {
-	private:
-		sf::RectangleShape vazado1;
-		sf::RectangleShape vazado2;
 
 	public:
-		ObstaculoVazado();
+		ObstaculoVazado(int velObstaculo);
 
 		void setTexture() override;
 

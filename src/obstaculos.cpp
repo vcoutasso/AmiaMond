@@ -8,8 +8,9 @@
 
 // Construtor de ObstaculoEstatico. As outras opcoes sao configuradas em setTexture(). setTexture() nao pode ser chamada aqui, pois e uma funcao virtual.
 // Se for chamada aqui, sempre sera utilizada a implementacao de ObstaculoEstatico, e nunca as de ObstaculoGiratorio e ObstaculoVazado.
-ObstaculoEstatico::ObstaculoEstatico() {
-	speed = -12;
+ObstaculoEstatico::ObstaculoEstatico(int velObstaculo) {
+	speed = velObstaculo;
+	vertical = true;
 }
 
 // Atualiza a posicao do objeto com base na velocidade.
@@ -112,7 +113,7 @@ void ObstaculoGiratorio::setTexture() {
 }
 
 // Construtor de ObstaculoGiratorio. Chamado antes do construror de ObstaculoEstatico
-ObstaculoGiratorio::ObstaculoGiratorio() {
+ObstaculoGiratorio::ObstaculoGiratorio(int velObstaculo) : ObstaculoEstatico(velObstaculo) {
 	angularSpeed = static_cast<int>(rand()) % 11;
 	angularSpeed -= 5;
 }
@@ -144,16 +145,9 @@ void ObstaculoVazado::setTexture() {
 	sprite.setOrigin(sf::Vector2f(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2));
 	setInitialPosition();
 
-	if (n == 0) {
-		vazado1.setPosition(sf::Vector2f(getPosition().x, sprite.getGlobalBounds().top + 1 / 3 * sprite.getGlobalBounds().height));
-		vazado1.setSize(sf::Vector2f(sprite.getLocalBounds().width, 1 / 3 * sprite.getGlobalBounds().height));
-		vazado2.setPosition(sf::Vector2f(getPosition().x, sprite.getGlobalBounds().top + 1 / 3 * sprite.getGlobalBounds().height));
-		vazado2.setSize(sf::Vector2f(sprite.getLocalBounds().width, 1 / 3 * sprite.getGlobalBounds().height));
-	}
-
 	delete[] textureFiles;
 }
 
 // Construtor de ObstaculoVazado. Chamado antes do construror de ObstaculoEstatico
-ObstaculoVazado::ObstaculoVazado() {
+ObstaculoVazado::ObstaculoVazado(int velObstaculo) : ObstaculoEstatico(velObstaculo) {
 }
