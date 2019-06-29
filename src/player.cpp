@@ -101,22 +101,22 @@ void Player::ajustaPosicao(const sf::Sprite& obstaculo, const bool vertical, con
 	const sf::Vector2f bottomLeft(obstaculo.getGlobalBounds().left, obstaculo.getGlobalBounds().top + obstaculo.getGlobalBounds().height);
 	//const sf::Vector2f bottomRight(obstaculo.getGlobalBounds().left + obstaculo.getGlobalBounds().width, obstaculo.getGlobalBounds().top + obstaculo.getGlobalBounds().height);
 
-	if (vertical) {
-		if (abs(prancha.y - topLeft.y) < 5) // Colisão de cima para baixo. Boneco deve subir para compensar
+	 if (vertical) {
+		if (abs(prancha.y - topLeft.y) < 5 && cabeca.x >= topLeft.x) // Colisão de cima para baixo. Boneco deve subir para compensar
 			this->setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y - this->getSpeed()));
-		else if (abs(cabeca.y - bottomLeft.y) < 5) // Colisão de baixo para cima. Boneco deve descer para compensar.
+		else if (abs(cabeca.y - bottomLeft.y) < 5 && cabeca.x >= topLeft.x) // Colisão de baixo para cima. Boneco deve descer para compensar.
 			this->setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y + this->getSpeed()));
 		else // Colisão de frente. Boneco deve ser arrastado pelo obstaculo.
 			this->setPosition(sf::Vector2f(this->getPosition().x + speedObstaculo, this->getPosition().y));
 	}
 	else {
-		if (abs(prancha.y - topLeft.y) < 8) // Colisão de cima para baixo. Boneco deve subir para compensar.
+		if (abs(prancha.y - topLeft.y) < 8 && cabeca.x >= topLeft.x) // Colisão de cima para baixo. Boneco deve subir para compensar.
 			this->setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y - this->getSpeed()));
-		else if (abs(cabeca.y - bottomLeft.y) < 8) // Colisão de baixo para cima. Boneco deve descer para compensar.
+		else if (abs(cabeca.y - bottomLeft.y) < 8 && cabeca.x >= topLeft.x) // Colisão de baixo para cima. Boneco deve descer para compensar.
 			this->setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y + this->getSpeed()));
 		else // Colisão de frente. Boneco deve ser arrastado pelo obstaculo.
 			this->setPosition(sf::Vector2f(this->getPosition().x + speedObstaculo, this->getPosition().y));
-	}
+	} 
 
 	restartTemporizador();
 }

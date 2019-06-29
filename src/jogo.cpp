@@ -578,34 +578,27 @@ int Jogo::playCorrida(int nplayers) {
 					break;
 			}
 
-		/*	// Checa colisões com obstaculos do tipo estatico.
+			// Checa colisões com obstaculos do tipo estatico.
 			for (auto it = corrida.obstaculosEstaticos.begin(); it != corrida.obstaculosEstaticos.end(); ++it) {
 				// Faz todas as checagens para cada player
-				for (auto it_player = corrida.player.begin(); it_player != corrida.player.end(); ++it_player)
+				for (auto it_player = corrida.player.begin(); it_player != corrida.player.end(); ++it_player) {
 					// Se colidiu, ajusta a posição do boneco
 					if (Collision::BoundingBoxTest((*it_player)->sprite, (*it)->sprite)) {
-						//(*it_player)->resetSpeed();
+						(*it_player)->resetSpeed();
 						(*it_player)->ajustaPosicao((*it)->sprite, (*it)->isVertical(), (*it)->getSpeed());
-						//(*it_player)->restartTemporizador();
+						(*it_player)->restartTemporizador();
 					}
-			}*/
-
-				for (auto it_player = corrida.player.begin(); it_player != corrida.player.end(); ++it_player) {
-						for (auto it = corrida.obstaculosEstaticos.begin(); it != corrida.obstaculosEstaticos.end(); ++it) {
-								if (Collision::BoundingBoxTest((*it_player)->sprite, (*it)->sprite)) {
-										(*it_player)->ajustaPosicao((*it)->sprite, (*it)->isVertical(), (*it)->getSpeed());
-									}
-								}
 				}
+			}
 
 
-
-
+			// Itera pelos vetores contendo os obstaculos e imprime os sprites na tela.
 			for (auto it = corrida.obstaculosGiratorios.begin(); it != corrida.obstaculosGiratorios.end(); ++it) {
 				window.draw((*it)->sprite);
 				(*it)->updatePosition();
 			}
 
+			// Itera pelo vector até que remova todos os obstaculos que não estao mais visiveis na tela
 			while (!corrida.obstaculosGiratorios.empty()) {
 				if (corrida.obstaculosGiratorios.front()->getPosition().x < - corrida.obstaculosGiratorios.front()->sprite.getGlobalBounds().width / 2)
 					corrida.obstaculosGiratorios.erase(corrida.obstaculosGiratorios.begin());
@@ -613,11 +606,13 @@ int Jogo::playCorrida(int nplayers) {
 					break;
 			}
 
+			// Itera pelos vetores contendo os obstaculos e imprime os sprites na tela.
 			for(auto it = corrida.obstaculosVazados.begin(); it != corrida.obstaculosVazados.end(); ++it) {
 				window.draw((*it)->sprite);
 				(*it)->updatePosition();
 			}
 
+			// Itera pelo vector até que remova todos os obstaculos que não estao mais visiveis na tela
 			while (!corrida.obstaculosVazados.empty()) {
 				if (corrida.obstaculosVazados.front()->getPosition().x < - corrida.obstaculosVazados.front()->sprite.getGlobalBounds().width / 2)
 					corrida.obstaculosVazados.erase(corrida.obstaculosVazados.begin());
