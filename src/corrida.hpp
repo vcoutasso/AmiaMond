@@ -8,26 +8,33 @@
 
 class Corrida {
 	private:
-		int numPlayers;
+		int numPlayers; // Quantidade atual de jogadores
 
 	public:
-		std::vector<ObstaculoEstatico*> obstaculosEstaticos;
-		std::vector<ObstaculoGiratorio*> obstaculosGiratorios;
-		std::vector<ObstaculoVazado*> obstaculosVazados;
+		Corrida(int n); // Construtor
 
-		std::vector<Player*> player;
+		bool alive[4];
 
-		Corrida(int n);
+		std::vector<ObstaculoEstatico*> obstaculosEstaticos; // Vetor contendo todos os obstaculos estaticos
+		std::vector<ObstaculoGiratorio*> obstaculosGiratorios; // Vetor contendo todos os obstaculos giratorios
+		std::vector<ObstaculoVazado*> obstaculosVazados; // Vetor contendo todos os obstaculos vazados
 
-		void criaObstaculo();
-		void initPlayer(sf::Vector2f pos, sf::Vector2f scale, std::string pathToTexture, float speed);
+		std::vector<Player*> player; // Vetor contendo todos os jogadores
 
-		void removeObstaculos();
-		void desenhaObstaculos(sf::RenderWindow& window);
+		void criaObstaculo(); // Cria obstaculo aleatoriamente. É chamado em um intervalo de tempo fixo.
+		void initPlayer(sf::Vector2f pos, sf::Vector2f scale, std::string pathToTexture, float speed); // Inicializa o vetor player de acordo com numPlayers
 
-		int getNumPlayers();
-		void setNumPlayers(int n);
+		void removeObstaculos(); // Remove obstaculos que estão fora da tela
+		void desenhaObstaculos(sf::RenderWindow& window); // Desenha todos os obstaculos na tela
 
+		int getNumPlayers(); // Retorna o numero atual de jogadores
+		void setNumPlayers(int n); // Seta o numero atual de jogadores
+
+		void retornaPlayers(); // Faz com que os bonecos se direcionem ao centro da tela se estiverem tempo suficiente sem colidir
+
+		void desenhaPlayers(sf::RenderWindow& window); // Desenha os bonecos na tela
+
+		void mataMatado(); // Remove do vetor player os jogadores que já morreram
 };
 
 

@@ -4,13 +4,14 @@
 #include "player.hpp"
 
 
-
 #define WIDTH 1920
 #define HEIGHT 1080
 
 // Construtor padrão
 Player::Player() {
 	pos = sf::Vector2f(0, 0);
+
+	initialX = 860;
 
 	speed = 9;
 	voltando = true;
@@ -33,13 +34,15 @@ void Player::setPlayerTexture(std::string pathToTexture) {
 }
 
 // Seta todos os atributos necessarios do objeto
-void Player::createPlayer(sf::Vector2f pos, sf::Vector2f scale, std::string pathToTexture, float speed) {
+void Player::createPlayer(sf::Vector2f pos, sf::Vector2f scale, std::string pathToTexture, float speed, int num) {
 
 	setPlayerTexture(pathToTexture);
 	sprite.setScale(scale);
 	sprite.setOrigin(sf::Vector2f(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2));
-	sprite.setPosition(pos);
+	setPosition(pos);
 	setSpeed(speed);
+
+	this->num = num;
 
 }
 

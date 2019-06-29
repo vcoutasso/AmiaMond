@@ -597,24 +597,16 @@ int Jogo::playCorrida(int nplayers) {
 					}
 			}
 
-			for (auto it = corrida.player.begin(); it != corrida.player.end(); ++it) {
-				if ((*it)->elapsedTime().asSeconds() >= 10 && (*it)->getPosition().x < xInicial) {
-					(*it)->voltando = true;
-					(*it)->moveX(6);
-				}
-				if ((*it)->voltando && (*it)->getPosition().x >= xInicial) {
-					(*it)->setPosition(sf::Vector2f(860, (*it)->getPosition().y));
-					(*it)->voltando = false;
-				}
-			}
+			// Remove os jogadores que morreram
+			//corrida.mataMatado();
 
-			// Desenha os bonecos
-			for (auto boneco = corrida.player.begin() ; boneco != corrida.player.end(); ++boneco) {
-				(*boneco)->updatePosition();
-				if (!(*boneco)->morreu)
-						window.draw((*boneco)->sprite);
-			}
+			// Faz os joagdores se deslocarem para a posição inicial em x (860) se for necessário.
+			corrida.retornaPlayers();
 
+			// Desenha jogadores
+			corrida.desenhaPlayers(window);
+
+			// Aguarda para manter um fps proximo de 60
 			sf::sleep(sf::seconds(1 / FPS - clock.getElapsedTime().asSeconds()));
 		}
 

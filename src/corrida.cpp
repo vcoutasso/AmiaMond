@@ -4,11 +4,18 @@
 // Inicializa com a quantiade adequada de jogadores.
 Corrida::Corrida(int n) {
 	setNumPlayers(n);
+
+	for (int i = 0; i < 4; i++) {
+		if (i < n)
+			alive[i] = true;
+		else
+			alive[i] = false;
+	}
 }
 
 void Corrida::initPlayer(sf::Vector2f pos, sf::Vector2f scale, std::string pathToTexture, float speed) {
 	player.push_back(new Player);
-	player.back()->createPlayer(pos, scale, pathToTexture, speed);
+	player.back()->createPlayer(pos, scale, pathToTexture, speed, player.size() - 1);
 }
 
 // Decide aleatoriamente o tipo do proximo obstaculo a ser gerado
@@ -78,6 +85,43 @@ void Corrida::desenhaObstaculos(sf::RenderWindow& window) {
 		window.draw((*it)->sprite);
 		(*it)->updatePosition();
 	}
+}
+
+void Corrida::retornaPlayers() {
+	for (auto it = player.begin(); it != player.end(); ++it) {
+		if ((*it)->elapsedTime().asSeconds() >= 10 && (*it)->getPosition().x < (*it)->initialX) {
+			(*it)->voltando = true;
+			(*it)->moveX(6);
+		}
+		if ((*it)->voltando && (*it)->getPosition().x >= (*it)->initialX) {
+			(*it)->setPosition(sf::Vector2f(860, (*it)->getPosition().y));
+			(*it)->voltando = false;
+		}
+	}
+}
+
+// Itera pelo vetor player e imprime todos os sprites na tela.
+void Corrida::desenhaPlayers(sf::RenderWindow & window) {
+	for (auto boneco = player.begin(); boneco != player.end(); ++boneco) {
+		(*boneco)->updatePosition();
+		if (!(*boneco)->morreu)
+			window.draw((*boneco)->sprite);
+	}
+}
+
+// Itera pelo vetor e remove do mesmo os jogadores com a flag morreu setada para true
+void Corrida::mataMatado() {
+	auto it = player.begin();
+
+	while(it != player.end()) {
+		if ((*it)->morreu) {
+			alive[(*it)->num] = false;
+			it = player.erase(it);
+		}
+		else
+			++it;
+	}
+
 }
 
 
