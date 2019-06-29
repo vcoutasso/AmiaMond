@@ -465,6 +465,8 @@ int Jogo::mainMenu() {
 // Método principal do jogo no modo Corrida
 int Jogo::playCorrida(int nplayers) {
 
+	std::string surfnautas[4] = { "bin/cachimbo.png", "bin/hot_chick.png", "bin/negao.png", "bin/cachorro.png" };
+
 	sf::Clock clock;
 	sf::Clock clockObstaculos;
 
@@ -483,7 +485,7 @@ int Jogo::playCorrida(int nplayers) {
 
 	// Inicializa os bonecos
 	for (int n = 0; n < corrida.getNumPlayers(); ++n) {
-		corrida.initPlayer(sf::Vector2f(xInicial, yInicial), sf::Vector2f(0.1, 0.1), "bin/surfnauta_cinza.png", velInicial);
+		corrida.initPlayer(sf::Vector2f(xInicial, yInicial), sf::Vector2f(0.1, 0.1), surfnautas[n], velInicial);
 		yInicial += yInicial;
 	}
 
