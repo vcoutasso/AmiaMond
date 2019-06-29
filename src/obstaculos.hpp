@@ -6,14 +6,18 @@
 class ObstaculoEstatico {
 	protected:
 		sf::Vector2f pos;
-		void setInitialPosition();
 		float speed;
+		void setInitialPosition();
+		bool vertical;
+		
 
 	public:
 		virtual ~ObstaculoEstatico() = default;
-		ObstaculoEstatico();
+		ObstaculoEstatico(int velObstaculo);
 		sf::Texture texture;
 		sf::Sprite sprite;
+
+		std::string loadedFile;
 
 		virtual void setTexture();
 	
@@ -21,9 +25,13 @@ class ObstaculoEstatico {
 
 		sf::Vector2f getPosition();
 
+		float getSpeed();
+		void setSpeed(float speed);
+
 		void setPosition(float x, float y);
 		void setPosition(sf::Vector2f pos);
 
+		bool isVertical();
 };
 
 class ObstaculoGiratorio : public ObstaculoEstatico {
@@ -31,7 +39,7 @@ class ObstaculoGiratorio : public ObstaculoEstatico {
 		float angularSpeed;
 
 	public:
-		ObstaculoGiratorio();
+		ObstaculoGiratorio(int velObstaculo);
 
 		void updatePosition() override;
 
@@ -40,12 +48,9 @@ class ObstaculoGiratorio : public ObstaculoEstatico {
 };
 
 class ObstaculoVazado : public ObstaculoEstatico {
-	private:
-		sf::RectangleShape vazado1;
-		sf::RectangleShape vazado2;
 
 	public:
-		ObstaculoVazado();
+		ObstaculoVazado(int velObstaculo);
 
 		void setTexture() override;
 
