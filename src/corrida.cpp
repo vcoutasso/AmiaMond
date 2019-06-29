@@ -2,6 +2,7 @@
 #include "collision.hpp"
 
 #include <cstdlib> 
+#include <iostream>
 
 // Inicializa com a quantiade adequada de jogadores.
 Corrida::Corrida(int n) {
@@ -169,15 +170,22 @@ void Corrida::colisaoVazado() {
 		for (auto it_player = player.begin(); it_player != player.end(); ++it_player)
 			// Se colidiu, verifica se não está passando entre o(s) buraco(s)
 			if (Collision::BoundingBoxTest((*it_player)->sprite, (*it)->sprite)) {
+
 				if ((*it)->loadedFile == "bin/obstaculo_3.png") { // Se for o obstaculo com apenas um buraco
-					if ((*it_player)->getPosition().y > (*it)->sprite.getGlobalBounds().top + 1 / 3 * (*it)->sprite.getGlobalBounds().height &&
-						(*it_player)->getPosition().y < (*it)->sprite.getGlobalBounds().top + 2 / 3 * (*it)->sprite.getGlobalBounds().height)
-						continue; // Nao faz nada, passou no buraco
-					
-					(*it_player)->ajustaPosicao((*it)->sprite, (*it)->isVertical(), (*it)->getSpeed());
+					if ((*it_player)->sprite.getPosition().y > (*it)->sprite.getGlobalBounds().top + (*it)->sprite.getGlobalBounds().height / 3 &&
+							(*it_player)->sprite.getPosition().y < (*it)->sprite.getGlobalBounds().top + 2 * (*it)->sprite.getGlobalBounds().height / 3)
+							continue; // Nao faz nada, passou no buraco
+
+					(*it_player)->ajustaPosicao((*it)->sprite, (*it)->isVertical(), (*it)->getSpeed()); // Caso contrario, ajusta a posição do boneco
 				}
 				else if ((*it)->loadedFile == "bin/obstaculo_4.png") {
-					
+					if ((*it_player)->sprite.getPosition().y > (*it)->sprite.getGlobalBounds().top + (*it)->sprite.getGlobalBounds().height / 5 &&
+						(*it_player)->sprite.getPosition().y < (*it)->sprite.getGlobalBounds().top + 2 * (*it)->sprite.getGlobalBounds().height / 5 ||
+						((*it_player)->sprite.getPosition().y > (*it)->sprite.getGlobalBounds().top + 3 * (*it)->sprite.getGlobalBounds().height / 5 &&
+						(*it_player)->sprite.getPosition().y < (*it)->sprite.getGlobalBounds().top + 4 * (*it)->sprite.getGlobalBounds().height / 5))
+						continue; // Nao faz nada, passou no buraco
+
+					(*it_player)->ajustaPosicao((*it)->sprite, (*it)->isVertical(), (*it)->getSpeed()); // Caso contrario, ajusta a posição do boneco
 				}
 			}
 	}

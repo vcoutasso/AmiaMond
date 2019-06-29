@@ -7,9 +7,7 @@
 #include "option.hpp"
 #include "jogo.hpp"
 #include "corrida.hpp"
-#include "player.hpp"
 
-#include "collision.hpp"
 
 Jogo::Jogo() {
 	font.loadFromFile("bin/Pixelada.ttf");
@@ -321,8 +319,16 @@ int Jogo::mainMenu() {
 	 */
 	bool resetaDeltaTime = false;
 
-	sf::RectangleShape background(sf::Vector2f(1920.0f, 1080.0f));
+	sf::RectangleShape background(sf::Vector2f(WIDTH, HEIGHT));
 	sf::Texture space;
+
+	sf::Texture t_titulo;
+	sf::Sprite titulo;
+
+	t_titulo.loadFromFile("bin/titulo.png");
+	titulo.setTexture(t_titulo);
+	titulo.setScale(1.5, 1.5);
+	titulo.setPosition(620, 5);
 
 	space.loadFromFile("bin/bg_menu.png");
 
@@ -426,6 +432,7 @@ int Jogo::mainMenu() {
 				animation.updateY(0, deltaTime);
 				background.setTextureRect(animation.uvRect);
 				window.draw(background);
+				window.draw(titulo);
 				window.draw(instrucoes.text);
 				window.draw(sair.text);
 				window.draw(jogar.text);

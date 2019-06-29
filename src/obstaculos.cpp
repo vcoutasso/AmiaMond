@@ -144,10 +144,16 @@ void ObstaculoVazado::setTexture() {
 	sprite.setOrigin(sf::Vector2f(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2));
 	setInitialPosition();
 
+	if (n == 0) {
+		vazado1.setPosition(sf::Vector2f(getPosition().x, sprite.getGlobalBounds().top + 1 / 3 * sprite.getGlobalBounds().height));
+		vazado1.setSize(sf::Vector2f(sprite.getLocalBounds().width, 1 / 3 * sprite.getGlobalBounds().height));
+		vazado2.setPosition(sf::Vector2f(getPosition().x, sprite.getGlobalBounds().top + 1 / 3 * sprite.getGlobalBounds().height));
+		vazado2.setSize(sf::Vector2f(sprite.getLocalBounds().width, 1 / 3 * sprite.getGlobalBounds().height));
+	}
+
 	delete[] textureFiles;
 }
 
 // Construtor de ObstaculoVazado. Chamado antes do construror de ObstaculoEstatico
 ObstaculoVazado::ObstaculoVazado() {
-	// TODO: Implementar as posicoes dos retangulos para representar os espaços vazios
 }

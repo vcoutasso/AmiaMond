@@ -4,6 +4,12 @@
 
 #include "jogo.hpp"
 
+#ifdef _DEBUG
+#define STYLE sf::Style::Default
+#else
+#define STYLE sf::Style::Fullscreen
+#endif
+
 
 int main(int argc, char** argv) {
 
@@ -17,7 +23,7 @@ int main(int argc, char** argv) {
 	Jogo jogo;
 
 	// Cria a janela e logo em seguida centraliza.
-	jogo.window.create(sf::VideoMode(WIDTH, HEIGHT), "Amia: Mond", sf::Style::Fullscreen, settings);
+	jogo.window.create(sf::VideoMode(WIDTH, HEIGHT), "Amia::Mond", STYLE, settings);
 	jogo.window.setPosition(sf::Vector2i(sf::VideoMode::getDesktopMode().width / 2 - jogo.window.getSize().x / 2,
 		sf::VideoMode::getDesktopMode().height / 2 - jogo.window.getSize().y / 2));
 	jogo.window.setVerticalSyncEnabled(true);
