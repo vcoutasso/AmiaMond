@@ -10,9 +10,11 @@ class Player {		//Inserindo todos os dados do player generalizado
 		sf::Vector2f scale;
 		float speed;
 		sf::Texture playerTexture;
-		sf::Clock temporizador; // Conta o tempo que o jogador ficou sem colisoes. Caso se mantenha um tempo minimo sem colidir, ganha velocidade para retornar à posição inicial.
+		sf::Clock temporizador; // Conta o tempo que o jogador ficou sem colisoes. Caso se mantenha um tempo minimo sem colidir, ganha velocidade para retornar ï¿½ posiï¿½ï¿½o inicial.
 
 	public:
+		bool voltando; // Volta para a posicao x inicial se ficar tempo o suficiente sem colidir
+		bool morreu; // Indica se o jogador ainda estÃ¡ no ojogo ou se ficou para tras (morreu)
 
 		Player();
 
@@ -22,7 +24,7 @@ class Player {		//Inserindo todos os dados do player generalizado
 		void setPlayerTexture(std::string pathToTexture);
 		void createPlayer(sf::Vector2f pos, sf::Vector2f scale, std::string pathToTexture, float speed);
 
-		void updatePosition();
+		void updatePosition(); // Move para cima e para baixo
 		void setPosition(sf::Vector2f pos);
 		sf::Vector2f getPosition();
 
@@ -35,6 +37,8 @@ class Player {		//Inserindo todos os dados do player generalizado
 
 		void restartTemporizador();
 		sf::Time elapsedTime();
+
+		void moveX(float x);
 };
 
 

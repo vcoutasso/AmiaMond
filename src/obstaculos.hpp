@@ -17,6 +17,8 @@ class ObstaculoEstatico {
 		sf::Texture texture;
 		sf::Sprite sprite;
 
+		std::string loadedFile;
+
 		virtual void setTexture();
 	
 		virtual void updatePosition();

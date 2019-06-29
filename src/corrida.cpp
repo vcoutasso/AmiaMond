@@ -4,8 +4,6 @@
 // Inicializa com a quantiade adequada de jogadores.
 Corrida::Corrida(int n) {
 	setNumPlayers(n);
-	//for (int i = 0; i < n; ++i)
-		//player.push_back(new Player);
 }
 
 void Corrida::initPlayer(sf::Vector2f pos, sf::Vector2f scale, std::string pathToTexture, float speed) {

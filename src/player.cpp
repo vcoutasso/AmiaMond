@@ -8,11 +8,19 @@
 #define WIDTH 1920
 #define HEIGHT 1080
 
-// Construtor padrão
+// Construtor padrÃ£o
 Player::Player() {
 	pos = sf::Vector2f(0, 0);
 
 	speed = 9;
+	voltando = true;
+	morreu = false;
+}
+
+// Move o jogador no eixo x. Normalmente o jogador fica parado e os obstaculos que se movem.
+// Esse mÃ©todo permite com que o jogador possa mudar sua posiÃ§Ã£o no eixo x
+void Player::moveX(float x) {
+	setPosition(sf::Vector2f(getPosition().x + x, getPosition().y));
 }
 
 // Carrega a textura
@@ -35,7 +43,7 @@ void Player::createPlayer(sf::Vector2f pos, sf::Vector2f scale, std::string path
 
 }
 
-// Atualiza a posição do objeto com base na velocidade. Só altera a posição se estiver dentro dos limites da janela.
+// Atualiza a posiÃ§Ã£o do objeto com base na velocidade. SÃ³ altera a posiÃ§Ã£o se estiver dentro dos limites da janela.
 void Player::updatePosition() {
 	if (rise) {
 		if (sprite.getPosition().y >= 0 + (sprite.getTexture()->getSize().y * sprite.getScale().y) / 2)
@@ -45,19 +53,22 @@ void Player::updatePosition() {
 		if (sprite.getPosition().y <= HEIGHT - (sprite.getTexture()->getSize().y * sprite.getScale().y) / 2)
 			setPosition(sf::Vector2f(sprite.getPosition().x, sprite.getPosition().y + speed));
 	}
+
+	if (getPosition().x < -50)
+			morreu = true;
 }
 
-// Seta a posição do jogador e do sprite.
+// Seta a posiÃ§Ã£o do jogador e do sprite.
 void Player::setPosition(sf::Vector2f pos) {
 	this->pos = pos;
 	sprite.setPosition(pos);
 }
 
-// Retoran a posição do jogador e do sprite. Poderia ser utilizado sprite.getPosition(). Ambos tem o mesmo valor.
+// Retoran a posiÃ§Ã£o do jogador e do sprite. Poderia ser utilizado sprite.getPosition(). Ambos tem o mesmo valor.
 sf::Vector2f Player::getPosition() {
 	return pos;
 }
- 
+
 // Retorna speed
 float Player::getSpeed() {
 	return speed;
@@ -79,7 +90,7 @@ float Player::changeSpeed(float extraSpeed) {
 	return speed;
 }
 
-// Ajusta a posição do boneco de acordo com a colisão (por exemplo se colidiu de cima pra baixo ou de frente)
+// Ajusta a posiÃ§Ã£o do boneco de acordo com a colisÃ£o (por exemplo se colidiu de cima pra baixo ou de frente)
 void Player::ajustaPosicao(const sf::Sprite& obstaculo, const bool vertical, const float speedObstaculo) {
 	const sf::Vector2f prancha(this->getPosition().x, this->sprite.getGlobalBounds().top + this->sprite.getGlobalBounds().height);
 	const sf::Vector2f cabeca(this->getPosition().x, this->sprite.getGlobalBounds().top);
@@ -91,19 +102,19 @@ void Player::ajustaPosicao(const sf::Sprite& obstaculo, const bool vertical, con
 	//const sf::Vector2f bottomRight(obstaculo.getGlobalBounds().left + obstaculo.getGlobalBounds().width, obstaculo.getGlobalBounds().top + obstaculo.getGlobalBounds().height);
 
 	if (vertical) {
-		if (abs(prancha.y - topLeft.y) < 5) // Colisão de cima para baixo. Boneco deve subir para compensar
+		if (abs(prancha.y - topLeft.y) < 5) // ColisÃ£o de cima para baixo. Boneco deve subir para compensar
 			this->setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y - this->getSpeed()));
-		else if (abs(cabeca.y - bottomLeft.y) < 5) // Colisão de baixo para cima. Boneco deve descer para compensar.
+		else if (abs(cabeca.y - bottomLeft.y) < 5) // ColisÃ£o de baixo para cima. Boneco deve descer para compensar.
 			this->setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y + this->getSpeed()));
-		else // Colisão de frente. Boneco deve ser arrastado pelo obstaculo.
+		else // ColisÃ£o de frente. Boneco deve ser arrastado pelo obstaculo.
 			this->setPosition(sf::Vector2f(this->getPosition().x + speedObstaculo, this->getPosition().y));
 	}
 	else {
-		if (abs(prancha.y - topLeft.y) < 8) // Colisão de cima para baixo. Boneco deve subir para compensar.
+		if (abs(prancha.y - topLeft.y) < 8) // ColisÃ£o de cima para baixo. Boneco deve subir para compensar.
 			this->setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y - this->getSpeed()));
-		else if (abs(cabeca.y - bottomLeft.y) < 8) // Colisão de baixo para cima. Boneco deve descer para compensar.
+		else if (abs(cabeca.y - bottomLeft.y) < 8) // ColisÃ£o de baixo para cima. Boneco deve descer para compensar.
 			this->setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y + this->getSpeed()));
-		else // Colisão de frente. Boneco deve ser arrastado pelo obstaculo.
+		else // ColisÃ£o de frente. Boneco deve ser arrastado pelo obstaculo.
 			this->setPosition(sf::Vector2f(this->getPosition().x + speedObstaculo, this->getPosition().y));
 	}
 
@@ -117,4 +128,3 @@ void Player::restartTemporizador() {
 sf::Time Player::elapsedTime() {
 	return temporizador.getElapsedTime();
 }
-

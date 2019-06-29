@@ -27,7 +27,7 @@ int Jogo::openInstructions() {
 
 	sf::RectangleShape background(sf::Vector2f(1920.0f, 1080.0f));
 	sf::Texture space;
-	
+
 	space.loadFromFile("bin/bg_inst.png");
 	background.setTexture(&space);
 
@@ -85,16 +85,16 @@ int Jogo::openInstructions() {
 				sf::sleep(sf::seconds(static_cast<float>(1.f / FPS - clock.getElapsedTime().asSeconds())));
 
 			}
-			
+
 			atualizaTela = true;
-			
+
 			if (atualizaTela) {
 				window.display();
 
 				deltaTime = clock.restart().asSeconds();
 				atualizaTela = false;
 			}
-			
+
 		}
 
 
@@ -115,7 +115,7 @@ int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 
 	Option novoJogo(0, 0, 40, "* SELECIONE O ESTILO DE JOGO:", "bin/Pixelada.ttf");
 	novoJogo.text.setPosition(modoJogo.text.getGlobalBounds().width / 10 - 3, 10);
-	novoJogo.text.setStyle(sf::Text::Bold | sf::Text::Italic); 
+	novoJogo.text.setStyle(sf::Text::Bold | sf::Text::Italic);
 
 	Option modoJogoCorrida(0, 0, 40, "CORRIDA", "bin/Pixelada.ttf");
 	modoJogoCorrida.text.setPosition(100, 400);
@@ -182,15 +182,15 @@ int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 					tresJogadores.setHovering(false);
 					quatroJogadores.setHovering(false);
 
-					exit.text.setFillColor(BUTTON_COLOR); 
-					iniciar.text.setFillColor(BUTTON_COLOR); 
+					exit.text.setFillColor(BUTTON_COLOR);
+					iniciar.text.setFillColor(BUTTON_COLOR);
 
-					if (!modoJogoCorrida.getSelected()) modoJogoCorrida.text.setFillColor(BUTTON_COLOR); 
+					if (!modoJogoCorrida.getSelected()) modoJogoCorrida.text.setFillColor(BUTTON_COLOR);
 					if (!doisJogadores.getSelected()) doisJogadores.text.setFillColor(BUTTON_COLOR);
 					if (!tresJogadores.getSelected()) tresJogadores.text.setFillColor(BUTTON_COLOR);
 					if (!quatroJogadores.getSelected()) quatroJogadores.text.setFillColor(BUTTON_COLOR);
 				}
-				
+
 				break;
 
 			case sf::Event::MouseButtonPressed:
@@ -290,9 +290,9 @@ int Jogo::openJogar(Animation& animation, sf::RectangleShape& background) {
 			window.draw(tresJogadores.text);
 			window.draw(quatroJogadores.text);
 
-			sf::sleep(sf::seconds(1 / FPS - clock.getElapsedTime().asSeconds())); 
+			sf::sleep(sf::seconds(1 / FPS - clock.getElapsedTime().asSeconds()));
 		}
-		
+
 		atualizaTela = true;
 
 		if (atualizaTela) {
@@ -323,7 +323,7 @@ int Jogo::mainMenu() {
 
 	sf::RectangleShape background(sf::Vector2f(1920.0f, 1080.0f));
 	sf::Texture space;
-	
+
 	space.loadFromFile("bin/bg_menu.png");
 
 	background.setTexture(&space);
@@ -336,7 +336,7 @@ int Jogo::mainMenu() {
 
 	sf::Clock clock;
 	float deltaTime = 0;
- 
+
 	 if (!music.openFromFile("bin/menu_theme.wav")) {
 			std::cout << "Error! Could not load menu_theme.wav!" << std::endl;
 			quit = -1;
@@ -349,10 +349,10 @@ int Jogo::mainMenu() {
 	bool atualizaTela = true;
 
 	while(!quit) {
-		
+
 		sf::Event event{};
 
-		/* Tratamento de eventos */ 
+		/* Tratamento de eventos */
 		while (window.pollEvent(event)) {
 
 
@@ -364,7 +364,7 @@ int Jogo::mainMenu() {
 				case sf::Event::MouseButtonPressed:
 					if (sair.getHovering())
 						quit = 1;
-					
+
 					if (instrucoes.getHovering()) {
 						if (openInstructions() == -1) //Entrando nas Instruções
 							quit = -1;
@@ -418,7 +418,7 @@ int Jogo::mainMenu() {
 					break;
 			}
 		}
-			
+
 
 			// Atualiza a tela apenas depois de processar os eventos e se tiver passado o tempo minimo necessario.
 			// Caso contrário, torna a processar os eventos.
@@ -429,7 +429,7 @@ int Jogo::mainMenu() {
 				window.draw(instrucoes.text);
 				window.draw(sair.text);
 				window.draw(jogar.text);
-				
+
 				sf::sleep(sf::seconds((1 / FPS) - clock.getElapsedTime().asSeconds()));
 			}
 
@@ -522,7 +522,7 @@ int Jogo::playCorrida(int nplayers) {
 					break;
 
 				// Ao soltar, volta a cair
-				case sf::Event::KeyReleased: 
+				case sf::Event::KeyReleased:
 					if (event.key.code == sf::Keyboard::Escape) // Volta para o menu
 						quit = 1;
 					if (event.key.code == sf::Keyboard::F1) // Botão de toggle para o contador de FPS
@@ -546,8 +546,13 @@ int Jogo::playCorrida(int nplayers) {
 				default:
 					break;
 
-			}	
+			}
 		}
+			// Muda o background para fazer a animação e desenha na tela.
+			animation.updateXY(deltaTime);
+			background.setTextureRect(animation.uvRect);
+
+			window.draw(background);
 
 		// Se passou o tempo definido em intervaloObstaculos, cria um novo obstaculo e reseta o clock.
 		if (clockObstaculos.getElapsedTime().asSeconds() >= intervaloObstaculos.asSeconds()) {
@@ -557,18 +562,9 @@ int Jogo::playCorrida(int nplayers) {
 
 		// Desenha elementos na tela
 		if (clock.getElapsedTime().asSeconds() <= 1 / FPS) {
-			animation.updateXY(deltaTime);
-			background.setTextureRect(animation.uvRect);
-
-			window.draw(background);
-
-			for (int i = 0; i < nplayers; ++i) {
-				corrida.player[i]->updatePosition();
-				window.draw(corrida.player[i]->sprite);
-			}
 
 
-			// Itera pelos vetores contendo os obstaculos e imprime os sprites na tela. 
+			// Itera pelos vetores contendo os obstaculos e imprime os sprites na tela.
 			for (auto it = corrida.obstaculosEstaticos.begin(); it != corrida.obstaculosEstaticos.end(); ++it) {
 				window.draw((*it)->sprite);
 				(*it)->updatePosition();
@@ -582,14 +578,26 @@ int Jogo::playCorrida(int nplayers) {
 					break;
 			}
 
-			// Checa colisões com obstaculos do tipo estatico.
+		/*	// Checa colisões com obstaculos do tipo estatico.
 			for (auto it = corrida.obstaculosEstaticos.begin(); it != corrida.obstaculosEstaticos.end(); ++it) {
 				// Faz todas as checagens para cada player
 				for (auto it_player = corrida.player.begin(); it_player != corrida.player.end(); ++it_player)
 					// Se colidiu, ajusta a posição do boneco
-					if (Collision::BoundingBoxTest((*it_player)->sprite, (*it)->sprite))
+					if (Collision::BoundingBoxTest((*it_player)->sprite, (*it)->sprite)) {
+						//(*it_player)->resetSpeed();
 						(*it_player)->ajustaPosicao((*it)->sprite, (*it)->isVertical(), (*it)->getSpeed());
-			}
+						//(*it_player)->restartTemporizador();
+					}
+			}*/
+
+				for (auto it_player = corrida.player.begin(); it_player != corrida.player.end(); ++it_player) {
+						for (auto it = corrida.obstaculosEstaticos.begin(); it != corrida.obstaculosEstaticos.end(); ++it) {
+								if (Collision::BoundingBoxTest((*it_player)->sprite, (*it)->sprite)) {
+										(*it_player)->ajustaPosicao((*it)->sprite, (*it)->isVertical(), (*it)->getSpeed());
+									}
+								}
+				}
+
 
 
 
@@ -615,6 +623,41 @@ int Jogo::playCorrida(int nplayers) {
 					corrida.obstaculosVazados.erase(corrida.obstaculosVazados.begin());
 				else
 					break;
+			}
+
+
+			// Checa colisões com obstaculos do tipo vazado.
+			for (auto it = corrida.obstaculosVazados.begin(); it != corrida.obstaculosVazados.end(); ++it) {
+				// Faz todas as checagens para cada player
+				for (auto it_player = corrida.player.begin(); it_player != corrida.player.end(); ++it_player)
+					// Se colidiu, verifica se não está passando entre o(s) buraco(s)
+					if (Collision::BoundingBoxTest((*it_player)->sprite, (*it)->sprite)) {
+						if ((*it)->loadedFile == "obstaculo_3.png") { // Se for o obstaculo com apenas um buraco
+							if ((*it_player)->getPosition().y > (*it)->sprite.getGlobalBounds().top + 1/3 * (*it)->sprite.getGlobalBounds().height &&
+							(*it_player)->getPosition().y < (*it)->sprite.getGlobalBounds().top + 2/3 * (*it)->sprite.getGlobalBounds().height)
+								continue; // Nao faz nada, passou no buraco
+							else
+								(*it_player)->ajustaPosicao((*it)->sprite, (*it)->isVertical(), (*it)->getSpeed());
+						}
+					}
+			}
+
+			for (auto it = corrida.player.begin(); it != corrida.player.end(); ++it) {
+				if ((*it)->elapsedTime().asSeconds() >= 10 && (*it)->getPosition().x < xInicial) {
+					(*it)->voltando = true;
+					(*it)->moveX(6);
+				}
+				if ((*it)->voltando && (*it)->getPosition().x >= xInicial) {
+					(*it)->setPosition(sf::Vector2f(860, (*it)->getPosition().y));
+					(*it)->voltando = false;
+				}
+			}
+
+			// Desenha os bonecos
+			for (auto boneco = corrida.player.begin() ; boneco != corrida.player.end(); ++boneco) {
+				(*boneco)->updatePosition();
+				if (!(*boneco)->morreu)
+						window.draw((*boneco)->sprite);
 			}
 
 			sf::sleep(sf::seconds(1 / FPS - clock.getElapsedTime().asSeconds()));
