@@ -22,6 +22,9 @@ class Corrida {
 		void criaObstaculo();
 		void initPlayer(sf::Vector2f pos, sf::Vector2f scale, std::string pathToTexture, float speed);
 
+		void removeObstaculos();
+		void desenhaObstaculos(sf::RenderWindow& window);
+
 		int getNumPlayers();
 		void setNumPlayers(int n);
 

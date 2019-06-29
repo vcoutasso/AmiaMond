@@ -37,5 +37,47 @@ int Corrida::getNumPlayers() {
 	return numPlayers;
 }
 
+// Itera pelo vetores de obstaculos até que remova todos os obstaculos que não estao mais visiveis na tela
+void Corrida::removeObstaculos() {
+	
+	while (!obstaculosEstaticos.empty()) {
+		if (obstaculosEstaticos.front()->getPosition().x < - obstaculosEstaticos.front()->sprite.getGlobalBounds().width / 2)
+			obstaculosEstaticos.erase(obstaculosEstaticos.begin());
+		else
+			break;
+	}
+
+	while (!obstaculosGiratorios.empty()) {
+		if (obstaculosGiratorios.front()->getPosition().x < -obstaculosGiratorios.front()->sprite.getGlobalBounds().width / 2)
+			obstaculosGiratorios.erase(obstaculosGiratorios.begin());
+		else
+			break;
+	}
+
+	while (!obstaculosVazados.empty()) {
+		if (obstaculosVazados.front()->getPosition().x < -obstaculosVazados.front()->sprite.getGlobalBounds().width / 2)
+			obstaculosVazados.erase(obstaculosVazados.begin());
+		else
+			break;
+	}
+}
+
+// Itera pelos vetores contendo os obstaculos e imprime os sprites na tela.
+void Corrida::desenhaObstaculos(sf::RenderWindow& window) {
+	for (auto it = obstaculosEstaticos.begin(); it != obstaculosEstaticos.end(); ++it) {
+		window.draw((*it)->sprite);
+		(*it)->updatePosition();
+	}
+
+	for (auto it = obstaculosGiratorios.begin(); it != obstaculosGiratorios.end(); ++it) {
+		window.draw((*it)->sprite);
+		(*it)->updatePosition();
+	}
+
+	for (auto it = obstaculosVazados.begin(); it != obstaculosVazados.end(); ++it) {
+		window.draw((*it)->sprite);
+		(*it)->updatePosition();
+	}
+}
 
 

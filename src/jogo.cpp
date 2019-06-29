@@ -548,11 +548,12 @@ int Jogo::playCorrida(int nplayers) {
 
 			}
 		}
-			// Muda o background para fazer a animação e desenha na tela.
-			animation.updateXY(deltaTime);
-			background.setTextureRect(animation.uvRect);
-
-			window.draw(background);
+			
+		// Muda o background para fazer a animação e desenha na tela.
+		animation.updateXY(deltaTime);			
+		background.setTextureRect(animation.uvRect);
+	
+		window.draw(background);
 
 		// Se passou o tempo definido em intervaloObstaculos, cria um novo obstaculo e reseta o clock.
 		if (clockObstaculos.getElapsedTime().asSeconds() >= intervaloObstaculos.asSeconds()) {
@@ -564,19 +565,8 @@ int Jogo::playCorrida(int nplayers) {
 		if (clock.getElapsedTime().asSeconds() <= 1 / FPS) {
 
 
-			// Itera pelos vetores contendo os obstaculos e imprime os sprites na tela.
-			for (auto it = corrida.obstaculosEstaticos.begin(); it != corrida.obstaculosEstaticos.end(); ++it) {
-				window.draw((*it)->sprite);
-				(*it)->updatePosition();
-			}
-
-			// Itera pelo vector até que remova todos os obstaculos que não estao mais visiveis na tela
-			while (!corrida.obstaculosEstaticos.empty()) {
-				if (corrida.obstaculosEstaticos.front()->getPosition().x < - corrida.obstaculosEstaticos.front()->sprite.getGlobalBounds().width / 2)
-					corrida.obstaculosEstaticos.erase(corrida.obstaculosEstaticos.begin());
-				else
-					break;
-			}
+			corrida.removeObstaculos(); // Remove todos os obstaculos que não estão mais visiveis na tela
+			corrida.desenhaObstaculos(window); // Desenha obstaculos restantes na tela
 
 			// Checa colisões com obstaculos do tipo estatico.
 			for (auto it = corrida.obstaculosEstaticos.begin(); it != corrida.obstaculosEstaticos.end(); ++it) {
@@ -590,36 +580,6 @@ int Jogo::playCorrida(int nplayers) {
 					}
 				}
 			}
-
-
-			// Itera pelos vetores contendo os obstaculos e imprime os sprites na tela.
-			for (auto it = corrida.obstaculosGiratorios.begin(); it != corrida.obstaculosGiratorios.end(); ++it) {
-				window.draw((*it)->sprite);
-				(*it)->updatePosition();
-			}
-
-			// Itera pelo vector até que remova todos os obstaculos que não estao mais visiveis na tela
-			while (!corrida.obstaculosGiratorios.empty()) {
-				if (corrida.obstaculosGiratorios.front()->getPosition().x < - corrida.obstaculosGiratorios.front()->sprite.getGlobalBounds().width / 2)
-					corrida.obstaculosGiratorios.erase(corrida.obstaculosGiratorios.begin());
-				else
-					break;
-			}
-
-			// Itera pelos vetores contendo os obstaculos e imprime os sprites na tela.
-			for(auto it = corrida.obstaculosVazados.begin(); it != corrida.obstaculosVazados.end(); ++it) {
-				window.draw((*it)->sprite);
-				(*it)->updatePosition();
-			}
-
-			// Itera pelo vector até que remova todos os obstaculos que não estao mais visiveis na tela
-			while (!corrida.obstaculosVazados.empty()) {
-				if (corrida.obstaculosVazados.front()->getPosition().x < - corrida.obstaculosVazados.front()->sprite.getGlobalBounds().width / 2)
-					corrida.obstaculosVazados.erase(corrida.obstaculosVazados.begin());
-				else
-					break;
-			}
-
 
 			// Checa colisões com obstaculos do tipo vazado.
 			for (auto it = corrida.obstaculosVazados.begin(); it != corrida.obstaculosVazados.end(); ++it) {
