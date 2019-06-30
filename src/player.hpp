@@ -30,9 +30,9 @@ class Player {		//Inserindo todos os dados do player generalizado
 
 		void updatePosition(); // Move para cima e para baixo
 		void setPosition(sf::Vector2f pos);
-		sf::Vector2f getPosition();
+		sf::Vector2f getPosition() const;
 
-		float getSpeed();
+		float getSpeed() const;
 		void setSpeed(float speed);
 		void resetSpeed();
 		float changeSpeed(float extraSpeed);
@@ -40,7 +40,7 @@ class Player {		//Inserindo todos os dados do player generalizado
 		void ajustaPosicao(const sf::Sprite& obstaculo, bool vertical, float speedObstaculo);
 
 		void restartTemporizador();
-		sf::Time elapsedTime();
+		sf::Time elapsedTime() const;
 
 		void moveX(float x);
 };

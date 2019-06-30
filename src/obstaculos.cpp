@@ -36,7 +36,7 @@ void ObstaculoEstatico::setInitialPosition() {
 }
 
 // Retorna a posicao do objeto.
-sf::Vector2f ObstaculoEstatico::getPosition() {
+sf::Vector2f ObstaculoEstatico::getPosition() const {
 	return pos;
 }
 
@@ -81,11 +81,11 @@ void ObstaculoEstatico::setSpeed(float speed) {
 	this->speed = speed;
 }
 
-float ObstaculoEstatico::getSpeed() {
+float ObstaculoEstatico::getSpeed() const {
 	return this->speed;
 }
 
-bool ObstaculoEstatico::isVertical() {
+bool ObstaculoEstatico::isVertical() const {
 	return vertical;
 }
 

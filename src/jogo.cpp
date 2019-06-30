@@ -486,7 +486,7 @@ int Jogo::playCorrida(int nplayers) {
 
 	Corrida corrida(nplayers);
 
-	const int xInicial = 860;
+	const int xInicial = 960;
 	int yInicial = 100;
 	const int velInicial = 9;
 
@@ -562,7 +562,7 @@ int Jogo::playCorrida(int nplayers) {
 			// Remove os jogadores que morreram.
 			corrida.mataMatado();
 
-			// Faz os joagdores se deslocarem para a posição inicial em x (860) se for necessário.
+			// Faz os joagdores se deslocarem para a posição inicial em x (960) se for necessário.
 			corrida.retornaPlayers();
 
 			// Desenha jogadores
@@ -579,7 +579,7 @@ int Jogo::playCorrida(int nplayers) {
 				aux++;
 		}
 
-		if (aux == 1) {
+		if (aux <= 1) {
 			window.draw(gameOver);
 			window.display();
 			sf::sleep(sf::seconds(2));

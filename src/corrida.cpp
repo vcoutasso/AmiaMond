@@ -98,7 +98,7 @@ void Corrida::retornaPlayers() {
 			(*it)->moveX(6);
 		}
 		if ((*it)->voltando && (*it)->getPosition().x >= (*it)->initialX) {
-			(*it)->setPosition(sf::Vector2f(860, (*it)->getPosition().y));
+			(*it)->setPosition(sf::Vector2f(960, (*it)->getPosition().y));
 			(*it)->voltando = false;
 		}
 	}

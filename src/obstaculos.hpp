@@ -25,15 +25,15 @@ class ObstaculoEstatico {
 	
 		virtual void updatePosition();
 
-		sf::Vector2f getPosition();
+		sf::Vector2f getPosition() const;
 
-		float getSpeed();
+		float getSpeed() const;
 		void setSpeed(float speed);
 
 		void setPosition(float x, float y);
 		void setPosition(sf::Vector2f pos);
 
-		bool isVertical();
+		bool isVertical() const;
 };
 
 class ObstaculoGiratorio : public ObstaculoEstatico {

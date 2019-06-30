@@ -9,9 +9,11 @@
 
 // Construtor padrão
 Player::Player() {
+	num = 0;
+
 	pos = sf::Vector2f(0, 0);
 
-	initialX = 860;
+	initialX = 960;
 
 	speed = 9;
 	voltando = true;
@@ -25,7 +27,7 @@ void Player::moveX(float x) {
 }
 
 // Carrega a textura
-void Player::setPlayerTexture(std::string pathToTexture) {
+void Player::setPlayerTexture(const std::string pathToTexture) {
 	if (!playerTexture.loadFromFile(pathToTexture))
 		std::cout << "Error: Could not load texture! Path to file: " << pathToTexture << std::endl;
 	else
@@ -68,12 +70,12 @@ void Player::setPosition(sf::Vector2f pos) {
 }
 
 // Retoran a posição do jogador e do sprite. Poderia ser utilizado sprite.getPosition(). Ambos tem o mesmo valor.
-sf::Vector2f Player::getPosition() {
+sf::Vector2f Player::getPosition() const {
 	return pos;
 }
 
 // Retorna speed
-float Player::getSpeed() {
+float Player::getSpeed() const {
 	return speed;
 }
 
@@ -135,6 +137,6 @@ void Player::restartTemporizador() {
 	temporizador.restart();
 }
 
-sf::Time Player::elapsedTime() {
+sf::Time Player::elapsedTime() const {
 	return temporizador.getElapsedTime();
 }
