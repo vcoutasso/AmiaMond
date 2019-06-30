@@ -487,7 +487,7 @@ int Jogo::playCorrida(int nplayers) {
 	Corrida corrida(nplayers);
 
 	const int xInicial = 860;
-	int yInicial = 170;
+	int yInicial = 100;
 	const int velInicial = 9;
 
 	int velObstaculo = -12;
