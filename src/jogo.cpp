@@ -472,7 +472,7 @@ int Jogo::mainMenu() {
 // Método principal do jogo no modo Corrida
 int Jogo::playCorrida(int nplayers) {
 
-	std::string surfnautas[4] = { "bin/cachimbo.png", "bin/hot_chick.png", "bin/negao.png", "bin/cachorro.png" };
+	std::string surfnautas[4] = { "bin/cachimbo.png", "bin/hot_chick.png", "bin/negao.png", "bin/caramelo.png" };
 
 	sf::Clock clock;
 	sf::Clock clockObstaculos;
@@ -487,7 +487,7 @@ int Jogo::playCorrida(int nplayers) {
 	Corrida corrida(nplayers);
 
 	const int xInicial = 860;
-	int yInicial = 170;
+	int yInicial = 100;
 	const int velInicial = 9;
 
 	int velObstaculo = -12;
