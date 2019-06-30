@@ -25,7 +25,8 @@ void Corrida::initPlayer(sf::Vector2f pos, sf::Vector2f scale, std::string pathT
 void Corrida::criaObstaculo(int velObstaculo) {
 	const auto num = rand() % 3;
 
-	if (num == 0) {
+	//if (num == 0) {
+	if (true) {
 		obstaculosEstaticos.push_back(new ObstaculoEstatico(velObstaculo));
 		obstaculosEstaticos.back()->setTexture();
 	}
@@ -114,15 +115,10 @@ void Corrida::desenhaPlayers(sf::RenderWindow & window) {
 
 // Itera pelo vetor e remove do mesmo os jogadores com a flag morreu setada para true
 void Corrida::mataMatado() {
-	auto it = player.begin();
 
-	while(it != player.end()) {
-		if ((*it)->morreu) {
+	for(auto it = player.begin(); it != player.end(); ++it) {
+		if ((*it)->morreu)
 			alive[(*it)->num] = false;
-			it = player.erase(it);
-		}
-		else
-			++it;
 	}
 
 }

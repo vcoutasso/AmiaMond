@@ -8,7 +8,7 @@ class ObstaculoEstatico {
 		sf::Vector2f pos;
 		float speed;
 		void setInitialPosition();
-		bool vertical;
+		
 		
 
 	public:
@@ -16,6 +16,8 @@ class ObstaculoEstatico {
 		ObstaculoEstatico(int velObstaculo);
 		sf::Texture texture;
 		sf::Sprite sprite;
+
+		bool vertical;
 
 		std::string loadedFile;
 

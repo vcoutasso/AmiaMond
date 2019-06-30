@@ -20,6 +20,8 @@ class Jogo {
 	sf::Font font;
 	sf::Text fps;
 
+	sf::Text gameOver;
+
 	int mainMenu();
 
 	int openInstructions();

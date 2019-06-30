@@ -13,6 +13,13 @@ Jogo::Jogo() {
 	font.loadFromFile("bin/Pixelada.ttf");
 	fps.setFont(font);
 	fps.setCharacterSize(24);
+
+	gameOver.setFont(font);
+	gameOver.setString("Game Over!");
+	gameOver.setFillColor(sf::Color::White);
+	gameOver.setCharacterSize(80);
+	gameOver.setPosition(700, 460);
+
 }
 
 int Jogo::openInstructions() {
@@ -477,7 +484,7 @@ int Jogo::playCorrida(int nplayers) {
 	sf::RectangleShape background(sf::Vector2f(1920, 1080));
 	sf::Texture space;
 
-	Corrida corrida (nplayers);
+	Corrida corrida(nplayers);
 
 	const int xInicial = 860;
 	int yInicial = 170;
@@ -485,6 +492,7 @@ int Jogo::playCorrida(int nplayers) {
 
 	int velObstaculo = -12;
 
+	int aux;
 
 	// Inicializa os bonecos
 	for (int n = 0; n < corrida.getNumPlayers(); ++n) {
@@ -552,7 +560,7 @@ int Jogo::playCorrida(int nplayers) {
 			corrida.colisaoVazado();
 
 			// Remove os jogadores que morreram.
-			//corrida.mataMatado();
+			corrida.mataMatado();
 
 			// Faz os joagdores se deslocarem para a posição inicial em x (860) se for necessário.
 			corrida.retornaPlayers();
@@ -563,6 +571,21 @@ int Jogo::playCorrida(int nplayers) {
 			// Aguarda para manter um fps proximo de 60
 			sf::sleep(sf::seconds(1 / FPS - clock.getElapsedTime().asSeconds()));
 		}
+
+		// Verifica se o jogo acabou (acaba quando houver apensar um jogador restante)
+		aux = 0;
+		for (int i = 0; i < 4; i++) {
+			if (corrida.alive[i])
+				aux++;
+		}
+
+		if (aux == 1) {
+			window.draw(gameOver);
+			window.display();
+			sf::sleep(sf::seconds(2));
+			quit = 1;
+		}
+
 
 		atualizaTela = true;
 
@@ -578,6 +601,7 @@ int Jogo::playCorrida(int nplayers) {
 
 			atualizaTela = false;
 		}
+
 
 	}
 
