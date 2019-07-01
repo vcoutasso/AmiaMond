@@ -8,12 +8,14 @@
 
 class Corrida {
 	private:
-		int numPlayers; // Quantidade atual de jogadores
+		
 
 	public:
 		Corrida(int n); // Construtor
 
 		bool alive[4];
+
+		int numPlayers; // Quantidade atual de jogadores
 
 		std::vector<ObstaculoEstatico*> obstaculosEstaticos; // Vetor contendo todos os obstaculos estaticos
 		std::vector<ObstaculoGiratorio*> obstaculosGiratorios; // Vetor contendo todos os obstaculos giratorios

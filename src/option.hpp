@@ -21,14 +21,14 @@ class Option {		//Funcionalidade dos Botões
 		sf::Text text;
 
 		void setHovering(bool b);
-		bool getHovering();
-		bool isHovering(int x, int y);
+		bool getHovering() const;
+		bool isHovering(int x, int y) const;
 		void setSelected(bool b);
-		bool getSelected();
+		bool getSelected() const;
 
 		void setFont(std::string pathToFile);
 
-		sf::RectangleShape printRect();
+		sf::RectangleShape printRect() const;
 
 };
 

@@ -9,9 +9,11 @@
 
 // Construtor padrão
 Player::Player() {
+	num = 0;
+
 	pos = sf::Vector2f(0, 0);
 
-	initialX = 860;
+	initialX = 960;
 
 	speed = 9;
 	voltando = true;
@@ -25,7 +27,7 @@ void Player::moveX(float x) {
 }
 
 // Carrega a textura
-void Player::setPlayerTexture(std::string pathToTexture) {
+void Player::setPlayerTexture(const std::string pathToTexture) {
 	if (!playerTexture.loadFromFile(pathToTexture))
 		std::cout << "Error: Could not load texture! Path to file: " << pathToTexture << std::endl;
 	else
@@ -68,12 +70,12 @@ void Player::setPosition(sf::Vector2f pos) {
 }
 
 // Retoran a posição do jogador e do sprite. Poderia ser utilizado sprite.getPosition(). Ambos tem o mesmo valor.
-sf::Vector2f Player::getPosition() {
+sf::Vector2f Player::getPosition() const {
 	return pos;
 }
 
 // Retorna speed
-float Player::getSpeed() {
+float Player::getSpeed() const {
 	return speed;
 }
 
@@ -98,28 +100,35 @@ void Player::ajustaPosicao(const sf::Sprite& obstaculo, const bool vertical, con
 	const sf::Vector2f prancha(this->getPosition().x, this->sprite.getGlobalBounds().top + this->sprite.getGlobalBounds().height);
 	const sf::Vector2f cabeca(this->getPosition().x, this->sprite.getGlobalBounds().top);
 
+	const sf::Vector2f playerTopLeft(this->sprite.getGlobalBounds().left, this->sprite.getGlobalBounds().top);
+	const sf::Vector2f playerTopRight(this->sprite.getGlobalBounds().left + this->sprite.getGlobalBounds().width, this->sprite.getGlobalBounds().top);
+
+	const sf::Vector2f playerBottomLeft(this->sprite.getGlobalBounds().left, this->sprite.getGlobalBounds().top + this->sprite.getGlobalBounds().height);
+	const sf::Vector2f playerBottomRight(this->sprite.getGlobalBounds().left + this->sprite.getGlobalBounds().width, this->sprite.getGlobalBounds().top + this->sprite.getGlobalBounds().height);
+
 	const sf::Vector2f topLeft(obstaculo.getGlobalBounds().left, obstaculo.getGlobalBounds().top);
-	//const sf::Vector2f topRight(obstaculo.getGlobalBounds().left + obstaculo.getGlobalBounds().width, obstaculo.getGlobalBounds().top);
+	const sf::Vector2f topRight(obstaculo.getGlobalBounds().left + obstaculo.getGlobalBounds().width, obstaculo.getGlobalBounds().top);
 
 	const sf::Vector2f bottomLeft(obstaculo.getGlobalBounds().left, obstaculo.getGlobalBounds().top + obstaculo.getGlobalBounds().height);
-	//const sf::Vector2f bottomRight(obstaculo.getGlobalBounds().left + obstaculo.getGlobalBounds().width, obstaculo.getGlobalBounds().top + obstaculo.getGlobalBounds().height);
+	const sf::Vector2f bottomRight(obstaculo.getGlobalBounds().left + obstaculo.getGlobalBounds().width, obstaculo.getGlobalBounds().top + obstaculo.getGlobalBounds().height);
 
-	 if (vertical) {
-		if (abs(prancha.y - topLeft.y) < 5 && cabeca.x >= topLeft.x) // Colisão de cima para baixo. Boneco deve subir para compensar
+
+	if (vertical) {
+		if (abs(prancha.y - topLeft.y) < 5) // Colisão de cima para baixo. Boneco deve subir para compensar
 			this->setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y - this->getSpeed()));
-		else if (abs(cabeca.y - bottomLeft.y) < 5 && cabeca.x >= topLeft.x) // Colisão de baixo para cima. Boneco deve descer para compensar.
+		else if (abs(cabeca.y - bottomLeft.y) < 5) // Colisão de baixo para cima. Boneco deve descer para compensar.
 			this->setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y + this->getSpeed()));
-		else // Colisão de frente. Boneco deve ser arrastado pelo obstaculo.
+		else if (cabeca.x <= topLeft.x) // Colisão de frente. Boneco deve ser arrastado pelo obstaculo.
 			this->setPosition(sf::Vector2f(this->getPosition().x + speedObstaculo, this->getPosition().y));
 	}
 	else {
-		if (abs(prancha.y - topLeft.y) < 8 && cabeca.x >= topLeft.x) // Colisão de cima para baixo. Boneco deve subir para compensar.
+		if (abs(prancha.y - topLeft.y) < 10) // Colisão de cima para baixo. Boneco deve subir para compensar.
 			this->setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y - this->getSpeed()));
-		else if (abs(cabeca.y - bottomLeft.y) < 8 && cabeca.x >= topLeft.x) // Colisão de baixo para cima. Boneco deve descer para compensar.
+		else if (abs(cabeca.y - bottomLeft.y) < 10) // Colisão de baixo para cima. Boneco deve descer para compensar.
 			this->setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y + this->getSpeed()));
-		else // Colisão de frente. Boneco deve ser arrastado pelo obstaculo.
+		else if (cabeca.x <= topLeft.x) // Colisão de frente. Boneco deve ser arrastado pelo obstaculo.
 			this->setPosition(sf::Vector2f(this->getPosition().x + speedObstaculo, this->getPosition().y));
-	} 
+	}
 
 	restartTemporizador();
 }
@@ -128,6 +137,6 @@ void Player::restartTemporizador() {
 	temporizador.restart();
 }
 
-sf::Time Player::elapsedTime() {
+sf::Time Player::elapsedTime() const {
 	return temporizador.getElapsedTime();
 }

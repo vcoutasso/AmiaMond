@@ -13,6 +13,13 @@ Jogo::Jogo() {
 	font.loadFromFile("bin/Pixelada.ttf");
 	fps.setFont(font);
 	fps.setCharacterSize(24);
+
+	gameOver.setFont(font);
+	gameOver.setString("Game Over!");
+	gameOver.setFillColor(sf::Color::White);
+	gameOver.setCharacterSize(80);
+	gameOver.setPosition(700, 460);
+
 }
 
 int Jogo::openInstructions() {
@@ -35,6 +42,39 @@ int Jogo::openInstructions() {
 	Option exit(0, 0, 40, "VOLTAR PARA O MENU", "bin/Pixelada.ttf");
 	exit.text.setPosition(static_cast<float>(width) - (exit.text.getGlobalBounds().width) - 14, static_cast<float>(height) - 65);
 	Option title(160, 30, 40, "COMO JOGAR:", "bin/Pixelada.ttf");
+	title.text.setFillColor(sf::Color::Yellow);
+	Option texto1(0, 0, 40, "O MODO DE JOGO CORRIDA CONSISTE EM QUAL JOGADOR CONTINUA NA TELA PELA MAIOR", "bin/Pixelada.ttf");
+	texto1.text.setPosition(170, 140);
+	Option texto2(0, 0, 40, "QUANTIDADE DE TEMPO POSSIVEL, OU SEJA, O ULTIMO SOBREVIVENTE TORNA-SE O GANHADOR!", "bin/Pixelada.ttf");
+	texto2.text.setPosition(30, 240);
+	Option controles(0, 0, 40, "COMANDOS:", "bin/Pixelada.ttf");
+	controles.text.setFillColor(sf::Color::Cyan);
+	controles.text.setPosition(45, 390);
+	Option texto3(0, 0, 40, "PARA CONTROLAR OS PERSONAGENS UTILIZA-SE AS SEGUINTES TECLAS:", "bin/Pixelada.ttf");
+	texto3.text.setPosition(170, 500);
+
+	Player jogador1;
+	jogador1.createPlayer(sf::Vector2f(450, 750), sf::Vector2f(0.1, 0.1), "bin/cachimbo.png", 0, 0);
+	Player jogador2;
+	jogador2.createPlayer(sf::Vector2f(800, 750), sf::Vector2f(0.1, 0.1), "bin/hot_chick.png", 0, 0);
+	Player jogador3;
+	jogador3.createPlayer(sf::Vector2f(1150, 750), sf::Vector2f(0.1, 0.1), "bin/negao.png", 0, 0);
+	Player jogador4;
+	jogador4.createPlayer(sf::Vector2f(1500, 750), sf::Vector2f(0.1, 0.1), "bin/caramelo.png", 0, 0);
+
+	Option a(0, 0, 40, "TECLA A", "bin/Pixelada.ttf");
+	a.text.setPosition(376, 850);
+	a.text.setFillColor(sf::Color::Cyan);
+	Option f(0, 0, 40, "TECLA F", "bin/Pixelada.ttf");
+	f.text.setPosition(726, 850);
+	f.text.setFillColor(sf::Color::Magenta);
+	Option j(0, 0, 40, "TECLA J", "bin/Pixelada.ttf");
+	j.text.setPosition(1076, 850);
+	j.text.setFillColor(sf::Color::Yellow);
+	Option l(0, 0, 40, "TECLA L", "bin/Pixelada.ttf");
+	l.text.setPosition(1426, 850);
+	l.text.setFillColor(sf::Color(160, 82, 45, 255));
+
 
 	title.text.setStyle(sf::Text::Bold | sf::Text::Italic);
 
@@ -77,9 +117,26 @@ int Jogo::openInstructions() {
 			if (clock.getElapsedTime().asSeconds() <= 1 / FPS) {
 				animation.updateY(0, deltaTime);
 				background.setTextureRect(animation.uvRect);
+
 				window.draw(background);
 				window.draw(exit.text);
 				window.draw(title.text);
+
+				window.draw(texto1.text);
+				window.draw(texto2.text);
+				window.draw(texto3.text);
+				window.draw(controles.text);
+
+				window.draw(jogador1.sprite);
+				window.draw(jogador2.sprite);
+				window.draw(jogador3.sprite);
+				window.draw(jogador4.sprite);
+
+				window.draw(a.text);
+				window.draw(f.text);
+				window.draw(j.text);
+				window.draw(l.text);
+
 				sf::sleep(sf::seconds(static_cast<float>(1.f / FPS - clock.getElapsedTime().asSeconds())));
 
 			}
@@ -465,7 +522,7 @@ int Jogo::mainMenu() {
 // Método principal do jogo no modo Corrida
 int Jogo::playCorrida(int nplayers) {
 
-	std::string surfnautas[4] = { "bin/cachimbo.png", "bin/hot_chick.png", "bin/negao.png", "bin/cachorro.png" };
+	std::string surfnautas[4] = { "bin/cachimbo.png", "bin/hot_chick.png", "bin/negao.png", "bin/caramelo.png" };
 
 	sf::Clock clock;
 	sf::Clock clockObstaculos;
@@ -477,19 +534,20 @@ int Jogo::playCorrida(int nplayers) {
 	sf::RectangleShape background(sf::Vector2f(1920, 1080));
 	sf::Texture space;
 
-	Corrida corrida (nplayers);
+	Corrida corrida(nplayers);
 
-	const int xInicial = 860;
-	int yInicial = 170;
+	const int xInicial = 960;
+	int yInicial = 100;
 	const int velInicial = 9;
 
 	int velObstaculo = -12;
 
+	int aux;
 
 	// Inicializa os bonecos
 	for (int n = 0; n < corrida.getNumPlayers(); ++n) {
 		corrida.initPlayer(sf::Vector2f(xInicial, yInicial), sf::Vector2f(0.1, 0.1), surfnautas[n], velInicial);
-		yInicial += yInicial;
+		yInicial += 170;
 	}
 
 	space.loadFromFile("bin/bg_game.png");
@@ -552,9 +610,9 @@ int Jogo::playCorrida(int nplayers) {
 			corrida.colisaoVazado();
 
 			// Remove os jogadores que morreram.
-			//corrida.mataMatado();
+			corrida.mataMatado();
 
-			// Faz os joagdores se deslocarem para a posição inicial em x (860) se for necessário.
+			// Faz os joagdores se deslocarem para a posição inicial em x (960) se for necessário.
 			corrida.retornaPlayers();
 
 			// Desenha jogadores
@@ -563,6 +621,21 @@ int Jogo::playCorrida(int nplayers) {
 			// Aguarda para manter um fps proximo de 60
 			sf::sleep(sf::seconds(1 / FPS - clock.getElapsedTime().asSeconds()));
 		}
+
+		// Verifica se o jogo acabou (acaba quando houver apensar um jogador restante)
+		aux = 0;
+		for (int i = 0; i < 4; i++) {
+			if (corrida.alive[i])
+				aux++;
+		}
+
+		if (aux <= 1) {
+			window.draw(gameOver);
+			window.display();
+			sf::sleep(sf::seconds(2));
+			quit = 1;
+		}
+
 
 		atualizaTela = true;
 
@@ -578,6 +651,7 @@ int Jogo::playCorrida(int nplayers) {
 
 			atualizaTela = false;
 		}
+
 
 	}
 
