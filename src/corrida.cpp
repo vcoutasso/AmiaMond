@@ -93,11 +93,11 @@ void Corrida::desenhaObstaculos(sf::RenderWindow& window) {
 
 void Corrida::retornaPlayers() {
 	for (auto it = player.begin(); it != player.end(); ++it) {
-		if ((*it)->elapsedTime().asSeconds() >= 10 && (*it)->getPosition().x < (*it)->initialX) {
+		if (((*it)->elapsedTime().asSeconds() >= 10) && ((*it)->getPosition().x < (*it)->initialX)) {
 			(*it)->voltando = true;
 			(*it)->moveX(6);
 		}
-		if ((*it)->voltando && (*it)->getPosition().x >= (*it)->initialX) {
+		if (((*it)->voltando) && ((*it)->getPosition().x >= (*it)->initialX)) {
 			(*it)->setPosition(sf::Vector2f(960, (*it)->getPosition().y));
 			(*it)->voltando = false;
 		}
@@ -175,10 +175,10 @@ void Corrida::colisaoVazado() {
 					(*it_player)->ajustaPosicao((*it)->sprite, (*it)->isVertical(), (*it)->getSpeed()); // Caso contrario, ajusta a posição do boneco
 				}
 				else if ((*it)->loadedFile == "bin/obstaculo_4.png") {
-					if ((*it_player)->sprite.getPosition().y > (*it)->sprite.getGlobalBounds().top + (*it)->sprite.getGlobalBounds().height / 5 &&
-						(*it_player)->sprite.getPosition().y < (*it)->sprite.getGlobalBounds().top + 2 * (*it)->sprite.getGlobalBounds().height / 5 ||
-						((*it_player)->sprite.getPosition().y > (*it)->sprite.getGlobalBounds().top + 3 * (*it)->sprite.getGlobalBounds().height / 5 &&
-						(*it_player)->sprite.getPosition().y < (*it)->sprite.getGlobalBounds().top + 4 * (*it)->sprite.getGlobalBounds().height / 5))
+					if ((((*it_player)->sprite.getPosition().y > (*it)->sprite.getGlobalBounds().top + (*it)->sprite.getGlobalBounds().height / 5) &&
+						((*it_player)->sprite.getPosition().y < (*it)->sprite.getGlobalBounds().top + 2 * (*it)->sprite.getGlobalBounds().height / 5)) ||
+						(((*it_player)->sprite.getPosition().y > (*it)->sprite.getGlobalBounds().top + 3 * (*it)->sprite.getGlobalBounds().height / 5) &&
+						((*it_player)->sprite.getPosition().y < (*it)->sprite.getGlobalBounds().top + 4 * (*it)->sprite.getGlobalBounds().height / 5)))
 						continue; // Nao faz nada, passou no buraco
 
 					(*it_player)->ajustaPosicao((*it)->sprite, (*it)->isVertical(), (*it)->getSpeed()); // Caso contrario, ajusta a posição do boneco
