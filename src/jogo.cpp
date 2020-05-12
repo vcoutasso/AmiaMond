@@ -18,7 +18,7 @@ Jogo::Jogo() {
 	gameOver.setString("Game Over!");
 	gameOver.setFillColor(sf::Color::White);
 	gameOver.setCharacterSize(80);
-	gameOver.setPosition(700, 460);
+	gameOver.setPosition(WIDTH / 2 - gameOver.getGlobalBounds().width / 2, 460);
 
 }
 
@@ -68,7 +68,7 @@ int Jogo::openInstructions() {
 	Option f(0, 0, 40, "TECLA F", "bin/Pixelada.ttf");
 	f.text.setPosition(726, 850);
 	f.text.setFillColor(sf::Color::Magenta);
-	Option j(0, 0, 40, "TECLA J", "bin/Pixelada.ttf");
+	Option j(0, 0, 40, "TECLA H", "bin/Pixelada.ttf");
 	j.text.setPosition(1076, 850);
 	j.text.setFillColor(sf::Color::Yellow);
 	Option l(0, 0, 40, "TECLA L", "bin/Pixelada.ttf");
@@ -529,7 +529,15 @@ int Jogo::playCorrida(int nplayers) {
 
 	// Define o intervalo entre a criação de diferentes obstaculos
 	sf::Time intervaloObstaculos = sf::seconds(1.5);
-	float dificuldade = 1;
+	int dificuldade = 1;
+
+	sf::Text level;
+	std::string strLevel = "Dificuldade 1";
+	level.setString(strLevel);
+	level.setFont(font);
+	level.setCharacterSize(24);
+	level.setFillColor(sf::Color::White);
+	level.setPosition(sf::Vector2f(0, 0));
 
 	sf::RectangleShape background(sf::Vector2f(1920, 1080));
 	sf::Texture space;
@@ -573,10 +581,15 @@ int Jogo::playCorrida(int nplayers) {
 
 	while (!quit) {
 
-		// Diminui o intervalo entre o aparecimento de obsatculos
-		if (intervaloObstaculos.asSeconds() >= 1 && gameTimer.getElapsedTime().asSeconds() >= dificuldade * 30) {
-			intervaloObstaculos -= sf::seconds(0.1);
-			velObstaculo -= 1.2;
+		// Diminui o intervalo entre o aparecimento de obstaculos e a velocidade deles
+		if (gameTimer.getElapsedTime().asSeconds() >= dificuldade * 5) {
+			velObstaculo -= 2;
+			dificuldade++;
+			strLevel = "Dificuldade " + std::to_string(dificuldade);
+			level.setString(strLevel);
+
+			if (intervaloObstaculos.asSeconds() >= 0.6) 
+				intervaloObstaculos -= sf::seconds(0.1);
 		}
 
 		sf::Event event{};
@@ -631,6 +644,9 @@ int Jogo::playCorrida(int nplayers) {
 
 		if (aux <= 1) {
 			window.draw(gameOver);
+			level.setCharacterSize(40);
+			level.setPosition(WIDTH / 2 - level.getLocalBounds().width / 2, HEIGHT / 2 + 40);
+			window.draw(level);
 			window.display();
 			sf::sleep(sf::seconds(2));
 			quit = 1;
@@ -647,6 +663,7 @@ int Jogo::playCorrida(int nplayers) {
 			if (mostraFPS)
 				showFPS(deltaTime);
 
+			window.draw(level);
 			window.display();
 
 			atualizaTela = false;
